@@ -1,2 +1,4 @@
-plan/
-.serena/
+.env
+plan
+.serena
+__pycache__
