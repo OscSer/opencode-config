@@ -27,6 +27,7 @@ python3 install.py
 
 ```
 ├── claude/          # Claude Code configuration
+├── codex/           # Codex configuration
 ├── rules/           # Shared agent rules
 └── install.py       # Installation script
 ```
