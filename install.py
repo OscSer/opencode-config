@@ -5,6 +5,7 @@ import json
 import os
 import shutil
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 from typing import Optional, TypedDict, Any, Dict, List, cast
 
 
@@ -62,36 +63,20 @@ class ConfigInstaller:
         self.claude_dir = Path.home() / ".claude"
         self.codex_dir = Path.home() / ".codex"
 
-    def validate_source(self, path: str) -> bool:
-        """Validate that source path exists in repository"""
-        full_path = self.repo_dir / path
+    def resolve_source(
+        self, relative: str, must_be_file: bool = True
+    ) -> Optional[Path]:
+        full_path = self.repo_dir / relative
         if not full_path.exists():
-            print(f"Warning: {path} not found in repository, skipping...")
-            return False
-        return True
-
-    
-
-    def copy_file_or_dir(self, source: Path, target: Path) -> bool:
-        """Copy file or directory to target location"""
-        if not source.exists():
-            raise CopyError(f"Source {source} does not exist")
-
-        try:
-            if target.exists() or target.is_symlink():
-                if target.is_dir() and not target.is_symlink():
-                    shutil.rmtree(target)
-                else:
-                    target.unlink()
-
-            if source.is_dir():
-                shutil.copytree(source, target)
-            else:
-                shutil.copy2(source, target)
-            return True
-
-        except Exception as copy_error:
-            raise CopyError(f"Failed to copy {source} to {target}: {copy_error}")
+            print(f"Warning: {relative} not found in repository, skipping...")
+            return None
+        if must_be_file and not full_path.is_file():
+            print(f"Warning: {relative} is not a file, skipping...")
+            return None
+        if not must_be_file and not full_path.is_dir():
+            print(f"Warning: {relative} is not a directory, skipping...")
+            return None
+        return full_path
 
     def create_symlink(self, source: Path, target: Path) -> bool:
         if not source.exists():
@@ -110,10 +95,10 @@ class ConfigInstaller:
 
     def update_claude_mcp_config(self) -> bool:
         """Update Claude MCP configuration"""
-        mcp_source = self.repo_dir / "claude" / ".mcp.json"
+        mcp_source = self.resolve_source("claude/.mcp.json", must_be_file=True)
         claude_config = Path.home() / ".claude.json"
 
-        if not mcp_source.exists():
+        if mcp_source is None:
             print("Warning: claude/.mcp.json not found, skipping MCP configuration...")
             return False
 
@@ -133,8 +118,18 @@ class ConfigInstaller:
 
             claude_data["mcpServers"] = mcp_data["mcpServers"]
 
-            with open(claude_config, "w") as f:
-                json.dump(claude_data, f, indent=2)
+            claude_config.parent.mkdir(parents=True, exist_ok=True)
+            with NamedTemporaryFile(
+                "w",
+                delete=False,
+                dir=str(claude_config.parent),
+                prefix=f"{claude_config.name}.tmp.",
+            ) as tmp:
+                json.dump(claude_data, tmp, indent=2)
+                tmp.flush()
+                os.fsync(tmp.fileno())
+                tmp_name = tmp.name
+            os.replace(tmp_name, claude_config)
 
             print("✓ MCP configuration updated successfully")
             return True
@@ -159,13 +154,11 @@ class ConfigInstaller:
             target_dir.mkdir(parents=True, exist_ok=True)
 
             # Install settings as symlink for all agents
-            settings_source_path = (
-                self.repo_dir / agent_name / config["settings_source"]
+            settings_source_rel = f"{agent_name}/{config['settings_source']}"
+            settings_source_path = self.resolve_source(
+                settings_source_rel, must_be_file=True
             )
-            if (
-                self.validate_source(f"{agent_name}/{config['settings_source']}")
-                and settings_source_path.is_file()
-            ):
+            if settings_source_path is not None:
                 print(f"Linking {agent_label} configuration...")
                 self.create_symlink(
                     settings_source_path,
@@ -174,11 +167,10 @@ class ConfigInstaller:
                 print(f"✓ {agent_label} configuration linked")
 
             # Link rules as symlink
-            rules_source_path = self.repo_dir / config["rules_source"]
-            if (
-                self.validate_source(config["rules_source"])
-                and rules_source_path.is_file()
-            ):
+            rules_source_path = self.resolve_source(
+                config["rules_source"], must_be_file=True
+            )
+            if rules_source_path is not None:
                 doc_name = config["rules_target"]
                 print(f"Linking shared {doc_name} for {agent_label}...")
                 if self.create_symlink(
@@ -190,8 +182,8 @@ class ConfigInstaller:
             # Update MCP configuration if needed
             if agent_name == "claude" and config["has_mcp"]:
                 if (
-                    self.validate_source("claude/.mcp.json")
-                    and (self.repo_dir / "claude" / ".mcp.json").is_file()
+                    self.resolve_source("claude/.mcp.json", must_be_file=True)
+                    is not None
                 ):
                     self.update_claude_mcp_config()
             # Codex uses a TOML config that already includes MCP servers

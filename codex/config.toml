@@ -1,6 +1,4 @@
-approval_policy = "on-request"
 hide_agent_reasoning = true
-tools.web_search = true
 
 [mcp_servers.zen]
 command = "uvx"
@@ -12,7 +10,6 @@ args = [
 
 [mcp_servers.zen.env]
 OPENROUTER_API_KEY = "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"
-OPENROUTER_ALLOWED_MODELS = "openai/o3,google/gemini-2.5-pro,google/gemini-2.5-flash,x-ai/grok-code-fast-1"
 DISABLED_TOOLS = "testgen,secaudit,docgen,tracer,chat,precommit,challenge,analyze"
 
 [mcp_servers.markitdown]
@@ -25,3 +22,6 @@ args = [
   "-y",
   "@upstash/context7-mcp",
 ]
+
+[projects."/home/oscar/repositories/agents-config"]
+trust_level = "trusted"
