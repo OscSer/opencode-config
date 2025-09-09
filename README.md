@@ -27,8 +27,6 @@ python3 install.py
 
 ```
 ├── claude/          # Claude Code configuration
-├── gemini/          # Gemini CLI configuration
-├── opencode/        # OpenCode configuration
 ├── rules/           # Shared agent rules
 └── install.py       # Installation script
 ```

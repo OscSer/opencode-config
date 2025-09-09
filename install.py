@@ -5,7 +5,7 @@ import json
 import os
 import shutil
 from pathlib import Path
-from typing import Optional, TypedDict, Any, Union
+from typing import Optional, TypedDict, Any, Dict, List, cast
 
 
 class InstallError(Exception):
@@ -37,9 +37,9 @@ class AgentConfig(TypedDict):
 
 
 class ConfigInstaller:
-    """Handles installation of Claude Code, OpenCode, and Gemini CLI configurations"""
+    """Handles installation of Claude Code configuration"""
 
-    AGENTS_CONFIG: dict[str, AgentConfig] = {
+    AGENTS_CONFIG: Dict[str, AgentConfig] = {
         "claude": {
             "label": "Claude Code",
             "settings_source": "settings.json",
@@ -49,31 +49,11 @@ class ConfigInstaller:
             "rules_target": "CLAUDE.md",
             "has_mcp": True,
         },
-        "gemini": {
-            "label": "Gemini CLI",
-            "settings_source": "settings.json",
-            "settings_target": "settings.json",
-            "commands_target": "commands",
-            "rules_source": "rules/AGENTS.md",
-            "rules_target": "GEMINI.md",
-            "has_mcp": False,
-        },
-        "opencode": {
-            "label": "OpenCode",
-            "settings_source": "opencode.json",
-            "settings_target": "opencode.json",
-            "commands_target": "command",
-            "rules_source": "rules/AGENTS.md",
-            "rules_target": "AGENTS.md",
-            "has_mcp": False,
-        },
     }
 
     def __init__(self, repo_dir: Optional[Path] = None):
         self.repo_dir = repo_dir or Path(__file__).parent.absolute()
         self.claude_dir = Path.home() / ".claude"
-        self.opencode_dir = Path.home() / ".config" / "opencode"
-        self.gemini_dir = Path.home() / ".gemini"
 
     def validate_source(self, path: str) -> bool:
         """Validate that source path exists in repository"""
@@ -83,10 +63,10 @@ class ConfigInstaller:
             return False
         return True
 
-    def load_env_file(self) -> dict[str, str]:
+    def load_env_file(self) -> Dict[str, str]:
         """Load variables from .env file in repository directory"""
         env_path = self.repo_dir / ".env"
-        env_vars: dict[str, str] = {}
+        env_vars: Dict[str, str] = {}
 
         if env_path.exists():
             with open(env_path, "r") as f:
@@ -113,15 +93,17 @@ class ConfigInstaller:
         print(f"  echo 'OPENROUTER_API_KEY=your-key-here' > {self.repo_dir}/.env")
         return False
 
-    def expand_env_variables(self, data: Any, env_vars: dict[str, str]) -> Any:
+    def expand_env_variables(self, data: Any, env_vars: Dict[str, str]) -> Any:
         """Expand environment variables in dictionary values recursively"""
         if isinstance(data, dict):
-            expanded = {}
-            for key, value in data.items():
+            expanded: Dict[str, Any] = {}
+            data_dict = cast(Dict[str, Any], data)
+            for key, value in data_dict.items():
                 expanded[key] = self.expand_env_variables(value, env_vars)
             return expanded
         elif isinstance(data, list):
-            return [self.expand_env_variables(item, env_vars) for item in data]
+            data_list = cast(List[Any], data)
+            return [self.expand_env_variables(item, env_vars) for item in data_list]
         elif isinstance(data, str) and data.startswith('${') and data.endswith('}'):
             var_name = data[2:-1]  # Remove ${ and }
             # First check .env file, then system environment
@@ -169,7 +151,7 @@ class ConfigInstaller:
 
         try:
             with open(mcp_source, "r") as f:
-                mcp_data = json.load(f)
+                mcp_data: Dict[str, Any] = json.load(f)
 
             if "mcpServers" not in mcp_data:
                 raise ConfigError("mcpServers not found in claude/.mcp.json")
@@ -178,12 +160,12 @@ class ConfigInstaller:
             env_vars = self.load_env_file()
             
             # Expand environment variables in MCP data
-            expanded_mcp_data = self.expand_env_variables(mcp_data, env_vars)
+            expanded_mcp_data = cast(Dict[str, Any], self.expand_env_variables(mcp_data, env_vars))
 
-            claude_data = {}
+            claude_data: Dict[str, Any] = {}
             if claude_config.exists():
                 with open(claude_config, "r") as f:
-                    claude_data = json.load(f)
+                    claude_data = cast(Dict[str, Any], json.load(f))
 
             claude_data["mcpServers"] = expanded_mcp_data["mcpServers"]
 
@@ -207,10 +189,6 @@ class ConfigInstaller:
 
         if agent_name == "claude":
             target_dir = self.claude_dir
-        elif agent_name == "gemini":
-            target_dir = self.gemini_dir
-        elif agent_name == "opencode":
-            target_dir = self.opencode_dir
         else:
             raise InstallError(f"Unknown agent: {agent_name}")
 
@@ -276,10 +254,10 @@ class ConfigInstaller:
 
     def install_all(self) -> bool:
         """Install all agent configurations"""
-        print("Claude Code, OpenCode & Gemini CLI Configuration Installation")
-        print("===============================================================")
+        print("Claude Code Configuration Installation")
+        print("=====================================")
 
-        success_flags: list[bool] = []
+        success_flags: List[bool] = []
         for agent_name in self.AGENTS_CONFIG:
             success = self.install_agent(agent_name)
             success_flags.append(success)
@@ -288,8 +266,6 @@ class ConfigInstaller:
             print("")
             print("✅ Installation complete!")
             print("Claude Code configuration is available in ~/.claude/")
-            print("OpenCode configuration is available in ~/.config/opencode/")
-            print("Gemini CLI configuration is available in ~/.gemini/")
             return True
         else:
             print("")
