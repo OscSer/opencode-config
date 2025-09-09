@@ -1,12 +1,25 @@
 {
   "mcpServers": {
-    "sequential-thinking": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    "zen": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/BeehiveInnovations/zen-mcp-server.git",
+        "zen-mcp-server"
+      ],
+      "env": {
+        "OPENROUTER_API_KEY": "${OPENROUTER_API_KEY}",
+        "OPENROUTER_ALLOWED_MODELS": "openai/o3,google/gemini-2.5-pro,google/gemini-2.5-flash,x-ai/grok-code-fast-1",
+        "DISABLED_TOOLS": "testgen,secaudit,docgen,tracer,chat,precommit,challenge,analyze"
+      }
     },
     "context7": {
       "type": "http",
       "url": "https://mcp.context7.com/mcp"
+    },
+    "markitdown": {
+      "command": "uvx",
+      "args": ["markitdown-mcp"]
     }
   }
 }
