@@ -7,7 +7,7 @@ Personal configuration for AI agents.
 - `claude/` - Claude Code configuration
 - `codex/` - Codex configuration
 - `rules/` - Shared agent rules
-- `install.py` - Automated installation by copying files
+- `install.py` - Automated installation
 
 ## Development
 

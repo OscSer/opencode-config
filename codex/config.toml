@@ -1,3 +1,7 @@
+approval_policy = "on-request"
+hide_agent_reasoning = true
+tools.web_search = true
+
 [mcp_servers.zen]
 command = "uvx"
 args = [
