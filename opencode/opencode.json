@@ -6,6 +6,38 @@
       "api": "https://api.z.ai/api/coding/paas/v4"
     }
   },
+  "permission": {
+    "webfetch": "allow",
+    "bash": {
+      "*": "allow",
+      "git commit": "ask",
+      "npm install": "ask"
+    }
+  },
+  "agent": {
+    "plan": {
+      "mode": "primary",
+      "model": "github-copilot/gemini-2.5-pro",
+      "permission": {
+        "edit": "deny"
+      },
+      "tools": {
+        "*": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "build": {
+      "mode": "primary",
+      "model": "zai/glm-4.5",
+      "permission": {
+        "edit": "allow"
+      },
+      "tools": {
+        "*": true
+      }
+    }
+  },
   "mcp": {
     "nx-mcp": {
       "enabled": true,
@@ -32,15 +64,6 @@
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
     }
-  },
-  "permission": {
-    "bash": {
-      "*": "allow",
-      "git commit": "ask",
-      "npm install": "ask"
-    },
-    "edit": "allow",
-    "webfetch": "allow"
   },
   "keybinds": {
     "input_clear": "none",
