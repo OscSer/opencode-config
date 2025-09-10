@@ -27,12 +27,16 @@ class ConfigError(InstallError):
     pass
 
 
+class AgentAsset(TypedDict):
+    source: str
+    target: str
+    type: str
+
+
 class AgentConfig(TypedDict):
     label: str
-    settings_source: str
-    settings_target: str
-    rules_source: str
-    rules_target: str
+    assets: List[AgentAsset]
+    special_actions: List[str]
 
 
 class ConfigInstaller:
@@ -41,24 +45,39 @@ class ConfigInstaller:
     AGENTS_CONFIG: Dict[str, AgentConfig] = {
         "claude": {
             "label": "Claude Code",
-            "settings_source": "settings.json",
-            "settings_target": "settings.json",
-            "rules_source": "rules/AGENTS.md",
-            "rules_target": "CLAUDE.md",
+            "assets": [
+                {
+                    "source": "claude/settings.json",
+                    "target": "settings.json",
+                    "type": "file",
+                },
+                {"source": "rules/AGENTS.md", "target": "CLAUDE.md", "type": "file"},
+            ],
+            "special_actions": ["update_claude_mcp_config"],
         },
         "codex": {
             "label": "Codex",
-            "settings_source": "config.toml",
-            "settings_target": "config.toml",
-            "rules_source": "rules/AGENTS.md",
-            "rules_target": "AGENTS.md",
+            "assets": [
+                {
+                    "source": "codex/config.toml",
+                    "target": "config.toml",
+                    "type": "file",
+                },
+                {"source": "rules/AGENTS.md", "target": "AGENTS.md", "type": "file"},
+            ],
+            "special_actions": [],
         },
         "opencode": {
             "label": "Opencode",
-            "settings_source": "opencode.json",
-            "settings_target": "opencode.json",
-            "rules_source": "rules/AGENTS.md",
-            "rules_target": "AGENTS.md",
+            "assets": [
+                {
+                    "source": "opencode/opencode.json",
+                    "target": "opencode.json",
+                    "type": "file",
+                },
+                {"source": "rules/AGENTS.md", "target": "AGENTS.md", "type": "file"},
+            ],
+            "special_actions": [],
         },
     }
 
@@ -74,27 +93,33 @@ class ConfigInstaller:
         self.codex_dir = codex_dir or Path.home() / ".codex"
         self.opencode_dir = opencode_dir or Path.home() / ".config" / "opencode"
 
+    def _validate_source_path(
+        self, relative_path: str, is_file: bool
+    ) -> Optional[Path]:
+        """Validate source path and return Path object if valid"""
+        full_path = self.repo_dir / relative_path
+        path_type = "file" if is_file else "directory"
+
+        if not full_path.exists():
+            print(
+                f"Warning: {relative_path} not found in repository, skipping..."
+            )
+            return None
+
+        if is_file and not full_path.is_file():
+            print(f"Warning: {relative_path} is not a file, skipping...")
+            return None
+
+        if not is_file and not full_path.is_dir():
+            print(f"Warning: {relative_path} is not a directory, skipping...")
+            return None
+
+        return full_path
+
     def resolve_source(
         self, relative: str, must_be_file: bool = True
     ) -> Optional[Path]:
-        full_path = self.repo_dir / relative
-
-        if must_be_file:
-            if not full_path.is_file():
-                if not full_path.exists():
-                    print(f"Warning: {relative} not found in repository, skipping...")
-                else:
-                    print(f"Warning: {relative} is not a file, skipping...")
-                return None
-        else:
-            if not full_path.is_dir():
-                if not full_path.exists():
-                    print(f"Warning: {relative} not found in repository, skipping...")
-                else:
-                    print(f"Warning: {relative} is not a directory, skipping...")
-                return None
-
-        return full_path
+        return self._validate_source_path(relative, must_be_file)
 
     def get_target_dir(self, agent_name: str) -> Path:
         """Get the target directory for a given agent"""
@@ -107,7 +132,8 @@ class ConfigInstaller:
             raise InstallError(f"Unknown agent: {agent_name}")
         return target_dirs[agent_name]
 
-    def create_symlink(self, source: Path, target: Path) -> bool:
+    @staticmethod
+    def create_symlink(source: Path, target: Path) -> bool:
         if not source.exists():
             raise CopyError(f"Source {source} does not exist")
         try:
@@ -166,6 +192,16 @@ class ConfigInstaller:
         except (json.JSONDecodeError, OSError) as e:
             raise ConfigError(f"Failed to update MCP configuration: {e}")
 
+    def _run_special_actions(self, agent_name: str):
+        """Run special actions for a given agent"""
+        config = self.AGENTS_CONFIG[agent_name]
+        for action_name in config.get("special_actions", []):
+            action_method = getattr(self, action_name, None)
+            if action_method and callable(action_method):
+                action_method()
+            else:
+                print(f"Warning: Unknown special action '{action_name}' for {agent_name}")
+
     def install_agent(self, agent_name: str) -> bool:
         config = self.AGENTS_CONFIG[agent_name]
         agent_label = config["label"]
@@ -176,41 +212,17 @@ class ConfigInstaller:
         try:
             target_dir.mkdir(parents=True, exist_ok=True)
 
-            # Install settings as symlink for all agents
-            settings_source_rel = f"{agent_name}/{config['settings_source']}"
-            settings_source_path = self.resolve_source(
-                settings_source_rel, must_be_file=True
-            )
-            if settings_source_path is not None:
-                print(f"Linking {agent_label} configuration...")
-                self.create_symlink(
-                    settings_source_path,
-                    target_dir / config["settings_target"],
+            for asset in config["assets"]:
+                source_path = self.resolve_source(
+                    asset["source"], must_be_file=asset["type"] == "file"
                 )
-                print(f"✓ {agent_label} configuration linked")
+                if source_path:
+                    target_path = target_dir / asset["target"]
+                    print(f"Linking {asset['source']} to {target_path}...")
+                    self.create_symlink(source_path, target_path)
+                    print(f"✓ Linked {asset['target']}")
 
-            # Link rules as symlink
-            rules_source_path = self.resolve_source(
-                config["rules_source"], must_be_file=True
-            )
-            if rules_source_path is not None:
-                doc_name = config["rules_target"]
-                print(f"Linking shared {doc_name} for {agent_label}...")
-                if self.create_symlink(
-                    rules_source_path,
-                    target_dir / doc_name,
-                ):
-                    print(f"✓ {agent_label} shared {doc_name} linked")
-
-            # Update MCP configuration for Claude
-            if agent_name == "claude":
-                if (
-                    self.resolve_source("claude/.mcp.json", must_be_file=True)
-                    is not None
-                ):
-                    self.update_claude_mcp_config()
-            # Opencode uses JSON config that already includes MCP servers
-            # Codex uses a TOML config that already includes MCP servers
+            self._run_special_actions(agent_name)
 
             return True
 
