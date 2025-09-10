@@ -9,6 +9,7 @@
   "includeCoAuthoredBy": false,
   "outputStyle": "default",
   "permissions": {
+    "defaultMode": "acceptEdits",
     "allow": [
       "Bash",
       "Read",
@@ -28,12 +29,11 @@
       "mcp__zen__listmodels",
       "mcp__zen__version"
     ],
-    "defaultMode": "acceptEdits",
     "deny": ["NotebookRead", "NotebookEdit", "mcp__ide__executeCode"]
+  },
+  "statusLine": {
+    "command": "bunx -y ccstatusline@latest",
+    "padding": 0,
+    "type": "command"
   }
-  // "statusLine": {
-  //   "command": "bunx -y ccstatusline@latest",
-  //   "padding": 0,
-  //   "type": "command"
-  // }
 }
