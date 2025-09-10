@@ -23,7 +23,8 @@
       ],
       "environment": {
         "OPENROUTER_API_KEY": "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",
-        "DISABLED_TOOLS": "precommit,secaudit,docgen,challenge,tracer"
+        "DISABLED_TOOLS": "precommit,secaudit,docgen,challenge,tracer",
+        "DEFAULT_MODEL": "o3"
       }
     },
     "context7": {
