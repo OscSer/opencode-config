@@ -6,35 +6,31 @@
       "api": "https://api.z.ai/api/coding/paas/v4"
     }
   },
-  "permission": {
-    "webfetch": "allow",
-    "bash": {
-      "*": "allow",
-      "git commit": "ask",
-      "npm install": "ask"
-    }
-  },
   "agent": {
     "plan": {
       "mode": "primary",
-      "model": "github-copilot/gemini-2.5-pro",
+      "model": "github-copilot/claude-sonnet-4",
       "permission": {
-        "edit": "deny"
-      },
-      "tools": {
-        "*": true,
-        "edit": false,
-        "write": false
+        "webfetch": "allow",
+        "edit": "deny",
+        "bash": {
+          "*": "ask",
+          "tree": "allow",
+          "find": "ask"
+        }
       }
     },
     "build": {
       "mode": "primary",
-      "model": "zai/glm-4.5",
+      "model": "github-copilot/claude-sonnet-4",
       "permission": {
-        "edit": "allow"
-      },
-      "tools": {
-        "*": true
+        "webfetch": "allow",
+        "edit": "allow",
+        "bash": {
+          "*": "allow",
+          "git commit": "ask",
+          "npm install": "ask"
+        }
       }
     }
   },
@@ -66,7 +62,8 @@
     }
   },
   "keybinds": {
-    "input_clear": "none",
-    "input_newline": "ctrl+enter"
+    "input_clear": "ctrl+d",
+    "input_newline": "ctrl+l",
+    "session_new": "ctrl+n"
   }
 }
