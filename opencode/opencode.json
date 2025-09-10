@@ -23,18 +23,13 @@
       ],
       "environment": {
         "OPENROUTER_API_KEY": "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",
-        "DISABLED_TOOLS": "testgen,secaudit,docgen,tracer,chat,precommit,challenge,analyze"
+        "DISABLED_TOOLS": "precommit,secaudit,docgen,challenge,tracer"
       }
     },
     "context7": {
       "enabled": true,
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
-    },
-    "markitdown": {
-      "enabled": true,
-      "type": "local",
-      "command": ["uvx", "markitdown-mcp"]
     }
   },
   "permission": {
