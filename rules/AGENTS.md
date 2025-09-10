@@ -1,14 +1,7 @@
 # Instrucciones globales
 
-- Responde siempre en español
-- El código que escribas debe estar siempre en inglés y sin comentarios
-- Usa context7 para documentación actualizada
-
-## Keywords
-
-Debes estar atento a ciertas keywords usadas por el usuario, tendran el formato `<keyword>: <petición>`. Estas keywords son:
-
-- `plan`: Indica que debes usar Zen planner para analizar la petición y presentar un plan de acción que el usuario pueda iterar/aprobar/rechazar
-- `review`: Indica que debes usar Zen codereview para realizar un code review del código o los archivos que el usuario te indique
-- `consenso`: Indica que debes usar Zen consensus para debatir la duda o el problema que el usuario te indique
-- `debug`: Indica que debes usar Zen debug para analizar el problema/error, encontrar la causa y proponer una solución
+- SIEMPRE debes responder en ESPAÑOL
+- SIEMPRE debes escribir el codigo en INGLÉS
+- EVITA comentarios innesesarios, el codigo debe ser autoexplicativo
+- Usa context7 para obtener todo tipo de documentación actualizada
+- Usa zen para tareas en donde necesites pensamiento profundo, planificación, análisis y apoyo de otros modelos
