@@ -33,7 +33,6 @@ class AgentConfig(TypedDict):
     settings_target: str
     rules_source: str
     rules_target: str
-    has_mcp: bool
 
 
 class ConfigInstaller:
@@ -46,7 +45,6 @@ class ConfigInstaller:
             "settings_target": "settings.json",
             "rules_source": "rules/AGENTS.md",
             "rules_target": "CLAUDE.md",
-            "has_mcp": True,
         },
         "codex": {
             "label": "Codex",
@@ -54,7 +52,6 @@ class ConfigInstaller:
             "settings_target": "config.toml",
             "rules_source": "rules/AGENTS.md",
             "rules_target": "AGENTS.md",
-            "has_mcp": False,
         },
         "opencode": {
             "label": "Opencode",
@@ -62,30 +59,53 @@ class ConfigInstaller:
             "settings_target": "opencode.json",
             "rules_source": "rules/AGENTS.md",
             "rules_target": "AGENTS.md",
-            "has_mcp": True,
         },
     }
 
-    def __init__(self, repo_dir: Optional[Path] = None):
+    def __init__(
+        self,
+        repo_dir: Optional[Path] = None,
+        claude_dir: Optional[Path] = None,
+        codex_dir: Optional[Path] = None,
+        opencode_dir: Optional[Path] = None,
+    ):
         self.repo_dir = repo_dir or Path(__file__).parent.absolute()
-        self.claude_dir = Path.home() / ".claude"
-        self.codex_dir = Path.home() / ".codex"
-        self.opencode_dir = Path.home() / ".config" / "opencode"
+        self.claude_dir = claude_dir or Path.home() / ".claude"
+        self.codex_dir = codex_dir or Path.home() / ".codex"
+        self.opencode_dir = opencode_dir or Path.home() / ".config" / "opencode"
 
     def resolve_source(
         self, relative: str, must_be_file: bool = True
     ) -> Optional[Path]:
         full_path = self.repo_dir / relative
-        if not full_path.exists():
-            print(f"Warning: {relative} not found in repository, skipping...")
-            return None
-        if must_be_file and not full_path.is_file():
-            print(f"Warning: {relative} is not a file, skipping...")
-            return None
-        if not must_be_file and not full_path.is_dir():
-            print(f"Warning: {relative} is not a directory, skipping...")
-            return None
+
+        if must_be_file:
+            if not full_path.is_file():
+                if not full_path.exists():
+                    print(f"Warning: {relative} not found in repository, skipping...")
+                else:
+                    print(f"Warning: {relative} is not a file, skipping...")
+                return None
+        else:
+            if not full_path.is_dir():
+                if not full_path.exists():
+                    print(f"Warning: {relative} not found in repository, skipping...")
+                else:
+                    print(f"Warning: {relative} is not a directory, skipping...")
+                return None
+
         return full_path
+
+    def get_target_dir(self, agent_name: str) -> Path:
+        """Get the target directory for a given agent"""
+        target_dirs = {
+            "claude": self.claude_dir,
+            "codex": self.codex_dir,
+            "opencode": self.opencode_dir,
+        }
+        if agent_name not in target_dirs:
+            raise InstallError(f"Unknown agent: {agent_name}")
+        return target_dirs[agent_name]
 
     def create_symlink(self, source: Path, target: Path) -> bool:
         if not source.exists():
@@ -123,7 +143,7 @@ class ConfigInstaller:
             claude_data: Dict[str, Any] = {}
             if claude_config.exists():
                 with open(claude_config, "r") as f:
-                    claude_data = cast(Dict[str, Any], json.load(f))
+                    claude_data = json.load(f)
 
             claude_data["mcpServers"] = mcp_data["mcpServers"]
 
@@ -149,15 +169,7 @@ class ConfigInstaller:
     def install_agent(self, agent_name: str) -> bool:
         config = self.AGENTS_CONFIG[agent_name]
         agent_label = config["label"]
-
-        if agent_name == "claude":
-            target_dir = self.claude_dir
-        elif agent_name == "codex":
-            target_dir = self.codex_dir
-        elif agent_name == "opencode":
-            target_dir = self.opencode_dir
-        else:
-            raise InstallError(f"Unknown agent: {agent_name}")
+        target_dir = self.get_target_dir(agent_name)
 
         print(f"Installing {agent_label} configuration...")
 
@@ -190,8 +202,8 @@ class ConfigInstaller:
                 ):
                     print(f"✓ {agent_label} shared {doc_name} linked")
 
-            # Update MCP configuration if needed
-            if agent_name == "claude" and config["has_mcp"]:
+            # Update MCP configuration for Claude
+            if agent_name == "claude":
                 if (
                     self.resolve_source("claude/.mcp.json", must_be_file=True)
                     is not None
