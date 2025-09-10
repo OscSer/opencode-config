@@ -10,6 +10,14 @@ Este proyecto centraliza configuraciones y reglas para múltiples agentes de IA,
 - `rules/` - Reglas globales para todos los agentes
 - `install.py` - Script de instalación
 
+## Desarrollo
+
+Después de cualquier modificación, SIEMPRE ejecutar los tests para verificar que no se hayan introducido errores:
+
+```bash
+python3 -m pytest tests/
+```
+
 ## Documentación
 
 SIEMPRE debes consultar esta documentación para cada agente:
