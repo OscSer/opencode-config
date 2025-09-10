@@ -1,25 +1,31 @@
-# Project Instructions
+# Instrucciones del Proyecto
 
-Personal configuration for AI agents.
+Este proyecto centraliza configuraciones y reglas para múltiples agentes de IA, facilitando su configuración a través de un script de instalación.
 
-## Structure
+## Estructura
 
-- `claude/` - Claude Code configuration
-- `codex/` - Codex configuration
-- `rules/` - Shared agent rules
-- `install.py` - Automated installation
+- `claude/` - Configuración de Claude Code
+- `codex/` - Configuración de Codex
+- `opencode/` - Configuración de Opencode
+- `rules/` - Reglas globales para todos los agentes
+- `install.py` - Script de instalación
 
-## Development
+## Documentación
 
-- When making any changes, you must check whether install.py needs to be updated
-- ALWAYS consult this documentation for each agent:
+SIEMPRE debes consultar esta documentación para cada agente:
 
-**Claude Code docs**
+**Claude Code**
 
-- [Settings](https://docs.anthropic.com/en/docs/claude-code/settings)
+- [Configuración](https://docs.anthropic.com/en/docs/claude-code/settings)
 - [MCP](https://docs.anthropic.com/en/docs/claude-code/mcp)
-- [Rules](https://docs.anthropic.com/en/docs/claude-code/memory)
+- [Reglas](https://docs.anthropic.com/en/docs/claude-code/memory)
 
-**Codex docs**
+**Codex**
 
-- [Settings & MCP & Rules](https://github.com/openai/codex/blob/main/docs/config.md)
+- [Config, MCP, Reglas](https://github.com/openai/codex/blob/main/docs/config.md)
+
+**Opencode**
+
+- [Configuración](https://opencode.ai/docs/config)
+- [MCP](https://opencode.ai/docs/mcp-servers)
+- [Reglas](https://opencode.ai/docs/rules)

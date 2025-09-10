@@ -56,12 +56,21 @@ class ConfigInstaller:
             "rules_target": "AGENTS.md",
             "has_mcp": False,
         },
+        "opencode": {
+            "label": "Opencode",
+            "settings_source": "opencode.json",
+            "settings_target": "opencode.json",
+            "rules_source": "rules/AGENTS.md",
+            "rules_target": "AGENTS.md",
+            "has_mcp": True,
+        },
     }
 
     def __init__(self, repo_dir: Optional[Path] = None):
         self.repo_dir = repo_dir or Path(__file__).parent.absolute()
         self.claude_dir = Path.home() / ".claude"
         self.codex_dir = Path.home() / ".codex"
+        self.opencode_dir = Path.home() / ".config" / "opencode"
 
     def resolve_source(
         self, relative: str, must_be_file: bool = True
@@ -145,6 +154,8 @@ class ConfigInstaller:
             target_dir = self.claude_dir
         elif agent_name == "codex":
             target_dir = self.codex_dir
+        elif agent_name == "opencode":
+            target_dir = self.opencode_dir
         else:
             raise InstallError(f"Unknown agent: {agent_name}")
 
@@ -186,6 +197,7 @@ class ConfigInstaller:
                     is not None
                 ):
                     self.update_claude_mcp_config()
+            # Opencode uses JSON config that already includes MCP servers
             # Codex uses a TOML config that already includes MCP servers
 
             return True
@@ -196,8 +208,8 @@ class ConfigInstaller:
 
     def install_all(self) -> bool:
         """Install all agent configurations"""
-        print("Claude Code & Codex Configuration Installation")
-        print("=============================================")
+        print("Claude Code, Codex & Opencode Configuration Installation")
+        print("===================================================")
 
         success_flags: List[bool] = []
         for agent_name in self.AGENTS_CONFIG:
@@ -209,6 +221,7 @@ class ConfigInstaller:
             print("✅ Installation complete!")
             print("Claude Code configuration is available in ~/.claude/")
             print("Codex configuration is available in ~/.codex/")
+            print("Opencode configuration is available in ~/.config/opencode/")
             return True
         else:
             print("")

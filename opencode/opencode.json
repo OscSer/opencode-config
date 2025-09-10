@@ -1,0 +1,53 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "autoupdate": true,
+  "provider": {
+    "zai": {
+      "api": "https://api.z.ai/api/coding/paas/v4"
+    }
+  },
+  "mcp": {
+    "nx-mcp": {
+      "enabled": true,
+      "type": "local",
+      "command": ["npx", "-y", "nx-mcp@latest", "."]
+    },
+    "zen": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "uvx",
+        "--from",
+        "git+https://github.com/BeehiveInnovations/zen-mcp-server.git",
+        "zen-mcp-server"
+      ],
+      "environment": {
+        "OPENROUTER_API_KEY": "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",
+        "DISABLED_TOOLS": "testgen,secaudit,docgen,tracer,chat,precommit,challenge,analyze"
+      }
+    },
+    "context7": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "markitdown": {
+      "enabled": true,
+      "type": "local",
+      "command": ["uvx", "markitdown-mcp"]
+    }
+  },
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "git commit": "ask",
+      "npm install": "ask"
+    },
+    "edit": "allow",
+    "webfetch": "allow"
+  },
+  "keybinds": {
+    "input_clear": "none",
+    "input_newline": "ctrl+enter"
+  }
+}
