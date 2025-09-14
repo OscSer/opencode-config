@@ -15,11 +15,10 @@
         "webfetch": "allow",
         "edit": "deny",
         "bash": {
-          "*": "ask",
-          "git status": "allow",
-          "git log": "allow",
-          "npx nx": "allow",
-          "ls": "allow"
+          "git status *": "allow",
+          "git log *": "allow",
+          "git show *": "allow",
+          "npx nx *": "allow"
         }
       }
     },
@@ -32,10 +31,9 @@
         "edit": "allow",
         "bash": {
           "*": "allow",
-          "cd": "deny",
-          "git commit": "ask",
-          "git push": "ask",
-          "npm install": "ask"
+          "git commit *": "ask",
+          "git push *": "ask",
+          "npm install *": "ask"
         }
       }
     }
