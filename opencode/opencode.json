@@ -9,28 +9,26 @@
   },
   "agent": {
     "plan": {
-      // "model": "github-copilot/gpt-5",
-      "model": "github-copilot/claude-sonnet-4",
       "permission": {
         "webfetch": "allow",
         "edit": "deny",
         "bash": {
-          "git status *": "allow",
+          "git status": "allow",
+          "git diff *": "allow",
           "git log *": "allow",
           "git show *": "allow",
-          "npx nx *": "allow"
+          "npx nx *": "allow",
+          "grep *": "allow"
         }
       }
     },
     "build": {
-      // "model": "zai/glm-4.5",
-      // "model": "github-copilot/claude-sonnet-4",
-      "model": "github-copilot/grok-code-fast-1",
       "permission": {
         "webfetch": "allow",
         "edit": "allow",
         "bash": {
           "*": "allow",
+          "git add *": "ask",
           "git commit *": "ask",
           "git push *": "ask",
           "npm install *": "ask"
