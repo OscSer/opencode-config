@@ -40,7 +40,7 @@ class AgentConfig(TypedDict):
 
 
 class ConfigInstaller:
-    """Handles installation of Claude Code and Codex configurations"""
+    """Handles installation of Claude Code and Opencode configurations"""
 
     AGENTS_CONFIG: Dict[str, AgentConfig] = {
         "claude": {
@@ -54,18 +54,6 @@ class ConfigInstaller:
                 {"source": "rules/AGENTS.md", "target": "CLAUDE.md", "type": "file"},
             ],
             "special_actions": ["update_claude_mcp_config"],
-        },
-        "codex": {
-            "label": "Codex",
-            "assets": [
-                {
-                    "source": "codex/config.toml",
-                    "target": "config.toml",
-                    "type": "file",
-                },
-                {"source": "rules/AGENTS.md", "target": "AGENTS.md", "type": "file"},
-            ],
-            "special_actions": [],
         },
         "opencode": {
             "label": "Opencode",
@@ -85,12 +73,10 @@ class ConfigInstaller:
         self,
         repo_dir: Optional[Path] = None,
         claude_dir: Optional[Path] = None,
-        codex_dir: Optional[Path] = None,
         opencode_dir: Optional[Path] = None,
     ):
         self.repo_dir = repo_dir or Path(__file__).parent.absolute()
         self.claude_dir = claude_dir or Path.home() / ".claude"
-        self.codex_dir = codex_dir or Path.home() / ".codex"
         self.opencode_dir = opencode_dir or Path.home() / ".config" / "opencode"
 
     def _validate_source_path(
@@ -101,9 +87,7 @@ class ConfigInstaller:
         path_type = "file" if is_file else "directory"
 
         if not full_path.exists():
-            print(
-                f"Warning: {relative_path} not found in repository, skipping..."
-            )
+            print(f"Warning: {relative_path} not found in repository, skipping...")
             return None
 
         if is_file and not full_path.is_file():
@@ -125,7 +109,6 @@ class ConfigInstaller:
         """Get the target directory for a given agent"""
         target_dirs = {
             "claude": self.claude_dir,
-            "codex": self.codex_dir,
             "opencode": self.opencode_dir,
         }
         if agent_name not in target_dirs:
@@ -200,7 +183,9 @@ class ConfigInstaller:
             if action_method and callable(action_method):
                 action_method()
             else:
-                print(f"Warning: Unknown special action '{action_name}' for {agent_name}")
+                print(
+                    f"Warning: Unknown special action '{action_name}' for {agent_name}"
+                )
 
     def install_agent(self, agent_name: str) -> bool:
         config = self.AGENTS_CONFIG[agent_name]
@@ -232,7 +217,7 @@ class ConfigInstaller:
 
     def install_all(self) -> bool:
         """Install all agent configurations"""
-        print("Claude Code, Codex & Opencode Configuration Installation")
+        print("Claude Code & Opencode Configuration Installation")
         print("===================================================")
 
         success_flags: List[bool] = []
@@ -244,7 +229,6 @@ class ConfigInstaller:
             print("")
             print("✅ Installation complete!")
             print("Claude Code configuration is available in ~/.claude/")
-            print("Codex configuration is available in ~/.codex/")
             print("Opencode configuration is available in ~/.config/opencode/")
             return True
         else:
