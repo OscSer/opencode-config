@@ -16,31 +16,12 @@
   },
   "agent": {
     "plan": {
-      // "model": "github-copilot/gpt-5",
-      // "model": "github-copilot/claude-sonnet-4",
-      "model": "openrouter/x-ai/grok-4-fast:free",
+      "model": "github-copilot/claude-sonnet-4",
       "permission": { "edit": "deny" }
     },
     "build": {
-      // "model": "github-copilot/grok-code-fast-1",
-      "model": "openrouter/x-ai/grok-4-fast:free",
+      "model": "github-copilot/grok-code-fast-1",
       "permission": { "edit": "allow" }
-    }
-  },
-  "provider": {
-    "openrouter": {
-      "models": {
-        "x-ai/grok-4-fast:free": {
-          "options": {
-            "reasoning": {
-              "effort": "high"
-            }
-          }
-        }
-      }
-    },
-    "zai": {
-      "api": "https://api.z.ai/api/coding/paas/v4"
     }
   },
   "mcp": {
