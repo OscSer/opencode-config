@@ -2,44 +2,43 @@
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": true,
   "theme": "system",
+  "permission": {
+    "webfetch": "allow",
+    "bash": {
+      "*": "allow",
+      "git add *": "ask",
+      "git commit *": "ask",
+      "git push": "ask",
+      "git push *": "ask",
+      "gh pr *": "ask",
+      "npm install *": "ask"
+    }
+  },
   "agent": {
     "plan": {
       // "model": "github-copilot/gpt-5",
-      "model": "github-copilot/claude-sonnet-4",
-      "permission": {
-        "webfetch": "allow",
-        "edit": "deny",
-        "bash": {
-          "git status": "allow",
-          "git status *": "allow",
-          "git diff *": "allow",
-          "git log *": "allow",
-          "git show *": "allow",
-          "npx nx *": "allow",
-          "grep *": "allow"
-        }
-      }
+      // "model": "github-copilot/claude-sonnet-4",
+      "model": "openrouter/x-ai/grok-4-fast:free",
+      "permission": { "edit": "deny" }
     },
     "build": {
-      // "model": "zai/glm-4.5",
       // "model": "github-copilot/grok-code-fast-1",
-      "model": "opencode/grok-code",
-      "permission": {
-        "webfetch": "allow",
-        "edit": "allow",
-        "bash": {
-          "*": "allow",
-          "git add *": "ask",
-          "git commit *": "ask",
-          "git push": "ask",
-          "git push *": "ask",
-          "gh pr *": "ask",
-          "npm install *": "ask"
-        }
-      }
+      "model": "openrouter/x-ai/grok-4-fast:free",
+      "permission": { "edit": "allow" }
     }
   },
   "provider": {
+    "openrouter": {
+      "models": {
+        "x-ai/grok-4-fast:free": {
+          "options": {
+            "reasoning": {
+              "effort": "high"
+            }
+          }
+        }
+      }
+    },
     "zai": {
       "api": "https://api.z.ai/api/coding/paas/v4"
     }
@@ -63,11 +62,6 @@
       "enabled": true,
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
-    },
-    "grep": {
-      "enabled": true,
-      "type": "remote",
-      "url": "https://mcp.grep.app"
     }
   },
   "keybinds": {
