@@ -6,9 +6,9 @@
     "webfetch": "allow",
     "bash": {
       "*": "allow",
+      "git checkout *": "ask",
       "git add *": "ask",
       "git commit *": "ask",
-      "git push": "ask",
       "git push *": "ask",
       "gh pr *": "ask",
       "npm install *": "ask"
@@ -16,29 +16,15 @@
   },
   "agent": {
     "plan": {
-      "model": "github-copilot/claude-sonnet-4",
+      "model": "openrouter/anthropic/claude-sonnet-4.5",
       "permission": { "edit": "deny" }
     },
     "build": {
-      "model": "github-copilot/grok-code-fast-1",
+      "model": "opencode/grok-code",
       "permission": { "edit": "allow" }
     }
   },
   "mcp": {
-    "zen": {
-      "enabled": true,
-      "type": "local",
-      "command": [
-        "uvx",
-        "--from",
-        "git+https://github.com/BeehiveInnovations/zen-mcp-server.git",
-        "zen-mcp-server"
-      ],
-      "environment": {
-        "OPENROUTER_API_KEY": "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",
-        "DISABLED_TOOLS": "chat,thinkdeep,precommit,analyze,testgen,secaudit,docgen,challenge,tracer"
-      }
-    },
     "context7": {
       "enabled": true,
       "type": "remote",

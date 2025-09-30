@@ -18,15 +18,7 @@
       "WebSearch",
       "mcp__ide__getDiagnostics",
       "mcp__context7__resolve-library-id",
-      "mcp__context7__get-library-docs",
-      "mcp__zen__thinkdeep",
-      "mcp__zen__planner",
-      "mcp__zen__consensus",
-      "mcp__zen__codereview",
-      "mcp__zen__debug",
-      "mcp__zen__refactor",
-      "mcp__zen__listmodels",
-      "mcp__zen__version"
+      "mcp__context7__get-library-docs"
     ],
     "deny": ["NotebookRead", "NotebookEdit", "mcp__ide__executeCode"]
   },

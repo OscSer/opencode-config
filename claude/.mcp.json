@@ -1,25 +1,8 @@
 {
   "mcpServers": {
-    "zen": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/BeehiveInnovations/zen-mcp-server.git",
-        "zen-mcp-server"
-      ],
-      "env": {
-        "OPENROUTER_API_KEY": "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",
-        "DISABLED_TOOLS": "chat,thinkdeep,precommit,analyze,testgen,secaudit,docgen,challenge,tracer",
-        "DEFAULT_MODEL": "o3"
-      }
-    },
     "context7": {
       "type": "http",
       "url": "https://mcp.context7.com/mcp"
-    },
-    "markitdown": {
-      "command": "uvx",
-      "args": ["markitdown-mcp"]
     }
   }
 }
