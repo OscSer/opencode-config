@@ -1,4 +1,4 @@
-# Instrucciones Globales
+# Global Instructions
 
 - Siempre debes responder en ESPAÑOL
 - Siempre debes escribir el codigo en INGLÉS
