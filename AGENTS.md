@@ -18,7 +18,7 @@ python3 -m pytest tests/
 
 ## Documentación
 
-SIEMPRE debes consultar esta documentación para el agente:
+SIEMPRE debes consultar la documentación de cada agente:
 
 **Opencode**
 
