@@ -10,7 +10,9 @@
       "git commit *": "ask",
       "git push *": "ask",
       "gh pr *": "ask",
-      "npm install *": "ask"
+      "npm install *": "ask",
+      "npm update *": "ask",
+      "cat *": "ask",
     }
   },
   "agent": {
@@ -20,7 +22,6 @@
     },
     "build": {
       // "model": "zai-coding-plan/glm-4.6",
-      // "model": "opencode/grok-code",
       "model": "github-copilot/claude-haiku-4.5",
       "permission": { "edit": "allow" }
     }

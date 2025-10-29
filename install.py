@@ -40,21 +40,9 @@ class AgentConfig(TypedDict):
 
 
 class ConfigInstaller:
-    """Handles installation of Claude Code and Opencode configurations"""
+    """Handles installation of Opencode configuration"""
 
     AGENTS_CONFIG: Dict[str, AgentConfig] = {
-        "claude": {
-            "label": "Claude Code",
-            "assets": [
-                {
-                    "source": "claude/settings.json",
-                    "target": "settings.json",
-                    "type": "file",
-                },
-                {"source": "rules/AGENTS.md", "target": "CLAUDE.md", "type": "file"},
-            ],
-            "special_actions": ["update_claude_mcp_config"],
-        },
         "opencode": {
             "label": "Opencode",
             "assets": [
@@ -72,11 +60,9 @@ class ConfigInstaller:
     def __init__(
         self,
         repo_dir: Optional[Path] = None,
-        claude_dir: Optional[Path] = None,
         opencode_dir: Optional[Path] = None,
     ):
         self.repo_dir = repo_dir or Path(__file__).parent.absolute()
-        self.claude_dir = claude_dir or Path.home() / ".claude"
         self.opencode_dir = opencode_dir or Path.home() / ".config" / "opencode"
 
     def _validate_source_path(
@@ -108,7 +94,6 @@ class ConfigInstaller:
     def get_target_dir(self, agent_name: str) -> Path:
         """Get the target directory for a given agent"""
         target_dirs = {
-            "claude": self.claude_dir,
             "opencode": self.opencode_dir,
         }
         if agent_name not in target_dirs:
@@ -130,50 +115,6 @@ class ConfigInstaller:
             return True
         except Exception as link_error:
             raise CopyError(f"Failed to symlink {source} to {target}: {link_error}")
-
-    def update_claude_mcp_config(self) -> bool:
-        """Update Claude MCP configuration"""
-        mcp_source = self.resolve_source("claude/.mcp.json", must_be_file=True)
-        claude_config = Path.home() / ".claude.json"
-
-        if mcp_source is None:
-            print("Warning: claude/.mcp.json not found, skipping MCP configuration...")
-            return False
-
-        print("Updating Claude MCP configuration...")
-
-        try:
-            with open(mcp_source, "r") as f:
-                mcp_data: Dict[str, Any] = json.load(f)
-
-            if "mcpServers" not in mcp_data:
-                raise ConfigError("mcpServers not found in claude/.mcp.json")
-
-            claude_data: Dict[str, Any] = {}
-            if claude_config.exists():
-                with open(claude_config, "r") as f:
-                    claude_data = json.load(f)
-
-            claude_data["mcpServers"] = mcp_data["mcpServers"]
-
-            claude_config.parent.mkdir(parents=True, exist_ok=True)
-            with NamedTemporaryFile(
-                "w",
-                delete=False,
-                dir=str(claude_config.parent),
-                prefix=f"{claude_config.name}.tmp.",
-            ) as tmp:
-                json.dump(claude_data, tmp, indent=2)
-                tmp.flush()
-                os.fsync(tmp.fileno())
-                tmp_name = tmp.name
-            os.replace(tmp_name, claude_config)
-
-            print("✓ MCP configuration updated successfully")
-            return True
-
-        except (json.JSONDecodeError, OSError) as e:
-            raise ConfigError(f"Failed to update MCP configuration: {e}")
 
     def _run_special_actions(self, agent_name: str):
         """Run special actions for a given agent"""
@@ -217,8 +158,8 @@ class ConfigInstaller:
 
     def install_all(self) -> bool:
         """Install all agent configurations"""
-        print("Claude Code & Opencode Configuration Installation")
-        print("===================================================")
+        print("Opencode Configuration Installation")
+        print("====================================")
 
         success_flags: List[bool] = []
         for agent_name in self.AGENTS_CONFIG:
@@ -228,7 +169,6 @@ class ConfigInstaller:
         if all(success_flags):
             print("")
             print("✅ Installation complete!")
-            print("Claude Code configuration is available in ~/.claude/")
             print("Opencode configuration is available in ~/.config/opencode/")
             return True
         else:

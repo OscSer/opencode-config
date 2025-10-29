@@ -4,7 +4,6 @@ Este proyecto centraliza configuraciones y reglas para múltiples agentes de IA,
 
 ## Estructura
 
-- `claude/` - Configuración de Claude Code
 - `opencode/` - Configuración de Opencode
 - `rules/` - Reglas globales para todos los agentes
 - `install.py` - Script de instalación
@@ -19,16 +18,11 @@ python3 -m pytest tests/
 
 ## Documentación
 
-SIEMPRE debes consultar esta documentación para cada agente:
-
-**Claude Code**
-
-- [Configuración](https://docs.anthropic.com/en/docs/claude-code/settings)
-- [MCP](https://docs.anthropic.com/en/docs/claude-code/mcp)
-- [Reglas](https://docs.anthropic.com/en/docs/claude-code/memory)
+SIEMPRE debes consultar esta documentación para el agente:
 
 **Opencode**
 
 - [Configuración](https://opencode.ai/docs/config)
 - [MCP](https://opencode.ai/docs/mcp-servers)
 - [Reglas](https://opencode.ai/docs/rules)
+- [Comandos](https://opencode.ai/docs/commands)

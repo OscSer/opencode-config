@@ -20,7 +20,6 @@ class TestConfigInstaller(unittest.TestCase):
         self.repo_dir = Path("/fake/repo")
         self.home_dir = Path("/fake/home")
 
-        self.claude_dir = self.home_dir / ".claude"
         self.opencode_dir = self.home_dir / ".config" / "opencode"
 
         # Patch Path.home() to return our fake home directory
@@ -29,7 +28,6 @@ class TestConfigInstaller(unittest.TestCase):
 
         self.installer = ConfigInstaller(
             repo_dir=self.repo_dir,
-            claude_dir=self.claude_dir,
             opencode_dir=self.opencode_dir,
         )
 
@@ -44,8 +42,8 @@ class TestConfigInstaller(unittest.TestCase):
         mock_exists.return_value = True
         mock_is_file.return_value = True
 
-        source_path = self.installer.resolve_source("claude/settings.json")
-        self.assertEqual(source_path, self.repo_dir / "claude/settings.json")
+        source_path = self.installer.resolve_source("opencode/opencode.json")
+        self.assertEqual(source_path, self.repo_dir / "opencode/opencode.json")
 
     @patch("builtins.print")
     @patch("pathlib.Path.exists")
@@ -61,7 +59,6 @@ class TestConfigInstaller(unittest.TestCase):
 
     def test_get_target_dir(self):
         """Test getting the correct target directory for each agent."""
-        self.assertEqual(self.installer.get_target_dir("claude"), self.claude_dir)
         self.assertEqual(self.installer.get_target_dir("opencode"), self.opencode_dir)
 
         with self.assertRaises(InstallError):
@@ -77,7 +74,7 @@ class TestConfigInstaller(unittest.TestCase):
     ):
         """Test successful creation of a symlink."""
         source = self.repo_dir / "a"
-        target = self.claude_dir / "b"
+        target = self.opencode_dir / "b"
 
         self.assertTrue(self.installer.create_symlink(source, target))
         mock_mkdir.assert_called_once_with(parents=True, exist_ok=True)
@@ -93,7 +90,7 @@ class TestConfigInstaller(unittest.TestCase):
     ):
         """Test failure during symlink creation."""
         source = self.repo_dir / "a"
-        target = self.claude_dir / "b"
+        target = self.opencode_dir / "b"
 
         with self.assertRaises(CopyError):
             self.installer.create_symlink(source, target)
@@ -106,111 +103,26 @@ class TestConfigInstaller(unittest.TestCase):
         self, mock_mkdir, mock_special_actions, mock_symlink, mock_resolve
     ):
         """Test a successful agent installation."""
-        mock_resolve.return_value = self.repo_dir / "claude/settings.json"
+        mock_resolve.return_value = self.repo_dir / "opencode/opencode.json"
 
-        result = self.installer.install_agent("claude")
+        result = self.installer.install_agent("opencode")
 
         self.assertTrue(result)
         mock_mkdir.assert_called_with(parents=True, exist_ok=True)
         self.assertTrue(mock_symlink.called)
-        mock_special_actions.assert_called_once_with("claude")
+        mock_special_actions.assert_called_once_with("opencode")
 
     @patch("install.ConfigInstaller.install_agent", return_value=True)
     def test_install_all_success(self, mock_install_agent):
         """Test successful installation of all agents."""
         self.assertTrue(self.installer.install_all())
-        self.assertEqual(mock_install_agent.call_count, 2)
+        self.assertEqual(mock_install_agent.call_count, 1)
 
-    @patch("install.ConfigInstaller.install_agent", side_effect=[True, False, True])
+    @patch("install.ConfigInstaller.install_agent", side_effect=[False])
     def test_install_all_with_errors(self, mock_install_agent):
         """Test installation of all agents with some failures."""
         self.assertFalse(self.installer.install_all())
-        self.assertEqual(mock_install_agent.call_count, 2)
-
-    # === MCP Configuration Tests (CRITICAL) ===
-
-    @patch(
-        "builtins.open",
-        new_callable=mock_open,
-        read_data='{"mcpServers": {"test": "server"}}',
-    )
-    @patch("pathlib.Path.exists", return_value=False)
-    @patch("install.ConfigInstaller.resolve_source")
-    @patch("json.dump")
-    @patch("os.replace")
-    @patch("os.fsync")
-    @patch("pathlib.Path.mkdir")
-    @patch("install.NamedTemporaryFile")
-    def test_update_claude_mcp_config_success(
-        self,
-        mock_tempfile,
-        mock_mkdir,
-        mock_fsync,
-        mock_replace,
-        mock_json_dump,
-        mock_resolve,
-        mock_exists,
-        mock_file,
-    ):
-        """Test successful MCP configuration update."""
-        # Mock temporary file
-        mock_tmp_file = MagicMock()
-        mock_tmp_file.name = "/fake/tmp/config.json.tmp"
-        mock_tmp_file.fileno.return_value = 1  # Mock file descriptor
-        mock_tmp_file.__enter__ = MagicMock(return_value=mock_tmp_file)
-        mock_tmp_file.__exit__ = MagicMock(return_value=None)
-        mock_tempfile.return_value = mock_tmp_file
-
-        mock_resolve.return_value = self.repo_dir / "claude/.mcp.json"
-
-        result = self.installer.update_claude_mcp_config()
-
-        self.assertTrue(result)
-        mock_json_dump.assert_called_once()
-        mock_replace.assert_called_once()
-        mock_mkdir.assert_called_with(parents=True, exist_ok=True)
-        mock_fsync.assert_called_once()
-
-    @patch("builtins.open", new_callable=mock_open, read_data='{"invalid": "data"}')
-    @patch("pathlib.Path.exists")
-    @patch("install.ConfigInstaller.resolve_source")
-    def test_update_claude_mcp_config_missing_mcp_servers(
-        self, mock_resolve, mock_exists, mock_file
-    ):
-        """Test MCP config update when mcpServers is missing."""
-        mock_resolve.return_value = self.repo_dir / "claude/.mcp.json"
-        mock_exists.return_value = False
-
-        with self.assertRaises(ConfigError) as context:
-            self.installer.update_claude_mcp_config()
-
-        self.assertIn("mcpServers not found", str(context.exception))
-
-    @patch("builtins.open", side_effect=json.JSONDecodeError("Invalid JSON", "doc", 1))
-    @patch("pathlib.Path.exists")
-    @patch("install.ConfigInstaller.resolve_source")
-    def test_update_claude_mcp_config_json_decode_error(
-        self, mock_resolve, mock_exists, mock_file
-    ):
-        """Test MCP config update with invalid JSON."""
-        mock_resolve.return_value = self.repo_dir / "claude/.mcp.json"
-        mock_exists.return_value = True
-
-        with self.assertRaises(ConfigError) as context:
-            self.installer.update_claude_mcp_config()
-
-        self.assertIn("Failed to update MCP configuration", str(context.exception))
-
-    @patch("install.ConfigInstaller.resolve_source", return_value=None)
-    @patch("builtins.print")
-    def test_update_claude_mcp_config_source_not_found(self, mock_print, mock_resolve):
-        """Test MCP config update when source file is not found."""
-        result = self.installer.update_claude_mcp_config()
-
-        self.assertFalse(result)
-        mock_print.assert_called_with(
-            "Warning: claude/.mcp.json not found, skipping MCP configuration..."
-        )
+        self.assertEqual(mock_install_agent.call_count, 1)
 
     # === Path Validation Tests (HIGH PRIORITY) ===
 
@@ -281,7 +193,7 @@ class TestConfigInstaller(unittest.TestCase):
     ):
         """Test symlink creation when target is an existing directory."""
         source = self.repo_dir / "a"
-        target = self.claude_dir / "b"
+        target = self.opencode_dir / "b"
 
         result = self.installer.create_symlink(source, target)
 
@@ -306,7 +218,7 @@ class TestConfigInstaller(unittest.TestCase):
     ):
         """Test symlink creation when target is an existing file."""
         source = self.repo_dir / "a"
-        target = self.claude_dir / "b"
+        target = self.opencode_dir / "b"
 
         result = self.installer.create_symlink(source, target)
 
@@ -318,7 +230,7 @@ class TestConfigInstaller(unittest.TestCase):
     def test_create_symlink_source_not_exists(self, mock_exists):
         """Test symlink creation when source does not exist."""
         source = self.repo_dir / "nonexistent"
-        target = self.claude_dir / "target"
+        target = self.opencode_dir / "target"
 
         with self.assertRaises(CopyError) as context:
             self.installer.create_symlink(source, target)
@@ -331,24 +243,23 @@ class TestConfigInstaller(unittest.TestCase):
     @patch("builtins.print")
     def test_run_special_actions_unknown_action(self, mock_print):
         """Test running unknown special action."""
-        # Temporarily add an unknown action to claude config
-        original_config = self.installer.AGENTS_CONFIG["claude"]["special_actions"]
-        self.installer.AGENTS_CONFIG["claude"]["special_actions"] = ["unknown_action"]
+        # Temporarily add an unknown action to opencode config
+        original_config = self.installer.AGENTS_CONFIG["opencode"]["special_actions"]
+        self.installer.AGENTS_CONFIG["opencode"]["special_actions"] = ["unknown_action"]
 
-        self.installer._run_special_actions("claude")
+        self.installer._run_special_actions("opencode")
 
         mock_print.assert_called_with(
-            "Warning: Unknown special action 'unknown_action' for claude"
+            "Warning: Unknown special action 'unknown_action' for opencode"
         )
 
         # Restore original config
-        self.installer.AGENTS_CONFIG["claude"]["special_actions"] = original_config
+        self.installer.AGENTS_CONFIG["opencode"]["special_actions"] = original_config
 
-    @patch("install.ConfigInstaller.update_claude_mcp_config")
-    def test_run_special_actions_valid_action(self, mock_update_mcp):
-        """Test running valid special action."""
-        self.installer._run_special_actions("claude")
-        mock_update_mcp.assert_called_once()
+    def test_run_special_actions_no_actions(self):
+        """Test running special actions when there are none."""
+        # opencode has no special actions, should not raise
+        self.installer._run_special_actions("opencode")
 
     # === Error Handling Tests (MEDIUM PRIORITY) ===
 
@@ -360,10 +271,10 @@ class TestConfigInstaller(unittest.TestCase):
         self, mock_mkdir, mock_special_actions, mock_symlink, mock_resolve
     ):
         """Test agent installation when symlink creation fails."""
-        mock_resolve.return_value = self.repo_dir / "claude/settings.json"
+        mock_resolve.return_value = self.repo_dir / "opencode/opencode.json"
         mock_symlink.side_effect = CopyError("Symlink failed")
 
-        result = self.installer.install_agent("claude")
+        result = self.installer.install_agent("opencode")
 
         self.assertFalse(result)
         mock_special_actions.assert_not_called()
@@ -375,10 +286,10 @@ class TestConfigInstaller(unittest.TestCase):
         self, mock_mkdir, mock_special_actions, mock_resolve
     ):
         """Test agent installation when source file is not found."""
-        result = self.installer.install_agent("claude")
+        result = self.installer.install_agent("opencode")
 
         self.assertTrue(result)  # Should still succeed, just skip missing asset
-        mock_special_actions.assert_called_once_with("claude")
+        mock_special_actions.assert_called_once_with("opencode")
 
     # === Integration Tests (LOW PRIORITY) ===
 
@@ -391,17 +302,17 @@ class TestConfigInstaller(unittest.TestCase):
         self, mock_print, mock_mkdir, mock_special_actions, mock_symlink, mock_resolve
     ):
         """Test agent installation with multiple assets."""
-        # Mock multiple assets for claude
+        # Mock multiple assets for opencode
         mock_resolve.side_effect = [
-            self.repo_dir / "claude/settings.json",
+            self.repo_dir / "opencode/opencode.json",
             self.repo_dir / "rules/AGENTS.md",
         ]
 
-        result = self.installer.install_agent("claude")
+        result = self.installer.install_agent("opencode")
 
         self.assertTrue(result)
         self.assertEqual(mock_symlink.call_count, 2)
-        mock_special_actions.assert_called_once_with("claude")
+        mock_special_actions.assert_called_once_with("opencode")
 
 
 if __name__ == "__main__":
