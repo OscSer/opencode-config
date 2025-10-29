@@ -52,6 +52,11 @@ class ConfigInstaller:
                     "type": "file",
                 },
                 {"source": "rules/AGENTS.md", "target": "AGENTS.md", "type": "file"},
+                {
+                    "source": "opencode/command",
+                    "target": "command",
+                    "type": "directory",
+                },
             ],
             "special_actions": [],
         },
@@ -111,7 +116,7 @@ class ConfigInstaller:
                     shutil.rmtree(target)
                 else:
                     target.unlink()
-            os.symlink(str(source), str(target))
+            os.symlink(str(source.resolve()), str(target))
             return True
         except Exception as link_error:
             raise CopyError(f"Failed to symlink {source} to {target}: {link_error}")

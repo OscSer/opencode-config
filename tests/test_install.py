@@ -302,16 +302,17 @@ class TestConfigInstaller(unittest.TestCase):
         self, mock_print, mock_mkdir, mock_special_actions, mock_symlink, mock_resolve
     ):
         """Test agent installation with multiple assets."""
-        # Mock multiple assets for opencode
+        # Mock multiple assets for opencode (3 assets: opencode.json, AGENTS.md, command directory)
         mock_resolve.side_effect = [
             self.repo_dir / "opencode/opencode.json",
             self.repo_dir / "rules/AGENTS.md",
+            self.repo_dir / "opencode/command",
         ]
 
         result = self.installer.install_agent("opencode")
 
         self.assertTrue(result)
-        self.assertEqual(mock_symlink.call_count, 2)
+        self.assertEqual(mock_symlink.call_count, 3)
         mock_special_actions.assert_called_once_with("opencode")
 
 
