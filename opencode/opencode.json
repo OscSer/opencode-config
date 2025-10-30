@@ -13,8 +13,7 @@
       "gh pr *": "ask",
       "npm install *": "ask",
       "npm update *": "ask",
-      "pip install *": "ask",
-      "cat *": "ask"
+      "pip install *": "ask"
     }
   },
   "agent": {

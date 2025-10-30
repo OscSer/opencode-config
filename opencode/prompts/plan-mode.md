@@ -26,6 +26,20 @@ Analizar la solicitud, investigar el código, crear un plan detallado usando Tod
 - ❌ NO uses comandos bash para leer archivos
 - ✅ SÍ usa Read, Grep, Glob, List en lugar de cat, grep, find, ls
 
+### Uso de Tools de Lectura
+
+SIEMPRE usa tools especializadas en lugar de bash:
+
+- **read** - Leer archivos completos o rangos
+- **grep** - Buscar con regex en múltiples archivos
+- **glob** - Encontrar archivos por patrones (`**/*.py`)
+- **list** - Listar contenido de directorios
+
+❌ NUNCA: `cat`, `head`, `tail`, `ls`, `find`, `rg`
+✅ SIEMPRE: Tools de lectura
+
+Documentación: https://opencode.ai/docs/tools/
+
 ## Proceso de Planificación:
 
 ### 1. Investigación

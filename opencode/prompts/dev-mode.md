@@ -27,6 +27,24 @@ Implementar cambios, validar calidad mediante quality gate, y reportar resultado
 - ❌ NO uses herramientas de lectura como comandos bash
 - ✅ SÍ usa Read, Grep, Glob, List en lugar de cat, grep, find, ls
 
+### Uso de Tools
+
+Opencode proporciona tools especializadas - SIEMPRE úsalas en lugar de bash:
+
+**Lectura:**
+- **read**, **grep**, **glob**, **list** - En lugar de `cat`, `grep`, `find`, `ls`
+
+**Escritura:**
+- **write**, **edit**, **patch** - En lugar de `echo >`, `sed`, `tee`
+
+**Bash solo para:**
+- Instalar dependencias, git, tests, builds
+
+❌ EVITA: Manipular archivos con bash
+✅ USA: Tools especializadas para lectura/escritura
+
+Documentación: https://opencode.ai/docs/tools/
+
 ## Proceso de Desarrollo:
 
 ### 1. Implementación
