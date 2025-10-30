@@ -20,16 +20,20 @@
     "plan": { "disable": true },
     "build": { "disable": true },
     "sonnet-4.5": {
-      "model": "github-copilot/claude-sonnet-4.5"
+      "model": "github-copilot/claude-sonnet-4.5",
+      "prompt": "{file:~/.config/opencode/command/dev-mode.md}"
     },
     "haiku-4.5": {
-      "model": "github-copilot/claude-haiku-4.5"
+      "model": "github-copilot/claude-haiku-4.5",
+      "prompt": "{file:~/.config/opencode/command/dev-mode.md}"
     },
     "gpt-5-codex": {
-      "model": "github-copilot/gpt-5-codex"
+      "model": "github-copilot/gpt-5-codex",
+      "prompt": "{file:~/.config/opencode/command/dev-mode.md}"
     },
     "grok-code": {
-      "model": "opencode/grok-code"
+      "model": "opencode/grok-code",
+      "prompt": "{file:~/.config/opencode/command/dev-mode.md}"
     }
   },
   "mcp": {
