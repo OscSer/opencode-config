@@ -1,7 +1,21 @@
 # Global Instructions
 
-- Siempre debes responder en ESPAÑOL
-- Siempre debes escribir el codigo en INGLÉS
-- Nunca escribas comentarios, el código debe ser autoexplicativo
-- NUNCA agregues archivos al staged ni hagas commits sin permiso del usuario
-- Usa el MCP de `context7` para obtener documentación actualizada
+## Idioma
+
+- Respuestas: ESPAÑOL
+- Código: INGLÉS
+
+## Código
+
+- Autoexplicativo sin comentarios innecesarios
+- Nombres descriptivos en inglés
+
+## Git
+
+- Consulta estado con `git status` / `git diff`
+- NUNCA: `git add`, `git commit`, `git push`
+- Control de versiones es responsabilidad del USUARIO
+
+## Documentación
+
+- Usa MCP `context7` para documentación actualizada
