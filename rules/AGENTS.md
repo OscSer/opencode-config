@@ -8,4 +8,4 @@
 
 ## OpenCode
 
-- Siempre debes priorizar el uso de las tools nativas de OpenCode. Por ejemplo, usa la tool `Grep` de OpenCode en lugar del comando `grep` de consola.
+- Siempre debes priorizar el uso de las tools de OpenCode por encima de comandos de bash

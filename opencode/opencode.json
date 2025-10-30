@@ -2,7 +2,6 @@
   "$schema": "https://opencode.ai/config.json",
   "theme": "system",
   "permission": {
-    "edit": "allow",
     "webfetch": "allow",
     "bash": {
       "*": "allow",
@@ -13,27 +12,19 @@
       "gh pr *": "ask",
       "npm install *": "ask",
       "npm update *": "ask",
+      "pip install *": "ask",
       "cat *": "ask"
     }
   },
   "agent": {
-    "plan": { "disable": true },
-    "build": { "disable": true },
-    "sonnet-4.5": {
+    "plan": {
       "model": "github-copilot/claude-sonnet-4.5",
-      "prompt": "{file:~/.config/opencode/command/dev-mode.md}"
+      "prompt": "{file:~/.config/opencode/prompts/plan-mode.md}",
+      "permission": { "edit": "deny" }
     },
-    "haiku-4.5": {
+    "build": {
       "model": "github-copilot/claude-haiku-4.5",
-      "prompt": "{file:~/.config/opencode/command/dev-mode.md}"
-    },
-    "gpt-5-codex": {
-      "model": "github-copilot/gpt-5-codex",
-      "prompt": "{file:~/.config/opencode/command/dev-mode.md}"
-    },
-    "grok-code": {
-      "model": "opencode/grok-code",
-      "prompt": "{file:~/.config/opencode/command/dev-mode.md}"
+      "permission": { "edit": "allow" }
     }
   },
   "mcp": {

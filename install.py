@@ -57,6 +57,11 @@ class ConfigInstaller:
                     "target": "command",
                     "type": "directory",
                 },
+                {
+                    "source": "opencode/prompts",
+                    "target": "prompts",
+                    "type": "directory",
+                },
             ],
             "special_actions": [],
         },
