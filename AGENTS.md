@@ -10,7 +10,7 @@ Este proyecto centraliza configuraciones y reglas para múltiples agentes de IA,
 
 ## Desarrollo
 
-Después de cualquier modificación, SIEMPRE ejecutar los tests para verificar que no se hayan introducido errores:
+Cuando modifiques el script de instalacion debes ejecutar los tests para verificar que no se hayan introducido errores:
 
 ```bash
 python3 -m pytest tests/
