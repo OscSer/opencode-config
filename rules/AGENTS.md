@@ -12,7 +12,6 @@
 
 ## Git
 
-- Consulta estado con `git status` / `git diff`
 - NUNCA: `git add`, `git commit`, `git push`
 - Control de versiones es responsabilidad del USUARIO
 
