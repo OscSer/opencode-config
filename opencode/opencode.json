@@ -23,7 +23,7 @@
       "permission": { "edit": "deny" }
     },
     "build": {
-      "model": "github-copilot/gpt-5-mini",
+      "model": "github-copilot/grok-code-fast-1",
       "prompt": "{file:~/.config/opencode/prompts/dev-mode.md}",
       "permission": { "edit": "allow" }
     }
