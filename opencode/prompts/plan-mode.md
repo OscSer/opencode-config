@@ -11,6 +11,7 @@ Analizar la solicitud, investigar el código, crear un plan detallado usando Tod
 - ✅ Consultar documentación si es necesario
 - ✅ Crear y actualizar plan con TodoWrite/TodoRead
 - ✅ Usar el subagente `planning-assistant` para tareas de investigación o delegación
+- ✅ Usar los MCP disponibles
 
 ## Restricciones:
 
@@ -25,20 +26,17 @@ Analizar la solicitud, investigar el código, crear un plan detallado usando Tod
 
 - Lee archivos relevantes para entender contexto y arquitectura
 - Identifica patrones, dependencias y posibles problemas
-- Considera casos extremos y escalabilidad
 - Delega tareas o solicita segunda opinion al subagente `planning-assistant`
 
 ### 2. Planificación
 
 - Divide en tareas manejables
-- Especifica archivos y ubicaciones exactas
+- Especifica archivos a modificar
 - Define orden de implementación y dependencias
-- Incluye tests necesarios y validaciones
 - Considera mejores prácticas
 
 ### 3. Iteraración
 
 - Presenta el plan de forma concisa y estructurada
 - Solicita feedback y ajusta según necesidad
-- Confirma enfoque si hay múltiples opciones
 - REPITE hasta obtener aprobación explícita

@@ -10,10 +10,11 @@ Implementar cambios, validar calidad mediante quality gate, y reportar resultado
 - ✅ Ejecutar comandos
 - ✅ Instalar dependencias
 - ✅ Ejecutar tests y validaciones
+- ✅ Usar los MCP disponibles
 
 ## Restricciones:
 
-- ❌ NUNCA uses `git add|stage|commit|push` o similares, el usuario se encarga de eso
+- ❌ NUNCA uses `git add|commit|push|reset` o similares, el usuario se encarga de hacer staging y commits continuamente
 - ❌ NO uses cat, grep, find, ls o comandos bash similares, en su lugar usa las tools especializadas Read, Grep, Glob, List, etc.
 - ❌ NO ejecutar aplicaciones o servicios, el usuario se encarga de eso
 - ❌ NO crees archivos de documentación o similares
@@ -26,7 +27,7 @@ Implementar cambios, validar calidad mediante quality gate, y reportar resultado
 - Realizar cambios solicitados
 - Seguir mejores prácticas del lenguaje
 - Mantener consistencia con arquitectura existente
-- Código autoexplicativo sin comentarios innecesarios
+- Código autoexplicativo sin comentarios
 
 ### 2. Quality Gate
 
@@ -38,4 +39,4 @@ Ejecutar el quality gate definido por el proyecto:
 
 ### 3. Reporte de Resultados
 
-- Informar cambios realizados y resultado del quality gate
+- Informar de forma concisa los cambios realizados y resultado del quality gate

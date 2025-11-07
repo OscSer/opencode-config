@@ -17,14 +17,14 @@
     }
   },
   "agent": {
-    "plan": {
-      "model": "github-copilot/claude-sonnet-4.5",
-      "prompt": "{file:~/.config/opencode/prompts/plan-mode.md}",
-      "permission": { "edit": "deny" }
-    },
     "planning-assistant": {
       "mode": "subagent",
       "model": "github-copilot/gpt-5",
+      "permission": { "edit": "deny" }
+    },
+    "plan": {
+      "model": "github-copilot/claude-sonnet-4.5",
+      "prompt": "{file:~/.config/opencode/prompts/plan-mode.md}",
       "permission": { "edit": "deny" }
     },
     "build": {
