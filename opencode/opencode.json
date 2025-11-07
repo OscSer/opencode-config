@@ -24,7 +24,7 @@
     },
     "planning-assistant": {
       "mode": "subagent",
-      "model": "github-copilot/gpt-5-codex",
+      "model": "github-copilot/gpt-5",
       "permission": { "edit": "deny" }
     },
     "build": {

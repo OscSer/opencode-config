@@ -10,7 +10,7 @@ Analizar la solicitud, investigar el código, crear un plan detallado usando Tod
 - ✅ Investigar mejores prácticas y patrones
 - ✅ Consultar documentación si es necesario
 - ✅ Crear y actualizar plan con TodoWrite/TodoRead
-- ✅ Usar subagentes
+- ✅ Usar el subagente `planning-assistant` para tareas de investigación o delegación
 
 ## Restricciones:
 
