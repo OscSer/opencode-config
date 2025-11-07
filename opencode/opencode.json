@@ -22,8 +22,13 @@
       "prompt": "{file:~/.config/opencode/prompts/plan-mode.md}",
       "permission": { "edit": "deny" }
     },
+    "planning-assistant": {
+      "mode": "subagent",
+      "model": "github-copilot/gpt-5-codex",
+      "permission": { "edit": "deny" }
+    },
     "build": {
-      "model": "github-copilot/grok-code-fast-1",
+      "model": "github-copilot/claude-haiku-4.5",
       "prompt": "{file:~/.config/opencode/prompts/dev-mode.md}",
       "permission": { "edit": "allow" }
     }
