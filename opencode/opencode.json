@@ -13,24 +13,23 @@
       "gh pr *": "ask",
       "npm install *": "ask",
       "npm update *": "ask",
-      "pip install *": "ask"
+      "pip install *": "ask",
+      "cat *": "ask"
     }
   },
   "agent": {
-    "planning-assistant": {
-      "mode": "subagent",
-      "model": "github-copilot/gpt-5",
-      "permission": { "edit": "deny" }
-    },
     "plan": {
       "model": "github-copilot/claude-sonnet-4.5",
-      "prompt": "{file:~/.config/opencode/prompts/plan-mode.md}",
+      // "model": "github-copilot/gpt-5",
       "permission": { "edit": "deny" }
+      // "prompt": "{file:~/.config/opencode/prompts/plan-mode.md}"
     },
     "build": {
-      "model": "github-copilot/claude-haiku-4.5",
-      "prompt": "{file:~/.config/opencode/prompts/dev-mode.md}",
+      "model": "opencode/big-pickle", // GLM 4.6
+      // "model": "chutes/moonshotai/Kimi-K2-Thinking", // el mas inteligente, documentacion
+      // "model": "chutes/MiniMaxAI/MiniMax-M2", // ejecuciones largas
       "permission": { "edit": "allow" }
+      // "prompt": "{file:~/.config/opencode/prompts/dev-mode.md}",
     }
   },
   "mcp": {
