@@ -1,16 +1,13 @@
 import unittest
-from unittest.mock import patch, MagicMock, mock_open, call
+from unittest.mock import patch
 import sys
 import os
-import json
-import shutil
-import tempfile
 from pathlib import Path
 
 # Add root directory to Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from install import ConfigInstaller, InstallError, CopyError, ConfigError
+from install import ConfigInstaller, InstallError, CopyError
 
 
 class TestConfigInstaller(unittest.TestCase):
@@ -302,18 +299,16 @@ class TestConfigInstaller(unittest.TestCase):
         self, mock_print, mock_mkdir, mock_special_actions, mock_symlink, mock_resolve
     ):
         """Test agent installation with multiple assets."""
-        # Mock multiple assets for opencode (4 assets: opencode.json, AGENTS.md, command directory, prompts directory)
+        # Mock multiple assets for opencode (2 assets: opencode.json, AGENTS.md)
         mock_resolve.side_effect = [
             self.repo_dir / "opencode/opencode.json",
             self.repo_dir / "rules/AGENTS.md",
-            self.repo_dir / "opencode/command",
-            self.repo_dir / "opencode/prompts",
         ]
 
         result = self.installer.install_agent("opencode")
 
         self.assertTrue(result)
-        self.assertEqual(mock_symlink.call_count, 4)
+        self.assertEqual(mock_symlink.call_count, 2)
         mock_special_actions.assert_called_once_with("opencode")
 
 

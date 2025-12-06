@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
 import sys
-import json
 import os
 import shutil
 from pathlib import Path
-from tempfile import NamedTemporaryFile
-from typing import Optional, TypedDict, Any, Dict, List, cast
+from typing import Optional, TypedDict, Dict, List
 
 
 class InstallError(Exception):
@@ -52,16 +50,6 @@ class ConfigInstaller:
                     "type": "file",
                 },
                 {"source": "rules/AGENTS.md", "target": "AGENTS.md", "type": "file"},
-                {
-                    "source": "opencode/command",
-                    "target": "command",
-                    "type": "directory",
-                },
-                {
-                    "source": "opencode/prompts",
-                    "target": "prompts",
-                    "type": "directory",
-                },
             ],
             "special_actions": [],
         },
@@ -80,7 +68,6 @@ class ConfigInstaller:
     ) -> Optional[Path]:
         """Validate source path and return Path object if valid"""
         full_path = self.repo_dir / relative_path
-        path_type = "file" if is_file else "directory"
 
         if not full_path.exists():
             print(f"Warning: {relative_path} not found in repository, skipping...")
