@@ -6,15 +6,16 @@ Repositorio centralizado de configuraciones y reglas que unifican cómo se insta
 
 ```
 agents-config/
-├── opencode/             # Configuración específica de Opencode
-│   └── opencode.json     # Archivo principal
-├── rules/                # Reglas globales compartidas
-│   └── AGENTS.md         # Instrucciones para todos los agentes
-├── tests/                # Tests del script de instalación
-│   └── test_install.py
-├── install.py            # Script de instalación
-├── requirements-dev.txt  # Dependencias de desarrollo
-└── AGENTS.md             # Este archivo (reglas para este repo)
+├── agents/
+│   ├── opencode/
+│   │   └── opencode.json     # Configuración específica de Opencode
+│   └── rules/
+│       └── AGENTS.md         # Reglas globales compartidas
+├── src/
+│   ├── installer.py           # Script del instalador
+│   └── installer_test.py      # Tests del instalador
+├── requirements-dev.txt        # Dependencias de desarrollo
+└── AGENTS.md                  # Este archivo (reglas para este repo)
 ```
 
 ## Setup de desarrollo

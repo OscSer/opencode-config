@@ -45,11 +45,15 @@ class ConfigInstaller:
             "label": "Opencode",
             "assets": [
                 {
-                    "source": "opencode/opencode.json",
+                    "source": "agents/opencode/opencode.json",
                     "target": "opencode.json",
                     "type": "file",
                 },
-                {"source": "rules/AGENTS.md", "target": "AGENTS.md", "type": "file"},
+                {
+                    "source": "agents/rules/AGENTS.md",
+                    "target": "AGENTS.md",
+                    "type": "file",
+                },
             ],
             "special_actions": [],
         },
@@ -60,7 +64,7 @@ class ConfigInstaller:
         repo_dir: Optional[Path] = None,
         opencode_dir: Optional[Path] = None,
     ):
-        self.repo_dir = repo_dir or Path(__file__).parent.absolute()
+        self.repo_dir = repo_dir or Path(__file__).resolve().parent.parent
         self.opencode_dir = opencode_dir or Path.home() / ".config" / "opencode"
 
     def _validate_source_path(
