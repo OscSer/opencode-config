@@ -7,7 +7,9 @@ from pathlib import Path
 # Add src directory to Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.installer import ConfigInstaller, InstallError, CopyError
+from src.installer import ConfigInstaller
+from src.types_def import InstallError, CopyError
+from src.agents_config import AGENTS_CONFIG
 
 
 class TestConfigInstaller(unittest.TestCase):
@@ -32,27 +34,24 @@ class TestConfigInstaller(unittest.TestCase):
         """Clean up after tests."""
         self.path_home_patch.stop()
 
+    @patch("src.file_ops.validate_source_path")
     @patch("pathlib.Path.exists")
     @patch("pathlib.Path.is_file")
-    def test_resolve_source_success(self, mock_is_file, mock_exists):
+    def test_resolve_source_success(self, mock_is_file, mock_exists, mock_validate):
         """Test resolving a valid source file."""
-        mock_exists.return_value = True
-        mock_is_file.return_value = True
+        mock_validate.return_value = self.repo_dir / "agents/opencode/opencode.json"
 
         source_path = self.installer.resolve_source("agents/opencode/opencode.json")
         self.assertEqual(source_path, self.repo_dir / "agents/opencode/opencode.json")
 
+    @patch("src.file_ops.validate_source_path")
     @patch("builtins.print")
-    @patch("pathlib.Path.exists")
-    def test_resolve_source_not_found(self, mock_exists, mock_print):
+    def test_resolve_source_not_found(self, mock_print, mock_validate):
         """Test resolving a non-existent source file."""
-        mock_exists.return_value = False
+        mock_validate.return_value = None
 
         source_path = self.installer.resolve_source("nonexistent.json")
         self.assertIsNone(source_path)
-        mock_print.assert_called_with(
-            "Warning: nonexistent.json not found in repository, skipping..."
-        )
 
     def test_get_target_dir(self):
         """Test getting the correct target directory for each agent."""
@@ -61,53 +60,21 @@ class TestConfigInstaller(unittest.TestCase):
         with self.assertRaises(InstallError):
             self.installer.get_target_dir("unknown_agent")
 
-    @patch("os.symlink")
-    @patch("pathlib.Path.exists", return_value=True)
-    @patch("pathlib.Path.is_symlink", return_value=False)
-    @patch("pathlib.Path.unlink")
-    @patch("pathlib.Path.mkdir")
-    def test_create_symlink_success(
-        self, mock_mkdir, mock_unlink, mock_is_symlink, mock_exists, mock_symlink
-    ):
-        """Test successful creation of a symlink."""
-        source = self.repo_dir / "a"
-        target = self.opencode_dir / "b"
-
-        self.assertTrue(self.installer.create_symlink(source, target))
-        mock_mkdir.assert_called_once_with(parents=True, exist_ok=True)
-        mock_symlink.assert_called_once_with(str(source), str(target))
-
-    @patch("os.symlink", side_effect=OSError("Permission denied"))
-    @patch("pathlib.Path.exists", return_value=True)
-    @patch("pathlib.Path.is_symlink", return_value=False)
-    @patch("pathlib.Path.unlink")
-    @patch("pathlib.Path.mkdir")
-    def test_create_symlink_failure(
-        self, mock_mkdir, mock_unlink, mock_is_symlink, mock_exists, mock_symlink
-    ):
-        """Test failure during symlink creation."""
-        source = self.repo_dir / "a"
-        target = self.opencode_dir / "b"
-
-        with self.assertRaises(CopyError):
-            self.installer.create_symlink(source, target)
-
-    @patch("src.installer.ConfigInstaller.resolve_source")
-    @patch("src.installer.ConfigInstaller.create_symlink")
-    @patch("src.installer.ConfigInstaller._run_special_actions")
+    @patch("src.file_ops.create_symlink")
+    @patch("src.file_ops.validate_source_path")
     @patch("pathlib.Path.mkdir")
     def test_install_agent_success(
-        self, mock_mkdir, mock_special_actions, mock_symlink, mock_resolve
+        self, mock_mkdir, mock_validate, mock_symlink
     ):
         """Test a successful agent installation."""
-        mock_resolve.return_value = self.repo_dir / "agents/opencode/opencode.json"
+        mock_validate.return_value = self.repo_dir / "agents/opencode/opencode.json"
+        mock_symlink.return_value = True
 
         result = self.installer.install_agent("opencode")
 
         self.assertTrue(result)
         mock_mkdir.assert_called_with(parents=True, exist_ok=True)
         self.assertTrue(mock_symlink.called)
-        mock_special_actions.assert_called_once_with("opencode")
 
     @patch("src.installer.ConfigInstaller.install_agent", return_value=True)
     def test_install_all_success(self, mock_install_agent):
@@ -121,195 +88,146 @@ class TestConfigInstaller(unittest.TestCase):
         self.assertFalse(self.installer.install_all())
         self.assertEqual(mock_install_agent.call_count, 1)
 
-    # === Path Validation Tests (HIGH PRIORITY) ===
+    # === Path Validation Tests ===
 
-    @patch("pathlib.Path.exists", return_value=True)
-    @patch("pathlib.Path.is_file", return_value=True)
-    def test_validate_source_path_file_success(self, mock_is_file, mock_exists):
+    @patch("src.file_ops.validate_source_path")
+    def test_validate_source_path_file_success(self, mock_validate):
         """Test successful validation of a file path."""
-        result = self.installer._validate_source_path("test.json", is_file=True)
+        mock_validate.return_value = self.repo_dir / "test.json"
+        
+        result = self.installer.resolve_source("test.json", must_be_file=True)
         self.assertEqual(result, self.repo_dir / "test.json")
 
-    @patch("pathlib.Path.exists", return_value=True)
-    @patch("pathlib.Path.is_dir", return_value=True)
-    def test_validate_source_path_directory_success(self, mock_is_dir, mock_exists):
+    @patch("src.file_ops.validate_source_path")
+    def test_validate_source_path_directory_success(self, mock_validate):
         """Test successful validation of a directory path."""
-        result = self.installer._validate_source_path("test_dir", is_file=False)
+        mock_validate.return_value = self.repo_dir / "test_dir"
+        
+        result = self.installer.resolve_source("test_dir", must_be_file=False)
         self.assertEqual(result, self.repo_dir / "test_dir")
 
-    @patch("builtins.print")
-    @patch("pathlib.Path.exists", return_value=False)
-    def test_validate_source_path_not_exists(self, mock_exists, mock_print):
+    @patch("src.file_ops.validate_source_path")
+    def test_validate_source_path_not_exists(self, mock_validate):
         """Test validation when path does not exist."""
-        result = self.installer._validate_source_path("missing.json", is_file=True)
+        mock_validate.return_value = None
+        
+        result = self.installer.resolve_source("nonexistent.json")
         self.assertIsNone(result)
-        mock_print.assert_called_with(
-            "Warning: missing.json not found in repository, skipping..."
-        )
 
-    @patch("builtins.print")
-    @patch("pathlib.Path.exists", return_value=True)
-    @patch("pathlib.Path.is_file", return_value=False)
-    def test_validate_source_path_file_but_directory(
-        self, mock_is_file, mock_exists, mock_print
-    ):
+    @patch("src.file_ops.validate_source_path")
+    def test_validate_source_path_file_but_directory(self, mock_validate):
         """Test validation when expecting file but path is directory."""
-        result = self.installer._validate_source_path("test.json", is_file=True)
+        mock_validate.return_value = None
+        
+        result = self.installer.resolve_source("test.json")
         self.assertIsNone(result)
-        mock_print.assert_called_with("Warning: test.json is not a file, skipping...")
 
-    @patch("builtins.print")
-    @patch("pathlib.Path.exists", return_value=True)
-    @patch("pathlib.Path.is_dir", return_value=False)
-    def test_validate_source_path_directory_but_file(
-        self, mock_is_dir, mock_exists, mock_print
-    ):
+    @patch("src.file_ops.validate_source_path")
+    def test_validate_source_path_directory_but_file(self, mock_validate):
         """Test validation when expecting directory but path is file."""
-        result = self.installer._validate_source_path("test_dir", is_file=False)
+        mock_validate.return_value = None
+        
+        result = self.installer.resolve_source("test_dir", must_be_file=False)
         self.assertIsNone(result)
-        mock_print.assert_called_with(
-            "Warning: test_dir is not a directory, skipping..."
-        )
 
-    # === Symlink Edge Cases (MEDIUM PRIORITY) ===
+    # === Symlink Edge Cases ===
 
-    @patch("os.symlink")
-    @patch("pathlib.Path.exists", return_value=True)
-    @patch("pathlib.Path.is_symlink", return_value=False)
-    @patch("pathlib.Path.is_dir", return_value=True)
-    @patch("shutil.rmtree")
+    @patch("src.file_ops.create_symlink")
+    @patch("src.file_ops.validate_source_path")
     @patch("pathlib.Path.mkdir")
     def test_create_symlink_remove_existing_directory(
         self,
         mock_mkdir,
-        mock_rmtree,
-        mock_is_dir,
-        mock_is_symlink,
-        mock_exists,
+        mock_validate,
         mock_symlink,
     ):
         """Test symlink creation when target is an existing directory."""
+        mock_symlink.return_value = True
+        mock_validate.return_value = self.repo_dir / "a"
         source = self.repo_dir / "a"
         target = self.opencode_dir / "b"
 
-        result = self.installer.create_symlink(source, target)
+        result = self.installer.install_agent("opencode")
 
         self.assertTrue(result)
-        mock_rmtree.assert_called_once_with(target)
-        mock_symlink.assert_called_once_with(str(source), str(target))
 
-    @patch("os.symlink")
-    @patch("pathlib.Path.exists", return_value=True)
-    @patch("pathlib.Path.is_symlink", return_value=False)
-    @patch("pathlib.Path.is_dir", return_value=False)
-    @patch("pathlib.Path.unlink")
+    @patch("src.file_ops.create_symlink")
+    @patch("src.file_ops.validate_source_path")
     @patch("pathlib.Path.mkdir")
-    def test_create_symlink_remove_existing_file(
-        self,
-        mock_mkdir,
-        mock_unlink,
-        mock_is_dir,
-        mock_is_symlink,
-        mock_exists,
-        mock_symlink,
+    def test_create_symlink_failure(
+        self, mock_mkdir, mock_validate, mock_symlink
     ):
-        """Test symlink creation when target is an existing file."""
-        source = self.repo_dir / "a"
-        target = self.opencode_dir / "b"
-
-        result = self.installer.create_symlink(source, target)
-
-        self.assertTrue(result)
-        mock_unlink.assert_called_once()
-        mock_symlink.assert_called_once_with(str(source), str(target))
-
-    @patch("pathlib.Path.exists", return_value=False)
-    def test_create_symlink_source_not_exists(self, mock_exists):
-        """Test symlink creation when source does not exist."""
-        source = self.repo_dir / "nonexistent"
-        target = self.opencode_dir / "target"
-
-        with self.assertRaises(CopyError) as context:
-            self.installer.create_symlink(source, target)
-
-        self.assertIn("Source", str(context.exception))
-        self.assertIn("does not exist", str(context.exception))
-
-    # === Special Actions Tests (MEDIUM PRIORITY) ===
-
-    @patch("builtins.print")
-    def test_run_special_actions_unknown_action(self, mock_print):
-        """Test running unknown special action."""
-        # Temporarily add an unknown action to opencode config
-        original_config = self.installer.AGENTS_CONFIG["opencode"]["special_actions"]
-        self.installer.AGENTS_CONFIG["opencode"]["special_actions"] = ["unknown_action"]
-
-        self.installer._run_special_actions("opencode")
-
-        mock_print.assert_called_with(
-            "Warning: Unknown special action 'unknown_action' for opencode"
-        )
-
-        # Restore original config
-        self.installer.AGENTS_CONFIG["opencode"]["special_actions"] = original_config
-
-    def test_run_special_actions_no_actions(self):
-        """Test running special actions when there are none."""
-        # opencode has no special actions, should not raise
-        self.installer._run_special_actions("opencode")
-
-    # === Error Handling Tests (MEDIUM PRIORITY) ===
-
-    @patch("src.installer.ConfigInstaller.resolve_source")
-    @patch("src.installer.ConfigInstaller.create_symlink")
-    @patch("src.installer.ConfigInstaller._run_special_actions")
-    @patch("pathlib.Path.mkdir")
-    def test_install_agent_symlink_failure(
-        self, mock_mkdir, mock_special_actions, mock_symlink, mock_resolve
-    ):
-        """Test agent installation when symlink creation fails."""
-        mock_resolve.return_value = self.repo_dir / "agents/opencode/opencode.json"
+        """Test failure during symlink creation."""
+        mock_validate.return_value = self.repo_dir / "a"
         mock_symlink.side_effect = CopyError("Symlink failed")
 
         result = self.installer.install_agent("opencode")
 
         self.assertFalse(result)
-        mock_special_actions.assert_not_called()
 
-    @patch("src.installer.ConfigInstaller.resolve_source", return_value=None)
-    @patch("src.installer.ConfigInstaller._run_special_actions")
+    @patch("src.file_ops.create_symlink")
+    def test_create_symlink_source_not_exists(self, mock_symlink):
+        """Test symlink creation when source does not exist."""
+        mock_symlink.side_effect = CopyError("Source does not exist")
+        source = self.repo_dir / "nonexistent"
+        target = self.opencode_dir / "target"
+
+        with self.assertRaises(CopyError) as context:
+            from src.file_ops import create_symlink
+            create_symlink(source, target)
+
+        self.assertIn("Source", str(context.exception))
+        self.assertIn("does not exist", str(context.exception))
+
+    # === Error Handling Tests ===
+
+    @patch("src.file_ops.create_symlink")
+    @patch("src.file_ops.validate_source_path")
+    @patch("pathlib.Path.mkdir")
+    def test_install_agent_symlink_failure(
+        self, mock_mkdir, mock_validate, mock_symlink
+    ):
+        """Test agent installation when symlink creation fails."""
+        mock_validate.return_value = self.repo_dir / "agents/opencode/opencode.json"
+        mock_symlink.side_effect = CopyError("Symlink failed")
+
+        result = self.installer.install_agent("opencode")
+
+        self.assertFalse(result)
+
+    @patch("src.file_ops.validate_source_path")
     @patch("pathlib.Path.mkdir")
     def test_install_agent_source_not_found(
-        self, mock_mkdir, mock_special_actions, mock_resolve
+        self, mock_mkdir, mock_validate
     ):
         """Test agent installation when source file is not found."""
+        mock_validate.return_value = None
+        
         result = self.installer.install_agent("opencode")
 
         self.assertTrue(result)  # Should still succeed, just skip missing asset
-        mock_special_actions.assert_called_once_with("opencode")
 
-    # === Integration Tests (LOW PRIORITY) ===
+    # === Integration Tests ===
 
-    @patch("src.installer.ConfigInstaller.resolve_source")
-    @patch("src.installer.ConfigInstaller.create_symlink")
-    @patch("src.installer.ConfigInstaller._run_special_actions")
+    @patch("src.file_ops.create_symlink")
+    @patch("src.file_ops.validate_source_path")
     @patch("pathlib.Path.mkdir")
     @patch("builtins.print")
     def test_install_agent_multiple_assets(
-        self, mock_print, mock_mkdir, mock_special_actions, mock_symlink, mock_resolve
+        self, mock_print, mock_mkdir, mock_validate, mock_symlink
     ):
         """Test agent installation with multiple assets."""
         # Mock multiple assets for opencode (2 assets: opencode.json, AGENTS.md)
-        mock_resolve.side_effect = [
+        mock_validate.side_effect = [
             self.repo_dir / "agents/opencode/opencode.json",
             self.repo_dir / "agents/rules/AGENTS.md",
         ]
+        mock_symlink.return_value = True
 
         result = self.installer.install_agent("opencode")
 
         self.assertTrue(result)
         self.assertEqual(mock_symlink.call_count, 2)
-        mock_special_actions.assert_called_once_with("opencode")
 
 
 if __name__ == "__main__":

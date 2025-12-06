@@ -19,13 +19,13 @@
   "agent": {
     "plan": {
       // "model": "github-copilot/claude-opus-4.5", // 3x
-      // "model": "github-copilot/claude-sonnet-4.5", // 1x
-      "model": "github-copilot/gpt-5.1-codex-max", // 1x
+      // "model": "github-copilot/gpt-5.1", // usado como oraculo en amp
+      "model": "github-copilot/gpt-5.1-codex-max",
       "permission": { "edit": "deny" }
     },
     "build": {
-      // "model": "github-copilot/claude-haiku-4.5", // 0.33x
-      "model": "github-copilot/gpt-5.1-codex-mini", // 0.33x
+      // "model": "opencode/big-pickle", // GLM 4.6 free
+      "model": "github-copilot/claude-haiku-4.5", // 0.33x
       "permission": { "edit": "allow" }
     }
   },
