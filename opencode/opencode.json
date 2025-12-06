@@ -18,13 +18,13 @@
   },
   "agent": {
     "plan": {
-      // "model": "github-copilot/gpt-5.1",
-      "model": "github-copilot/claude-opus-4.5",
+      // "model": "github-copilot/claude-opus-4.5", // 3x
+      "model": "github-copilot/gpt-5.1-codex-max", // 1x
       "permission": { "edit": "deny" }
     },
     "build": {
-      // "model": "github-copilot/claude-haiku-4.5",
-      "model": "github-copilot/gpt-5.1-codex-mini",
+      // "model": "github-copilot/claude-haiku-4.5", // 0.33x
+      "model": "github-copilot/gpt-5.1-codex-mini", // 0.33x
       "permission": { "edit": "allow" }
     }
   },

@@ -6,14 +6,36 @@ Repositorio centralizado de configuraciones y reglas que unifican cómo se insta
 
 ```
 agents-config/
-├── opencode/           # Configuración específica de Opencode
-│   └── opencode.json   # Archivo principal
-├── rules/              # Reglas globales compartidas
-│   └── AGENTS.md       # Instrucciones para todos los agentes
-├── tests/              # Tests del script de instalación
+├── opencode/             # Configuración específica de Opencode
+│   └── opencode.json     # Archivo principal
+├── rules/                # Reglas globales compartidas
+│   └── AGENTS.md         # Instrucciones para todos los agentes
+├── tests/                # Tests del script de instalación
 │   └── test_install.py
-├── install.py          # Script de instalación
-└── AGENTS.md           # Este archivo (reglas para este repo)
+├── install.py            # Script de instalación
+├── requirements-dev.txt  # Dependencias de desarrollo
+└── AGENTS.md             # Este archivo (reglas para este repo)
+```
+
+## Setup de desarrollo
+
+```bash
+# Crear entorno virtual
+python3 -m venv .venv
+
+# Activar entorno virtual
+source .venv/bin/activate
+
+# Instalar dependencias de desarrollo
+pip install -r requirements-dev.txt
+```
+
+## Uso
+
+Ejecutar el script de instalación directamente:
+
+```bash
+python3 install.py
 ```
 
 ## Desarrollo
@@ -24,6 +46,14 @@ Ejecutar los tests siempre que modifiques `install.py` o cambies assets usados p
 
 ```bash
 python3 -m pytest tests/
+```
+
+### Linting
+
+Verificar calidad de código con ruff:
+
+```bash
+ruff check .
 ```
 
 ### Modificaciones comunes
