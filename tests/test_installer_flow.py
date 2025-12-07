@@ -53,7 +53,7 @@ def test_install_agent_skips_missing_asset(monkeypatch, capsys, tmp_path):
         "src.agents_config.AGENTS_CONFIG",
         {
             "opencode": {
-                "label": "Opencode",
+                "label": "OpenCode",
                 "assets": [
                     {"source": "missing.json", "target": "a.json", "type": "file"},
                     {"source": "missing2.json", "target": "b.json", "type": "file"},

@@ -8,7 +8,7 @@ from src.types_def import InstallError
 
 
 class ConfigInstaller:
-    """Handles installation of Opencode configuration"""
+    """Handles installation of OpenCode configuration"""
 
     def __init__(
         self,
@@ -60,7 +60,7 @@ class ConfigInstaller:
 
     def install_all(self) -> bool:
         """Install all agent configurations"""
-        print("Opencode Configuration Installation")
+        print("OpenCode Configuration Installation")
         print("====================================")
 
         success_flags = []
@@ -71,7 +71,7 @@ class ConfigInstaller:
         if all(success_flags):
             print("")
             print("✅ Installation complete!")
-            print("Opencode configuration is available in ~/.config/opencode/")
+            print("OpenCode configuration is available in ~/.config/opencode/")
             return True
         else:
             print("")

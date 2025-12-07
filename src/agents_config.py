@@ -5,7 +5,7 @@ from src.types_def import AgentConfig
 
 AGENTS_CONFIG: dict[str, AgentConfig] = {
     "opencode": {
-        "label": "Opencode",
+        "label": "OpenCode",
         "assets": [
             {
                 "source": "agents/opencode/opencode.jsonc",

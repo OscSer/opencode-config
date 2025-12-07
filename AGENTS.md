@@ -8,7 +8,7 @@ Repositorio centralizado de configuraciones y reglas que unifican cómo se insta
 agents-config/
 ├── agents/
 │   ├── opencode/
-│   │   └── opencode.jsonc       # Configuración específica de Opencode
+│   │   └── opencode.jsonc       # Configuración específica de OpenCode
 │   └── rules/
 │       └── AGENTS.md            # Reglas globales compartidas
 ├── src/
@@ -99,7 +99,7 @@ ruff check .
 
 | Tarea                                | Archivos clave                              |
 | ------------------------------------ | ------------------------------------------- |
-| Ajustar la configuración de Opencode | `agents/opencode/opencode.jsonc`            |
+| Ajustar la configuración de OpenCode | `agents/opencode/opencode.jsonc`            |
 | Actualizar reglas compartidas        | `agents/rules/AGENTS.md`                    |
 | Registrar nuevos agentes o assets    | `src/agents_config.py` y `src/installer.py` |
 
@@ -113,7 +113,7 @@ ruff check .
 
 Siempre consulta la documentación oficial antes de hacer cambios:
 
-**Opencode**
+**OpenCode**
 
 - [Configuración](https://opencode.ai/docs/config)
 - [MCP Servers](https://opencode.ai/docs/mcp-servers)
