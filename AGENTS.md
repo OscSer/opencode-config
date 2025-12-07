@@ -1,4 +1,4 @@
-# Instrucciones del Proyecto
+# Agents Config
 
 Repositorio centralizado de configuraciones y reglas que unifican cómo se instalan agentes de IA.
 
@@ -8,14 +8,17 @@ Repositorio centralizado de configuraciones y reglas que unifican cómo se insta
 agents-config/
 ├── agents/
 │   ├── opencode/
-│   │   └── opencode.json     # Configuración específica de Opencode
+│   │   └── opencode.jsonc       # Configuración específica de Opencode
 │   └── rules/
-│       └── AGENTS.md         # Reglas globales compartidas
+│       └── AGENTS.md            # Reglas globales compartidas
 ├── src/
-│   ├── installer.py           # Script del instalador
-│   └── installer_test.py      # Tests del instalador
-├── requirements-dev.txt        # Dependencias de desarrollo
-└── AGENTS.md                  # Este archivo (reglas para este repo)
+│   ├── agents_config.py         # Registro de agentes y assets
+│   ├── file_ops.py              # Utilidades de paths y symlinks
+│   ├── installer.py             # Script del instalador
+│   └── types_def.py             # Tipos compartidos
+├── tests/                       # Pruebas del instalador y paths
+├── requirements-dev.txt         # Dependencias de desarrollo
+└── AGENTS.md                    # Este archivo (reglas para este repo)
 ```
 
 ## Setup de desarrollo
@@ -38,15 +41,16 @@ pre-commit run --all-files
 ```
 
 **Requisitos:**
+
 - Python 3.10 o superior
 - Los hooks se ejecutan automáticamente antes de cada commit
 
 ## Uso
 
-Ejecutar el script de instalación directamente:
+Ejecutar el instalador:
 
 ```bash
-python3 install.py
+python3 -m src.installer
 ```
 
 ## Desarrollo
@@ -67,6 +71,7 @@ pre-commit run ruff --all-files
 ```
 
 **Hooks configurados:**
+
 - `ruff` (lint y autofix de problemas)
 - `ruff-format` (formateo de código)
 - `pyupgrade` (actualiza sintaxis a Python 3.10+)
@@ -76,7 +81,7 @@ pre-commit run ruff --all-files
 
 ### Tests
 
-Ejecutar los tests siempre que modifiques `install.py` o cambies assets usados por el instalador:
+Ejecutar los tests cuando modifiques `src/installer.py`, `src/agents_config.py`, `src/file_ops.py` o assets:
 
 ```bash
 python3 -m pytest tests/
@@ -84,7 +89,7 @@ python3 -m pytest tests/
 
 ### Linting
 
-Verificar calidad de código con ruff:
+Verificar calidad de código con ruff:F
 
 ```bash
 ruff check .
@@ -92,17 +97,17 @@ ruff check .
 
 ### Modificaciones comunes
 
-| Tarea                                | Archivos clave                    |
-| ------------------------------------ | --------------------------------- |
-| Ajustar la configuración de Opencode | `opencode/opencode.json`          |
-| Actualizar reglas compartidas        | `rules/AGENTS.md`                 |
-| Registrar nuevos agentes o assets    | `install.py` y nuevos directorios |
+| Tarea                                | Archivos clave                              |
+| ------------------------------------ | ------------------------------------------- |
+| Ajustar la configuración de Opencode | `agents/opencode/opencode.jsonc`            |
+| Actualizar reglas compartidas        | `agents/rules/AGENTS.md`                    |
+| Registrar nuevos agentes o assets    | `src/agents_config.py` y `src/installer.py` |
 
 ## Flujo de trabajo
 
 1. Revisa la documentación relevante antes de tocar configuraciones.
 2. Modifica los archivos adecuados según la tarea.
-3. Ejecuta los tests mencionados sobre `install.py`.
+3. Ejecuta los tests.
 
 ## Documentación
 
