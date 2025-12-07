@@ -3,14 +3,13 @@
 import os
 import shutil
 from pathlib import Path
-from typing import Optional
 
 from src.types_def import CopyError
 
 
 def validate_source_path(
     repo_dir: Path, relative_path: str, is_file: bool
-) -> Optional[Path]:
+) -> Path | None:
     """Validate source path and return Path object if valid"""
     full_path = repo_dir / relative_path
 

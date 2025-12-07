@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import List, TypedDict
+from typing import TypedDict
 
 
 class InstallError(Exception):
@@ -29,4 +29,4 @@ class AgentAsset(TypedDict):
 
 class AgentConfig(TypedDict):
     label: str
-    assets: List[AgentAsset]
+    assets: list[AgentAsset]

@@ -29,7 +29,17 @@ source .venv/bin/activate
 
 # Instalar dependencias de desarrollo
 pip install -r requirements-dev.txt
+
+# Instalar hooks de pre-commit (solo primera vez)
+pre-commit install
+
+# Ejecutar validaciones contra todos los archivos (opcional, verifica setup)
+pre-commit run --all-files
 ```
+
+**Requisitos:**
+- Python 3.10 o superior
+- Los hooks se ejecutan automáticamente antes de cada commit
 
 ## Uso
 
@@ -40,6 +50,29 @@ python3 install.py
 ```
 
 ## Desarrollo
+
+### Validaciones Pre-commit
+
+Los hooks pre-commit se ejecutan automáticamente antes de cada commit para validar código, formato y tests. Si necesitas ejecutarlos manualmente:
+
+```bash
+# Ejecutar todos los hooks contra archivos modificados
+pre-commit run
+
+# Ejecutar todos los hooks contra todos los archivos
+pre-commit run --all-files
+
+# Ejecutar un hook específico
+pre-commit run ruff --all-files
+```
+
+**Hooks configurados:**
+- `ruff` (lint y autofix de problemas)
+- `ruff-format` (formateo de código)
+- `pyupgrade` (actualiza sintaxis a Python 3.10+)
+- `check-merge-conflict`, `end-of-file-fixer`, `trailing-whitespace` (limpieza)
+- `check-yaml`, `check-json`, `check-toml` (validación de sintaxis)
+- `pytest` (pruebas unitarias antes de commit)
 
 ### Tests
 

@@ -2,10 +2,9 @@
 
 import sys
 from pathlib import Path
-from typing import Optional
 
 from src import agents_config, file_ops
-from src.types_def import ConfigError, InstallError
+from src.types_def import InstallError
 
 
 class ConfigInstaller:
@@ -13,15 +12,13 @@ class ConfigInstaller:
 
     def __init__(
         self,
-        repo_dir: Optional[Path] = None,
-        opencode_dir: Optional[Path] = None,
+        repo_dir: Path | None = None,
+        opencode_dir: Path | None = None,
     ):
         self.repo_dir = repo_dir or Path(__file__).resolve().parent.parent
         self.opencode_dir = opencode_dir or Path.home() / ".config" / "opencode"
 
-    def resolve_source(
-        self, relative: str, must_be_file: bool = True
-    ) -> Optional[Path]:
+    def resolve_source(self, relative: str, must_be_file: bool = True) -> Path | None:
         """Resolve source path relative to repo directory"""
         return file_ops.validate_source_path(self.repo_dir, relative, must_be_file)
 
@@ -100,4 +97,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

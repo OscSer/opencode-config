@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 
-from typing import Dict
 
 from src.types_def import AgentConfig
 
-AGENTS_CONFIG: Dict[str, AgentConfig] = {
+AGENTS_CONFIG: dict[str, AgentConfig] = {
     "opencode": {
         "label": "Opencode",
         "assets": [
             {
-                "source": "agents/opencode/opencode.json",
+                "source": "agents/opencode/opencode.jsonc",
                 "target": "opencode.json",
                 "type": "file",
             },

@@ -1,18 +1,16 @@
 from pathlib import Path
-from typing import List
 
 import pytest
 
 from src import agents_config
 from src.installer import ConfigInstaller
-from src.types_def import InstallError
 
 
 @pytest.fixture()
 def sample_repo(tmp_path) -> Path:
     repo_dir = tmp_path / "repo"
     repo_dir.mkdir()
-    assets: List[dict] = []
+    assets: list[dict] = []
     for asset in agents_config.AGENTS_CONFIG["opencode"]["assets"]:
         source = repo_dir / asset["source"]
         source.parent.mkdir(parents=True, exist_ok=True)
@@ -40,7 +38,7 @@ def test_install_agent_success(monkeypatch, capsys, tmp_path, sample_repo):
     assert success is True
     assert "Installing" in output
     assert len(created) == len(agents_config.AGENTS_CONFIG["opencode"]["assets"])
-    for (_, target) in created:
+    for _, target in created:
         assert target.exists()
 
 
@@ -63,7 +61,10 @@ def test_install_agent_skips_missing_asset(monkeypatch, capsys, tmp_path):
             }
         },
     )
-    monkeypatch.setattr("src.file_ops.create_symlink", lambda s, t: (_ for _ in ()).throw(Exception("should not be called")))
+    monkeypatch.setattr(
+        "src.file_ops.create_symlink",
+        lambda s, t: (_ for _ in ()).throw(Exception("should not be called")),
+    )
 
     success = installer.install_agent("opencode")
     output = capsys.readouterr().out
@@ -72,7 +73,9 @@ def test_install_agent_skips_missing_asset(monkeypatch, capsys, tmp_path):
     assert "skipping" in output
 
 
-def test_install_agent_handles_symlink_error(monkeypatch, capsys, tmp_path, sample_repo):
+def test_install_agent_handles_symlink_error(
+    monkeypatch, capsys, tmp_path, sample_repo
+):
     target_dir = tmp_path / "opencode"
     installer = ConfigInstaller(repo_dir=sample_repo, opencode_dir=target_dir)
 
@@ -98,7 +101,9 @@ def test_install_all_handles_failure(monkeypatch, capsys, tmp_path, sample_repo)
         call_order.append(agent_name)
         return False
 
-    monkeypatch.setattr(ConfigInstaller, "install_agent", lambda self, name: fake_install(name))
+    monkeypatch.setattr(
+        ConfigInstaller, "install_agent", lambda self, name: fake_install(name)
+    )
 
     success = installer.install_all()
     output = capsys.readouterr().out
