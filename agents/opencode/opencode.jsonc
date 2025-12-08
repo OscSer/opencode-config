@@ -19,21 +19,14 @@
   "agent": {
     "plan": {
       "permission": { "edit": "deny" },
-
-      // 3x | el mejor en razonamiento y planificacion
-      // "model": "github-copilot/claude-opus-4.5",
-
-      // 1x | nueva compactacion, sesiones largas y autonomas, (interesante tambien en build)
-      "model": "github-copilot/gpt-5.1-codex-max"
+      // "model": "github-copilot/claude-opus-4.5", // 3x | el mejor en razonamiento y planificacion
+      "model": "github-copilot/gpt-5.1"
     },
     "build": {
       "permission": { "edit": "allow" },
-
-      // gratis | GLM 4.6, mejor codigo estructurado, tareas largas
-      "model": "opencode/big-pickle"
-
-      // 0.33x | mejor tool calling, multimodal
-      // "model": "github-copilot/claude-haiku-4.5",
+      // "model": "opencode/big-pickle" // gratis | GLM 4.6, mejor codigo estructurado | tareas largas
+      "model": "github-copilot/claude-haiku-4.5" // 0.33x | rapido | mejor tool calling
+      // "model": "chutes/zai-org/GLM-4.6",
     }
   },
   "mcp": {
