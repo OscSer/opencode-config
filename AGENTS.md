@@ -12,87 +12,61 @@ agents-config/
 │   └── rules/
 │       └── AGENTS.md            # Reglas globales compartidas
 ├── src/
-│   ├── agents_config.py         # Registro de agentes y assets
-│   ├── file_ops.py              # Utilidades de paths y symlinks
-│   ├── installer.py             # Script del instalador
-│   └── types_def.py             # Tipos compartidos
-├── tests/                       # Pruebas del instalador y paths
-├── requirements-dev.txt         # Dependencias de desarrollo
+│   ├── agents-config.ts         # Registro de agentes y assets
+│   ├── file-ops.ts              # Utilidades de paths y symlinks
+│   ├── installer.ts             # Script del instalador
+│   └── types-def.ts             # Tipos e interfaces TypeScript
+├── tests/                       # Tests de instalador y módulos
+├── package.json                 # Dependencias de Bun
+├── tsconfig.json                # Configuración de TypeScript
+├── biome.json                   # Configuración de Biome (linter/formatter)
 └── AGENTS.md                    # Este archivo (reglas para este repo)
 ```
 
 ## Setup de desarrollo
 
 ```bash
-# Crear entorno virtual
-python3 -m venv .venv
+# Instalar dependencias (requiere Bun)
+bun install
 
-# Activar entorno virtual
-source .venv/bin/activate
-
-# Instalar dependencias de desarrollo
-pip install -r requirements-dev.txt
-
-# Instalar hooks de pre-commit (solo primera vez)
-pre-commit install
-
-# Ejecutar validaciones contra todos los archivos (opcional, verifica setup)
-pre-commit run --all-files
+# Verificar que todo funciona
+bun test
 ```
-
-**Requisitos:**
-
-- Python 3.10 o superior
-- Los hooks se ejecutan automáticamente antes de cada commit
 
 ## Uso
 
 Ejecutar el instalador:
 
 ```bash
-python3 -m src.installer
+bun run setup
 ```
 
 ## Desarrollo
 
-### Validaciones Pre-commit
-
-Los hooks pre-commit se ejecutan automáticamente antes de cada commit para validar código, formato y tests. Si necesitas ejecutarlos manualmente:
-
-```bash
-# Ejecutar todos los hooks contra archivos modificados
-pre-commit run
-
-# Ejecutar todos los hooks contra todos los archivos
-pre-commit run --all-files
-
-# Ejecutar un hook específico
-pre-commit run ruff --all-files
-```
-
-**Hooks configurados:**
-
-- `ruff` (lint y autofix de problemas)
-- `ruff-format` (formateo de código)
-- `pyupgrade` (actualiza sintaxis a Python 3.10+)
-- `check-merge-conflict`, `end-of-file-fixer`, `trailing-whitespace` (limpieza)
-- `check-yaml`, `check-json`, `check-toml` (validación de sintaxis)
-- `pytest` (pruebas unitarias antes de commit)
-
 ### Tests
 
-Ejecutar los tests cuando modifiques `src/installer.py`, `src/agents_config.py`, `src/file_ops.py` o assets:
+Ejecutar los tests:
 
 ```bash
-python3 -m pytest tests/
+bun test
 ```
 
-### Linting
+### Linting y Formato
 
-Verificar calidad de código con ruff:F
+Verificar código con Biome:
 
 ```bash
-ruff check .
+# Lint
+bun run lint
+
+# Formatear (si es necesario)
+bun run format
+
+# Lint + format check combinados
+bun run check
+
+# Verificar tipos TypeScript
+bun run typecheck
 ```
 
 ### Modificaciones comunes
@@ -101,13 +75,22 @@ ruff check .
 | ------------------------------------ | ------------------------------------------- |
 | Ajustar la configuración de OpenCode | `agents/opencode/opencode.jsonc`            |
 | Actualizar reglas compartidas        | `agents/rules/AGENTS.md`                    |
-| Registrar nuevos agentes o assets    | `src/agents_config.py` y `src/installer.py` |
+| Registrar nuevos agentes o assets    | `src/agents-config.ts` y `src/installer.ts` |
+| Modificar lógica de instalación      | `src/file-ops.ts` e `src/installer.ts`      |
 
 ## Flujo de trabajo
 
 1. Revisa la documentación relevante antes de tocar configuraciones.
 2. Modifica los archivos adecuados según la tarea.
-3. Ejecuta los tests.
+3. Ejecuta `bun test` para validar cambios.
+4. Ejecuta `bun run check` para verificar formato y lint.
+
+## Stack Técnico
+
+- **Runtime:** Bun
+- **Lenguaje:** TypeScript
+- **Linter/Formatter:** Biome
+- **Tests:** bun:test
 
 ## Documentación
 

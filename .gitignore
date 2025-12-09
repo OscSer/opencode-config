@@ -1,30 +1,10 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-
-# Virtual environments
-.venv
-venv/
-ENV/
-env/
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
-
-# Linting & formatting
-.ruff_cache/
-
-# Distribution / packaging
-*.egg-info/
-build/
+# Node.js / Bun
+node_modules/
+*.tsbuildinfo
 dist/
-*.egg
+
+# Package managers
+bun.lock
 
 # IDEs
 .vscode/
@@ -36,3 +16,4 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+

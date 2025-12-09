@@ -13,20 +13,20 @@
       "git branch *": "allow",
       "* install *": "ask",
       "* update *": "ask",
+      "* add *": "ask",
       "rm -rf *": "ask"
     }
   },
   "agent": {
     "plan": {
-      "permission": { "edit": "deny" },
-      // "model": "github-copilot/claude-opus-4.5", // 3x | el mejor en razonamiento y planificacion
-      "model": "github-copilot/gpt-5.1"
+      // "model": "github-copilot/claude-opus-4.5", // 3x
+      "model": "github-copilot/gpt-5.1",
+      "permission": { "edit": "deny" }
     },
     "build": {
-      "permission": { "edit": "allow" },
-      // "model": "opencode/big-pickle" // gratis | GLM 4.6, mejor codigo estructurado | tareas largas
-      "model": "github-copilot/claude-haiku-4.5" // 0.33x | rapido | mejor tool calling
-      // "model": "chutes/zai-org/GLM-4.6",
+      "model": "opencode/big-pickle", // GLM gratis | mejor codigo estructurado
+      // "model": "github-copilot/claude-haiku-4.5", // 0.33x | mejor tool calling
+      "permission": { "edit": "allow" }
     }
   },
   "mcp": {
