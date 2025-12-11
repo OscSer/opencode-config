@@ -5,12 +5,15 @@
     "webfetch": "allow",
     "bash": {
       "*": "allow",
+      "gh *": "ask",
       "git *": "ask",
       "git status *": "allow",
       "git log *": "allow",
       "git diff *": "allow",
       "git show *": "allow",
       "git branch *": "allow",
+      "git add *": "deny",
+      "git push *": "deny",
       "* install *": "ask",
       "* update *": "ask",
       "* add *": "ask",
@@ -22,18 +25,18 @@
   },
   "agent": {
     "plan": {
-      "model": "github-copilot/gpt-5.1",
+      // "model": "github-copilot/claude-opus-4.5", // 3x
+      "model": "github-copilot/gpt-5.2", // 1x
       "permission": { "edit": "deny" }
     },
     "build": {
-      // "model": "github-copilot/claude-haiku-4.5", // 0.33x
-      "model": "github-copilot/gpt-5.1-codex-max",
+      // "model": "opencode/big-pickle", // free
+      "model": "github-copilot/gpt-5.1-codex-max", // x1
       "permission": { "edit": "allow" }
     }
   },
   "mcp": {
     "context7": {
-      "enabled": true,
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
     }
@@ -41,6 +44,7 @@
   "keybinds": {
     "input_newline": "ctrl+l",
     "input_clear": "ctrl+d",
+    "session_new": "ctrl+n",
     "command_list": "<leader>p"
   }
 }

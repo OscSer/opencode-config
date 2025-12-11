@@ -1,6 +1,9 @@
 # Instrucciones Globales
 
-SIEMPRE sigue estas reglas al escribir código en cualquier proyecto.
+## Lenguaje
+
+- SIEMPRE debes comunicarte en ESPAÑOL
+- El código debe estar en INGLÉS
 
 ## Principios
 
