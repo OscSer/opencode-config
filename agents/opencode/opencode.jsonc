@@ -14,19 +14,20 @@
       "* install *": "ask",
       "* update *": "ask",
       "* add *": "ask",
-      "cat *": "ask",
-      "rm -rf *": "ask"
+      "ls *": "deny",
+      "cat *": "deny",
+      "grep *": "deny",
+      "find *": "deny"
     }
   },
   "agent": {
     "plan": {
-      "model": "github-copilot/claude-opus-4.5", // 3x
-      // "model": "github-copilot/gpt-5.1", // 1x
+      "model": "github-copilot/gpt-5.1",
       "permission": { "edit": "deny" }
     },
     "build": {
-      "model": "opencode/big-pickle", // free
       // "model": "github-copilot/claude-haiku-4.5", // 0.33x
+      "model": "github-copilot/gpt-5.1-codex-max",
       "permission": { "edit": "allow" }
     }
   },
@@ -38,12 +39,8 @@
     }
   },
   "keybinds": {
-    "input_clear": "ctrl+d",
     "input_newline": "ctrl+l",
-    "session_new": "ctrl+n"
-  },
-  "plugin": ["@tarquinen/opencode-dcp@0.4.12"],
-  "experimental": {
-    "primary_tools": ["prune"]
+    "input_clear": "ctrl+d",
+    "command_list": "<leader>p"
   }
 }

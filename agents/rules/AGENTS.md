@@ -1,15 +1,12 @@
 # Instrucciones Globales
 
-## Idioma
+SIEMPRE sigue estas reglas al escribir código en cualquier proyecto.
 
-- Respuestas: ESPAÑOL
-- Código: INGLÉS
+## Principios
 
-## Principios de Código
-
-- Código limpio, sencillo y fácil de leer
-- Autoexplicativo y sin comentarios innecesarios
-- Nombres descriptivos en inglés
+- El Código siempre debe estar en inglés
+- Código limpio, sencillo, fácil de leer, nombres descriptivos
+- Autoexplicativo y sin comentarios
 - Diseño modular con responsabilidades bien definidas
 - Aplicar principios SOLID cuando corresponda:
   - Single Responsibility: una unidad, una razón para cambiar
@@ -27,22 +24,9 @@
 
 ## Herramientas
 
-- Priorizar las tools del agente sobre comandos bash innecesarios
-  - Usar `Read` en lugar de `cat`, `head` o `tail`
-  - Usar `Edit` para modificar archivos en vez de `sed`, `awk` o similares
-  - Preferir `Glob`/`Grep` sobre `find` o `grep`
-- Consultar MCP `context7` para documentación actualizada antes de suponer comportamiento
-
-## Git
-
-**Permitido:**
-
-- Consultar historial con `git log`, `git show`, etc.
-- Revisar diferencias con `git diff` o `git status`
-- Navegar ramas con `git branch`, `git checkout`, etc.
-
-**Prohibido:**
-
-- `git add`: el usuario se encarga de preparar el stage
-- `git commit`: los commits los maneja el usuario
-- `git push`: subir cambios también queda en manos del usuario
+- Usa siempre las tools nativas; evita equivalentes en bash.
+  - `Read` para inspeccionar archivos, nunca `cat`/`head`/`tail`.
+  - `Edit`/`Write` para modificar archivos, no `sed`/`awk`/`echo`.
+  - `Glob`/`Grep`/`List` para buscar y listar, no `find`/`grep`/`ls`.
+  - `Webfetch` para URLs, no `curl`/`wget`.
+- Consulta MCP `context7` para documentación actualizada de cualquier librería o herramienta.
