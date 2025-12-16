@@ -1,31 +1,14 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "theme": "system",
-  "permission": {
-    "webfetch": "allow",
-    "bash": {
-      "*": "allow",
-      "gh *": "ask",
-      "git add *": "deny",
-      "git commit *": "deny",
-      "git push *": "deny",
-      "git restore *": "deny",
-      "git branch -D *": "deny",
-      "* install *": "ask",
-      "* update *": "ask",
-      "* add *": "ask",
-      "cat *": "deny",
-      "rg *": "deny",
-      "grep *": "deny"
-    }
-  },
   "agent": {
     "plan": {
-      "model": "github-copilot/gpt-5.1-codex-max",
+      // "model": "github-copilot/claude-opus-4.5",
+      "model": "amazon-bedrock/global.anthropic.claude-opus-4-5-20251101-v1:0",
       "permission": { "edit": "deny" }
     },
     "build": {
-      "model": "github-copilot/claude-sonnet-4.5",
+      "model": "amazon-bedrock/minimax.minimax-m2", // al nivel de sonnet, pero mas barato
       "permission": { "edit": "allow" }
     }
   },
@@ -33,6 +16,38 @@
     "context7": {
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "permission": {
+    "webfetch": "allow",
+    "bash": {
+      "*": "allow",
+      // comandos peligrosos
+      "sudo *": "deny",
+      "chmod *": "deny",
+      "chown *": "deny",
+      "format *": "deny",
+      "fdisk *": "deny",
+      "dd *": "deny",
+      "curl *": "ask",
+      "wget *": "ask",
+      // comandos de desarrollo
+      "gh *": "ask",
+      "git add *": "deny",
+      "git commit *": "deny",
+      "git push *": "deny",
+      "git restore *": "deny",
+      "git branch -d *": "deny",
+      "git branch -D *": "deny",
+      "* install *": "ask",
+      "* update *": "ask",
+      "* add *": "ask",
+      "cat >*": "deny",
+      "cat > *": "deny",
+      "cat >>*": "deny",
+      "cat >> *": "deny",
+      "cat <<*": "deny",
+      "cat << *": "deny"
     }
   },
   "keybinds": {
