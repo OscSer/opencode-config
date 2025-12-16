@@ -14,6 +14,11 @@ export const AGENTS_CONFIG: AgentsConfigMap = {
         target: "AGENTS.md",
         type: "file",
       },
+      {
+        source: "agents/opencode/command",
+        target: "command",
+        type: "dir",
+      },
     ],
   },
 };

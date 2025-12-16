@@ -22,10 +22,14 @@ describe("installer-flow", () => {
     const repoDir = path.join(tmpDir, "repo");
     await fs.mkdir(repoDir, { recursive: true });
 
-    for (const asset of AGENTS_CONFIG.opencode.assets) {
+    for (const asset of AGENTS_CONFIG.opencode?.assets ?? []) {
       const sourcePath = path.join(repoDir, asset.source);
-      await fs.mkdir(path.dirname(sourcePath), { recursive: true });
-      await fs.writeFile(sourcePath, "data");
+      if (asset.type === "dir") {
+        await fs.mkdir(sourcePath, { recursive: true });
+      } else {
+        await fs.mkdir(path.dirname(sourcePath), { recursive: true });
+        await fs.writeFile(sourcePath, "data");
+      }
     }
 
     const targetDir = path.join(tmpDir, "opencode");
@@ -36,7 +40,7 @@ describe("installer-flow", () => {
     expect(success).toBe(true);
 
     // Check that symlinks were created
-    for (const asset of AGENTS_CONFIG.opencode.assets) {
+    for (const asset of AGENTS_CONFIG.opencode?.assets ?? []) {
       const targetPath = path.join(targetDir, asset.target);
       const stat = await fs.lstat(targetPath);
       expect(stat.isSymbolicLink()).toBe(true);
@@ -62,10 +66,14 @@ describe("installer-flow", () => {
     const repoDir = path.join(tmpDir, "repo");
     await fs.mkdir(repoDir, { recursive: true });
 
-    for (const asset of AGENTS_CONFIG.opencode.assets) {
+    for (const asset of AGENTS_CONFIG.opencode?.assets ?? []) {
       const sourcePath = path.join(repoDir, asset.source);
-      await fs.mkdir(path.dirname(sourcePath), { recursive: true });
-      await fs.writeFile(sourcePath, "data");
+      if (asset.type === "dir") {
+        await fs.mkdir(sourcePath, { recursive: true });
+      } else {
+        await fs.mkdir(path.dirname(sourcePath), { recursive: true });
+        await fs.writeFile(sourcePath, "data");
+      }
     }
 
     const targetDir = path.join(tmpDir, "opencode");
@@ -93,8 +101,12 @@ describe("installer-flow", () => {
     for (const config of Object.values(AGENTS_CONFIG)) {
       for (const asset of config.assets) {
         const sourcePath = path.join(repoDir, asset.source);
-        await fs.mkdir(path.dirname(sourcePath), { recursive: true });
-        await fs.writeFile(sourcePath, "data");
+        if (asset.type === "dir") {
+          await fs.mkdir(sourcePath, { recursive: true });
+        } else {
+          await fs.mkdir(path.dirname(sourcePath), { recursive: true });
+          await fs.writeFile(sourcePath, "data");
+        }
       }
     }
 
@@ -106,7 +118,7 @@ describe("installer-flow", () => {
     expect(success).toBe(true);
 
     // Verify all symlinks were created
-    for (const asset of AGENTS_CONFIG.opencode.assets) {
+    for (const asset of AGENTS_CONFIG.opencode?.assets ?? []) {
       const targetPath = path.join(targetDir, asset.target);
       const stat = await fs.lstat(targetPath);
       expect(stat.isSymbolicLink()).toBe(true);

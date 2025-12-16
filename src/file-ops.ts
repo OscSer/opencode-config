@@ -32,7 +32,7 @@ export async function validateSourcePath(
 
 export async function createSymlink(source: string, target: string): Promise<boolean> {
   try {
-    await fs.stat(source);
+    const sourceStat = await fs.stat(source);
 
     const targetDir = path.dirname(target);
     await fs.mkdir(targetDir, { recursive: true });
@@ -49,7 +49,8 @@ export async function createSymlink(source: string, target: string): Promise<boo
     }
 
     const resolvedSource = path.resolve(source);
-    await fs.symlink(resolvedSource, target, "file");
+    const symlinkType = sourceStat.isDirectory() ? "dir" : "file";
+    await fs.symlink(resolvedSource, target, symlinkType);
 
     return true;
   } catch (error) {

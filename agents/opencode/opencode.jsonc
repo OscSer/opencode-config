@@ -9,6 +9,7 @@
       "git add *": "deny",
       "git commit *": "deny",
       "git push *": "deny",
+      "git restore *": "deny",
       "git branch -D *": "deny",
       "* install *": "ask",
       "* update *": "ask",
