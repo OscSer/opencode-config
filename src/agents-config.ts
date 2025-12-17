@@ -6,7 +6,7 @@ export const AGENTS_CONFIG: AgentsConfigMap = {
     assets: [
       {
         source: "agents/opencode/opencode.jsonc",
-        target: "opencode.json",
+        target: "opencode.jsonc",
         type: "file",
       },
       {
