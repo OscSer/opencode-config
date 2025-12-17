@@ -22,7 +22,6 @@
     "webfetch": "allow",
     "bash": {
       "*": "allow",
-      // comandos peligrosos
       "sudo *": "deny",
       "chmod *": "deny",
       "chown *": "deny",
@@ -31,7 +30,6 @@
       "dd *": "deny",
       "curl *": "ask",
       "wget *": "ask",
-      // comandos de desarrollo
       "gh *": "ask",
       "git add *": "deny",
       "git commit *": "deny",
