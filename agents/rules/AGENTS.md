@@ -27,9 +27,6 @@
 
 ## Herramientas
 
-- Usa siempre las tools nativas; evita equivalentes en bash.
-  - `Read` para inspeccionar archivos, nunca `cat`/`head`/`tail`.
-  - `Edit`/`Write` para modificar archivos, no `sed`/`awk`/`echo`.
-  - `Glob`/`Grep`/`List` para buscar y listar, no `find`/`grep`/`ls`.
-  - `Webfetch` para URLs, no `curl`/`wget`.
-- Consulta MCP `context7` para documentación actualizada de cualquier librería o herramienta.
+- Usa `ref` para obtener documentación de APIs, servicios y librerías
+- Usa `exa` para buscar y navegar en la web
+- Usa `mgrep` para busqueda semantica en archivos locales
