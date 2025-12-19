@@ -3,19 +3,30 @@
   "theme": "system",
   "agent": {
     "plan": {
-      // "model": "github-copilot/claude-opus-4.5",
+      // "model": "anthropic/claude-opus-4-5",
       "model": "amazon-bedrock/global.anthropic.claude-opus-4-5-20251101-v1:0",
       "permission": { "edit": "deny" }
     },
     "build": {
-      "model": "amazon-bedrock/minimax.minimax-m2", // al nivel de sonnet, pero mas barato
+      "model": "github-copilot/gpt-5.1-codex-max",
       "permission": { "edit": "allow" }
     }
   },
   "mcp": {
-    "context7": {
+    // "context7": {
+    //   "type": "remote",
+    //   "url": "https://mcp.context7.com/mcp"
+    // },
+    "exa": {
       "type": "remote",
-      "url": "https://mcp.context7.com/mcp"
+      "url": "https://mcp.exa.ai/mcp?exaApiKey=f337a73e-f517-4035-8fb0-7495f841fe34&tools=web_search_exa,deep_search_exa"
+    },
+    "ref": {
+      "type": "remote",
+      "url": "https://api.ref.tools/mcp",
+      "headers": {
+        "x-ref-api-key": "{env:REF_API_KEY}"
+      }
     }
   },
   "permission": {
