@@ -1,5 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "autoupdate": false,
   "theme": "system",
   "agent": {
     "plan": {
@@ -40,6 +41,7 @@
       "git add *": "deny",
       "git commit *": "deny",
       "git push *": "deny",
+      "git reset *": "deny",
       "git restore *": "deny",
       "git branch -d *": "deny",
       "git branch -D *": "deny",
