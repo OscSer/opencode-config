@@ -8,7 +8,7 @@
       }
     },
     "build": {
-      "model": "github-copilot/gemini-3-flash-preview",
+      "model": "github-copilot/gpt-5.1-codex-max",
       "permission": {
         "edit": "allow"
       }

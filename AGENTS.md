@@ -96,9 +96,4 @@ bun run typecheck
 
 Siempre consulta la documentación oficial antes de hacer cambios:
 
-**OpenCode**
-
-- [Configuración](https://opencode.ai/docs/config)
-- [MCP Servers](https://opencode.ai/docs/mcp-servers)
-- [Reglas](https://opencode.ai/docs/rules)
-- [Comandos](https://opencode.ai/docs/commands)
+- OpenCode: https://opencode.ai/docs
