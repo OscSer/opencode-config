@@ -46,46 +46,21 @@ Bug: "Users can't save drafts after the cache update deployed yesterday"
 
 ### 3. Prompt Optimization
 
-Systematically improve prompts through testing and refinement. Start simple, measure performance (accuracy, consistency, token usage), then iterate. Test on diverse inputs including edge cases. Use A/B testing to compare variations. Critical for production prompts where consistency and cost matter.
-
-**Example:**
+Start simple, measure performance, iterate. Test on diverse inputs including edge cases.
 
 \`\`\`markdown
-Version 1 (Simple): "Summarize this article"
-→ Result: Inconsistent length, misses key points
-
-Version 2 (Add constraints): "Summarize in 3 bullet points"
-→ Result: Better structure, but still misses nuance
-
-Version 3 (Add reasoning): "Identify the 3 main findings, then summarize each"
-→ Result: Consistent, accurate, captures key information
+V1: "Summarize this article" → Inconsistent
+V2: "Summarize in 3 bullet points" → Better structure
+V3: "Identify 3 main findings, then summarize each" → Consistent, accurate
 \`\`\`
 
 ### 4. Template Systems
 
-Build reusable prompt structures with variables, conditional sections, and modular components. Use for multi-turn conversations, role-based interactions, or when the same pattern applies to different inputs. Reduces duplication and ensures consistency across similar tasks.
-
-**Example:**
+Build reusable prompt structures with variables. Reduces duplication, ensures consistency.
 
 \`\`\`python
-# Reusable code review template
-template = """
-Review this {language} code for {focus_area}.
-
-Code:
-{code_block}
-
-Provide feedback on:
-{checklist}
-"""
-
-# Usage
-prompt = template.format(
-    language="Python",
-    focus_area="security vulnerabilities",
-    code_block=user_code,
-    checklist="1. SQL injection\\n2. XSS risks\\n3. Authentication"
-)
+template = "Review this {language} code for {focus_area}. Code: {code_block}"
+prompt = template.format(language="Python", focus_area="security", code_block=user_code)
 \`\`\`
 
 ### 5. System Prompt Design
@@ -115,19 +90,12 @@ Format responses as:
 
 ### Progressive Disclosure
 
-Start with simple prompts, add complexity only when needed:
+Start simple, add complexity only when needed:
 
-1. **Level 1**: Direct instruction
-   - "Summarize this article"
-
-2. **Level 2**: Add constraints
-   - "Summarize this article in 3 bullet points, focusing on key findings"
-
-3. **Level 3**: Add reasoning
-   - "Read this article, identify the main findings, then summarize in 3 bullet points"
-
-4. **Level 4**: Add examples
-   - Include 2-3 example summaries with input-output pairs
+1. **Level 1**: Direct instruction → "Summarize this article"
+2. **Level 2**: Add constraints → "Summarize in 3 bullet points"
+3. **Level 3**: Add reasoning → "Identify findings, then summarize each"
+4. **Level 4**: Add examples → Include 2-3 input-output pairs
 
 ### Instruction Hierarchy
 
@@ -137,77 +105,36 @@ Start with simple prompts, add complexity only when needed:
 
 ### Error Recovery
 
-Build prompts that gracefully handle failures:
-
-- Include fallback instructions
-- Request confidence scores
-- Ask for alternative interpretations when uncertain
-- Specify how to indicate missing information
+Include fallback instructions, request confidence scores, specify how to indicate missing information.
 
 ## Best Practices
 
-1. **Be Specific**: Vague prompts produce inconsistent results
-2. **Show, Don't Tell**: Examples are more effective than descriptions
-3. **Test Extensively**: Evaluate on diverse, representative inputs
-4. **Iterate Rapidly**: Small changes can have large impacts
-5. **Monitor Performance**: Track metrics in production
-6. **Version Control**: Treat prompts as code with proper versioning
-7. **Document Intent**: Explain why prompts are structured as they are
+1. **Be Specific**: Vague → inconsistent results
+2. **Show, Don't Tell**: Examples > descriptions
+3. **Test Extensively**: Diverse inputs + edge cases
+4. **Iterate Rapidly**: Small changes → large impacts
+5. **Version Control**: Treat prompts as code
 
 ## Common Pitfalls
 
-- **Over-engineering**: Starting with complex prompts before trying simple ones
-- **Example pollution**: Using examples that don't match the target task
-- **Context overflow**: Exceeding token limits with excessive examples
-- **Ambiguous instructions**: Leaving room for multiple interpretations
-- **Ignoring edge cases**: Not testing on unusual or boundary inputs
+- **Over-engineering**: Try simple first
+- **Example pollution**: Examples must match target task
+- **Context overflow**: Balance examples vs. token limits
+- **Ambiguity**: Leave no room for interpretation
 
 ## Integration Patterns
 
-### With RAG Systems
+### With RAG + Validation
 
 \`\`\`python
-# Combine retrieved context with prompt engineering
-prompt = f"""Given the following context:
-{retrieved_context}
-
-{few_shot_examples}
+prompt = f"""Context: {retrieved_context}
 
 Question: {user_question}
 
-Provide a detailed answer based solely on the context above. If the context doesn't contain enough information, explicitly state what's missing."""
+Answer based solely on context. If insufficient, state what's missing.
+
+Verify: 1) Answers directly 2) Uses only context 3) Cites sources 4) Acknowledges uncertainty"""
 \`\`\`
-
-### With Validation
-
-\`\`\`python
-# Add self-verification step
-prompt = f"""{main_task_prompt}
-
-After generating your response, verify it meets these criteria:
-1. Answers the question directly
-2. Uses only information from provided context
-3. Cites specific sources
-4. Acknowledges any uncertainty
-
-If verification fails, revise your response."""
-\`\`\`
-
-## Performance Optimization
-
-### Token Efficiency
-
-- Remove redundant words and phrases
-- Use abbreviations consistently after first definition
-- Consolidate similar instructions
-- Move stable content to system prompts
-
-### Latency Reduction
-
-- Minimize prompt length without sacrificing quality
-- Use streaming for long-form outputs
-- Cache common prompt prefixes
-- Batch similar requests when possible
 
 ---
 
@@ -219,133 +146,37 @@ Based on Anthropic's official best practices for agent prompting.
 
 ### Context Window
 
-The "context window" refers to the entirety of the amount of text a language model can look back on and reference when generating new text plus the new text it generates. This is different from the large corpus of data the language model was trained on, and instead represents a "working memory" for the model. A larger context window allows the model to understand and respond to more complex and lengthy prompts, while a smaller context window may limit the model's ability to handle longer prompts or maintain coherence over extended conversations.
+The context window is the model's "working memory" (200K tokens). Key implications:
 
-- Progressive token accumulation: As the conversation advances through turns, each user message and assistant response accumulates within the context window. Previous turns are preserved completely.
-- Linear growth pattern: The context usage grows linearly with each turn, with previous turns preserved completely.
-- 200K token capacity: The total available context window (200,000 tokens) represents the maximum capacity for storing conversation history and generating new output from Claude.
-- Input-output flow: Each turn consists of:
-  - Input phase: Contains all previous conversation history plus the current user message
-  - Output phase: Generates a text response that becomes part of a future input
+- Tokens accumulate linearly with each turn
+- Your prompt shares space with system prompt, history, and other skills
+- Every token has a cost—make them count
 
 ### Concise is key
 
-The context window is a public good. Your prompt, command, skill shares the context window with everything else Claude needs to know, including:
+**Default assumption**: Claude is already very smart. Only add context Claude doesn't already have.
 
-- The system prompt
-- Conversation history
-- Other commands, skills, hooks, metadata
-- Your actual request
-
-**Default assumption**: Claude is already very smart
-
-Only add context Claude doesn't already have. Challenge each piece of information:
-
-- "Does Claude really need this explanation?"
-- "Can I assume Claude knows this?"
-- "Does this paragraph justify its token cost?"
-
-**Good example: Concise** (approximately 50 tokens):
-
-\`\`\`\`markdown
-## Extract PDF text
-
-Use pdfplumber for text extraction:
-
-\`\`\`python
-import pdfplumber
-
-with pdfplumber.open("file.pdf") as pdf:
-    text = pdf.pages[0].extract_text()
-\`\`\`
-\`\`\`\`
-
-**Bad example: Too verbose** (approximately 150 tokens):
+Challenge each piece: "Does this paragraph justify its token cost?"
 
 \`\`\`markdown
-## Extract PDF text
+# Good (~50 tokens)
+Use pdfplumber: \`pdf.pages[0].extract_text()\`
 
-PDF (Portable Document Format) files are a common file format that contains
-text, images, and other content. To extract text from a PDF, you'll need to
-use a library. There are many libraries available for PDF processing, but we
-recommend pdfplumber because it's easy to use and handles most cases well.
-First, you'll need to install it using pip. Then you can use the code below...
+# Bad (~150 tokens)
+PDF files are a common format... there are many libraries... we recommend pdfplumber because...
 \`\`\`
-
-The concise version assumes Claude knows what PDFs are and how libraries work.
 
 ### Set appropriate degrees of freedom
 
-Match the level of specificity to the task's fragility and variability.
+Match specificity to task fragility:
 
-**High freedom** (text-based instructions):
+| Freedom | When to use | Example |
+|---------|-------------|---------|
+| **High** | Multiple valid approaches, context-dependent | "Review code for bugs and readability" |
+| **Medium** | Preferred pattern exists, some variation OK | \`generate_report(data, format="markdown")\` |
+| **Low** | Fragile operations, exact sequence required | \`python scripts/migrate.py --verify --backup\` (no modifications) |
 
-Use when:
-
-- Multiple approaches are valid
-- Decisions depend on context
-- Heuristics guide the approach
-
-Example:
-
-\`\`\`markdown
-## Code review process
-
-1. Analyze the code structure and organization
-2. Check for potential bugs or edge cases
-3. Suggest improvements for readability and maintainability
-4. Verify adherence to project conventions
-\`\`\`
-
-**Medium freedom** (pseudocode or scripts with parameters):
-
-Use when:
-
-- A preferred pattern exists
-- Some variation is acceptable
-- Configuration affects behavior
-
-Example:
-
-\`\`\`\`markdown
-## Generate report
-
-Use this template and customize as needed:
-
-\`\`\`python
-def generate_report(data, format="markdown", include_charts=True):
-    # Process data
-    # Generate output in specified format
-    # Optionally include visualizations
-\`\`\`
-\`\`\`\`
-
-**Low freedom** (specific scripts, few or no parameters):
-
-Use when:
-
-- Operations are fragile and error-prone
-- Consistency is critical
-- A specific sequence must be followed
-
-Example:
-
-\`\`\`\`markdown
-## Database migration
-
-Run exactly this script:
-
-\`\`\`bash
-python scripts/migrate.py --verify --backup
-\`\`\`
-
-Do not modify the command or add additional flags.
-\`\`\`\`
-
-**Analogy**: Think of Claude as a robot exploring a path:
-
-- **Narrow bridge with cliffs on both sides**: There's only one safe way forward. Provide specific guardrails and exact instructions (low freedom). Example: database migrations that must run in exact sequence.
-- **Open field with no hazards**: Many paths lead to success. Give general direction and trust Claude to find the best route (high freedom). Example: code reviews where context determines the best approach.
+**Analogy**: Narrow bridge (one safe path) → low freedom. Open field (many paths) → high freedom.
 
 # Persuasion Principles for Agent Communication
 
@@ -473,32 +304,12 @@ LLMs respond to the same persuasion principles as humans. Understanding this psy
 ❌ You should probably tell me if I'm wrong.
 \`\`\`
 
-### 6. Reciprocity
+### 6. Reciprocity & 7. Liking — Avoid These
 
-**What it is:** Obligation to return benefits received.
+- **Reciprocity**: Rarely effective, can feel manipulative
+- **Liking**: Creates sycophancy, conflicts with honest feedback
 
-**How it works:**
-
-- Use sparingly - can feel manipulative
-- Rarely needed in prompts
-
-**When to avoid:**
-
-- Almost always (other principles more effective)
-
-### 7. Liking
-
-**What it is:** Preference for cooperating with those we like.
-
-**How it works:**
-
-- **DON'T USE for compliance**
-- Conflicts with honest feedback culture
-- Creates sycophancy
-
-**When to avoid:**
-
-- Always for discipline enforcement
+**When to avoid:** Almost always. Other principles are more effective.
 
 ## Principle Combinations by Prompt Type
 
@@ -509,42 +320,17 @@ LLMs respond to the same persuasion principles as humans. Understanding this psy
 | Collaborative | Unity + Commitment | Authority, Liking |
 | Reference | Clarity only | All persuasion |
 
-## Why This Works: The Psychology
+## Why This Works
 
-**Bright-line rules reduce rationalization:**
-
-- "YOU MUST" removes decision fatigue
-- Absolute language eliminates "is this an exception?" questions
-- Explicit anti-rationalization counters close specific loopholes
-
-**Implementation intentions create automatic behavior:**
-
-- Clear triggers + required actions = automatic execution
-- "When X, do Y" more effective than "generally do Y"
-- Reduces cognitive load on compliance
-
-**LLMs are parahuman:**
-
-- Trained on human text containing these patterns
-- Authority language precedes compliance in training data
-- Commitment sequences (statement → action) frequently modeled
-- Social proof patterns (everyone does X) establish norms
+- **Bright-line rules**: "YOU MUST" removes decision fatigue, eliminates "is this an exception?" questions
+- **Implementation intentions**: "When X, do Y" → automatic execution
+- **LLMs are parahuman**: Trained on human text containing these persuasion patterns
 
 ## Ethical Use
 
-**Legitimate:**
-
-- Ensuring critical practices are followed
-- Creating effective documentation
-- Preventing predictable failures
-
-**Illegitimate:**
-
-- Manipulating for personal gain
-- Creating false urgency
-- Guilt-based compliance
-
 **The test:** Would this technique serve the user's genuine interests if they fully understood it?
+
+Legitimate: Ensuring critical practices, preventing failures. Illegitimate: Manipulation, false urgency, guilt-based compliance.
 
 ## Quick Reference
 
@@ -559,7 +345,7 @@ When designing a prompt, ask:
 
 export default tool({
   description:
-    "Use this skill when writing commands, skills, or prompts for agents or any other LLM interaction, including optimizing prompts, improving LLM outputs, or designing production prompt templates. Covers: few-shot learning, chain-of-thought, template systems, system prompt design, persuasion principles (authority, commitment, scarcity, social proof, unity), and optimization patterns.",
+    "Use this skill when writing commands, skills for Agent, or prompts for sub agents or any other LLM interaction, including optimizing prompts, improving LLM outputs, or designing production prompt templates. Covers: few-shot learning, chain-of-thought, template systems, system prompt design, persuasion principles (authority, commitment, scarcity, social proof, unity), and optimization patterns.",
   args: {},
   async execute() {
     return SKILL;
