@@ -55,13 +55,23 @@ ANTES de considerar una tarea completada, verifica:
 
 ## Herramientas
 
-Tienes acceso a herramientas especializadas. Usa la correcta según el contexto:
+Tienes acceso a herramientas especializadas. Usa la correcta según el contexto
 
-| Herramienta | Uso                                    | Cuándo usarla                                                   |
-| ----------- | -------------------------------------- | --------------------------------------------------------------- |
-| `mgrep`     | Búsqueda semántica en archivos locales | Buscar código, funciones, patrones. SIEMPRE preferir sobre grep |
-| `ref`       | Documentación de APIs y librerías      | Consultar docs oficiales antes de implementar                   |
-| `exa`       | Búsqueda y navegación web              | Investigar soluciones, buscar información actualizada           |
+### MCP
+
+| MCP     | Uso                                    | Cuándo usarla                                                   |
+| ------- | -------------------------------------- | --------------------------------------------------------------- |
+| `mgrep` | Búsqueda semántica en archivos locales | Buscar código, funciones, patrones. SIEMPRE preferir sobre grep |
+| `ref`   | Documentación de APIs y librerías      | Consultar docs oficiales antes de implementar                   |
+| `exa`   | Búsqueda y navegación web              | Investigar soluciones, buscar información actualizada           |
+
+### Tools
+
+| Tool                   | Cuándo usarla                                               |
+| ---------------------- | ----------------------------------------------------------- |
+| `test-best-practices`  | Estrategia, estructura de tests, tests flaky, anti-patrones |
+| `systematic-debugging` | Bugs, fallos de tests, comportamiento inesperado            |
+| `prompt-engineering`   | Prompts, comandos, AGENTS.md, interacciones con LLMs        |
 
 ## Principios de Código
 
@@ -215,51 +225,6 @@ if (password.length < MIN_PASSWORD_LENGTH) { ... }
 if (retryCount > MAX_RETRY_ATTEMPTS) { ... }
 setTimeout(fn, ONE_DAY_MS)
 ```
-
-## Testing
-
-### Enfoque en Comportamiento
-
-Los tests deben verificar **qué** hace el código, no **cómo** lo hace. Esto permite refactorizar sin romper tests.
-
-```typescript
-// MAL: test acoplado a implementación
-test("uses cache internally", () => {
-  const spy = vi.spyOn(cache, "get");
-  getUser(1);
-  expect(spy).toHaveBeenCalledWith("user:1");
-});
-
-// BIEN: test enfocado en comportamiento
-test("returns user data for valid id", () => {
-  const user = getUser(1);
-  expect(user).toEqual({ id: 1, name: "John" });
-});
-```
-
-### Tests como Documentación
-
-El nombre del test debe describir el comportamiento esperado. Alguien que lea solo los nombres de tests debe entender qué hace el sistema.
-
-```typescript
-// MAL: nombres genéricos
-test("getUser works");
-test("validation test");
-test("error case");
-
-// BIEN: nombres descriptivos
-test("returns null when user does not exist");
-test("throws ValidationError when email format is invalid");
-test("retries request up to 3 times on network failure");
-```
-
-### Evitar Mocks Excesivos
-
-Mocks excesivos acoplan los tests a la implementación. Prefiere:
-
-- Tests de integración cuando aporten más valor
-- Fakes o stubs sobre mocks cuando sea posible
-- Mockear solo en los bordes del sistema (APIs externas, base de datos)
 
 ## Formato de Respuestas
 
