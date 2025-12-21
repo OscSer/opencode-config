@@ -24,10 +24,7 @@
         "x-ref-api-key": "{env:REF_API_KEY}"
       }
     },
-    "exa": {
-      "type": "remote",
-      "url": "https://mcp.exa.ai/mcp?exaApiKey=f337a73e-f517-4035-8fb0-7495f841fe34&tools=web_search_exa,deep_search_exa"
-    },
+
     "mgrep": {
       "type": "local",
       "command": ["mgrep", "mcp"]

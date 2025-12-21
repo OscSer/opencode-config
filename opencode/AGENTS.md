@@ -63,7 +63,6 @@ Tienes acceso a herramientas especializadas. Usa la correcta según el contexto
 | ------- | ------------------------------------------------------------------------------------------------------- |
 | `mgrep` | Búsqueda semántica en archivos locales. Buscar código, funciones, patrones. SIEMPRE preferir sobre grep |
 | `ref`   | Documentación de APIs y librerías. Consultar docs oficiales antes de implementar                        |
-| `exa`   | Búsqueda y navegación web. Investigar soluciones, buscar información actualizada                        |
 
 ### Tools
 
