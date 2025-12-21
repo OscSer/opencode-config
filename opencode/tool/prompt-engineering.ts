@@ -180,7 +180,7 @@ Match specificity to task fragility:
 
 # Persuasion Principles for Agent Communication
 
-Usefull for writing prompts, including but not limited to: commands, hooks, skills for Claude Code, or prompts for sub agents or any other LLM interaction.
+Useful for writing prompts, including but not limited to: commands, hooks, skills, or prompts for sub agents and any other LLM interaction.
 
 ## Overview
 

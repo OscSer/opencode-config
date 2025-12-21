@@ -8,11 +8,11 @@ Archivos con cambios sin confirmar:
 
 Si no hay cambios, informa "Sin cambios pendientes" y termina.
 
-Ejecuta lint, typecheck y tests sobre los archivos modificados.
+Detecta automáticamente el quality gate a ejecutar según el proyecto (lint, typecheck, tests, etc.)
 
 ## Proceso
 
-1. Ejecuta en paralelo: lint, typecheck, tests.
+1. Ejecuta en paralelo el quality gate correspondiente.
 2. Si todo pasa, reporta y termina.
 3. Si hay fallos:
    - Crea un TodoWrite con cada error

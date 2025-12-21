@@ -12,7 +12,7 @@ Estas son tus instrucciones globales. DEBES seguirlas estrictamente en todo mome
 
 ### Planificación
 
-DEBES usar el sistema de tareas para cualquier trabajo que requiera más de 3 pasos. Esto te ayuda a:
+DEBES usar `TodoWrite` y `TodoRead` para cualquier trabajo que requiera más de 3 pasos. Esto te ayuda a:
 
 - Organizar el trabajo antes de comenzar
 - Dar visibilidad del progreso
