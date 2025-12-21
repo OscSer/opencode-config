@@ -1,15 +1,17 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "autoupdate": false,
-  "theme": "system",
   "agent": {
     "plan": {
       "model": "anthropic/claude-opus-4-5",
-      "permission": { "edit": "deny" }
+      "permission": {
+        "edit": "deny"
+      }
     },
     "build": {
       "model": "github-copilot/gemini-3-flash-preview",
-      "permission": { "edit": "allow" }
+      "permission": {
+        "edit": "allow"
+      }
     }
   },
   "mcp": {
@@ -23,6 +25,10 @@
     "exa": {
       "type": "remote",
       "url": "https://mcp.exa.ai/mcp?exaApiKey=f337a73e-f517-4035-8fb0-7495f841fe34&tools=web_search_exa,deep_search_exa"
+    },
+    "mgrep": {
+      "type": "local",
+      "command": ["mgrep", "mcp"]
     }
   },
   "permission": {
@@ -60,6 +66,9 @@
     "input_newline": "ctrl+l",
     "input_clear": "ctrl+d",
     "session_new": "ctrl+n",
-    "command_list": "<leader>p"
-  }
+    "command_list": "<leader>p",
+    "terminal_suspend": "<leader>z"
+  },
+  "theme": "system",
+  "autoupdate": false
 }
