@@ -1,7 +1,7 @@
-export class CopyError extends Error {
+export class SymlinkError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "CopyError";
+    this.name = "SymlinkError";
   }
 }
 

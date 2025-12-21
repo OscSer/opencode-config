@@ -4,7 +4,7 @@ import * as os from "node:os";
 import * as path from "node:path";
 
 import { createSymlink, validateSourcePath } from "./file-ops";
-import { CopyError } from "./types-def";
+import { SymlinkError } from "./types-def";
 
 let tmpDir: string;
 
@@ -54,6 +54,22 @@ describe("file-ops", () => {
       const result = await validateSourcePath(tmpDir, "data", false);
       expect(result).toBe(dirPath);
     });
+
+    it("should return path for file when isFile is undefined", async () => {
+      const filePath = path.join(tmpDir, "file.txt");
+      await fs.writeFile(filePath, "content");
+
+      const result = await validateSourcePath(tmpDir, "file.txt");
+      expect(result).toBe(filePath);
+    });
+
+    it("should return path for directory when isFile is undefined", async () => {
+      const dirPath = path.join(tmpDir, "dir");
+      await fs.mkdir(dirPath);
+
+      const result = await validateSourcePath(tmpDir, "dir");
+      expect(result).toBe(dirPath);
+    });
   });
 
   describe("createSymlink", () => {
@@ -100,16 +116,11 @@ describe("file-ops", () => {
       expect(path.resolve(linkTarget)).toBe(path.resolve(sourcePath));
     });
 
-    it("should throw CopyError when source is missing", async () => {
+    it("should throw SymlinkError when source is missing", async () => {
       const sourcePath = path.join(tmpDir, "missing.txt");
       const targetPath = path.join(tmpDir, "link.txt");
 
-      try {
-        await createSymlink(sourcePath, targetPath);
-        expect(false).toBe(true); // Should not reach here
-      } catch (error) {
-        expect(error).toBeInstanceOf(CopyError);
-      }
+      await expect(createSymlink(sourcePath, targetPath)).rejects.toBeInstanceOf(SymlinkError);
     });
   });
 });

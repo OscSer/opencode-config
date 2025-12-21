@@ -1,7 +1,7 @@
 import { promises as fs } from "node:fs";
 import * as path from "node:path";
 
-import { CopyError } from "./types-def";
+import { SymlinkError } from "./types-def";
 
 export async function validateSourcePath(
   repoDir: string,
@@ -56,7 +56,7 @@ export async function createSymlink(source: string, target: string): Promise<boo
 
     return true;
   } catch (error) {
-    throw new CopyError(
+    throw new SymlinkError(
       `Failed to symlink ${source} to ${target}: ${error instanceof Error ? error.message : String(error)}`,
     );
   }

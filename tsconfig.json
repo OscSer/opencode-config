@@ -19,6 +19,6 @@
     "noPropertyAccessFromIndexSignature": false,
     "rootDir": "."
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

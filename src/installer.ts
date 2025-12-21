@@ -50,13 +50,12 @@ export class ConfigInstaller {
 
       for (const asset of assets) {
         const sourcePath = await this.resolveSource(asset.source);
+        if (!sourcePath) continue;
 
-        if (sourcePath) {
-          const targetPath = path.join(this.opencodeDir, asset.target);
-          console.log(`Linking ${asset.source} to ${targetPath}...`);
-          await createSymlink(sourcePath, targetPath);
-          console.log(`✓ Linked ${asset.target}`);
-        }
+        const targetPath = path.join(this.opencodeDir, asset.target);
+        console.log(`Linking ${asset.source} to ${targetPath}...`);
+        await createSymlink(sourcePath, targetPath);
+        console.log(`✓ Linked ${asset.target}`);
       }
 
       return true;
