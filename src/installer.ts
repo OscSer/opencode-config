@@ -2,9 +2,10 @@ import { promises as fs } from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 
-import { AGENTS_CONFIG } from "./agents-config";
 import { createSymlink, validateSourcePath } from "./file-ops";
 import { InstallError } from "./types-def";
+
+const OPENCODE_SOURCE_DIR = "opencode";
 
 export class ConfigInstaller {
   private repoDir: string;
@@ -15,46 +16,43 @@ export class ConfigInstaller {
     this.opencodeDir = opencodeDir || path.join(os.homedir(), ".config", "opencode");
   }
 
-  async resolveSource(relative: string, mustBeFile: boolean = true): Promise<string | null> {
-    return validateSourcePath(this.repoDir, relative, mustBeFile);
+  async resolveSource(relative: string, isFile?: boolean): Promise<string | null> {
+    return validateSourcePath(this.repoDir, relative, isFile);
   }
 
-  getTargetDir(agentName: string): string {
-    const targetDirs: Record<string, string> = {
-      opencode: this.opencodeDir,
-    };
-
-    if (!(agentName in targetDirs)) {
-      throw new InstallError(`Unknown agent: ${agentName}`);
+  async getOpencodeAssets(): Promise<Array<{ source: string; target: string }>> {
+    const sourcePath = await this.resolveSource(OPENCODE_SOURCE_DIR, false);
+    if (!sourcePath) {
+      throw new InstallError(`OpenCode source directory not found: ${OPENCODE_SOURCE_DIR}`);
     }
 
-    const targetDir = targetDirs[agentName];
-    if (!targetDir) {
-      throw new InstallError(`Target directory not found for agent: ${agentName}`);
+    const assets: Array<{ source: string; target: string }> = [];
+    const entries = await fs.readdir(sourcePath);
+
+    for (const entry of entries) {
+      const relativePath = path.join(OPENCODE_SOURCE_DIR, entry);
+      assets.push({
+        source: relativePath,
+        target: entry,
+      });
     }
 
-    return targetDir;
+    return assets;
   }
 
-  async installAgent(agentName: string): Promise<boolean> {
-    const config = AGENTS_CONFIG[agentName];
-    if (!config) {
-      throw new InstallError(`Agent configuration not found: ${agentName}`);
-    }
-
-    const agentLabel = config.label;
-    const targetDir = this.getTargetDir(agentName);
-
-    console.log(`Installing ${agentLabel} configuration...`);
+  async installOpencode(): Promise<boolean> {
+    console.log("Installing OpenCode configuration...");
 
     try {
-      await fs.mkdir(targetDir, { recursive: true });
+      await fs.mkdir(this.opencodeDir, { recursive: true });
 
-      for (const asset of config.assets) {
-        const sourcePath = await this.resolveSource(asset.source, asset.type === "file");
+      const assets = await this.getOpencodeAssets();
+
+      for (const asset of assets) {
+        const sourcePath = await this.resolveSource(asset.source);
 
         if (sourcePath) {
-          const targetPath = path.join(targetDir, asset.target);
+          const targetPath = path.join(this.opencodeDir, asset.target);
           console.log(`Linking ${asset.source} to ${targetPath}...`);
           await createSymlink(sourcePath, targetPath);
           console.log(`✓ Linked ${asset.target}`);
@@ -64,7 +62,7 @@ export class ConfigInstaller {
       return true;
     } catch (error) {
       console.error(
-        `Error installing ${agentLabel}: ${error instanceof Error ? error.message : String(error)}`,
+        `Error installing OpenCode: ${error instanceof Error ? error.message : String(error)}`,
       );
       return false;
     }
@@ -74,14 +72,9 @@ export class ConfigInstaller {
     console.log("OpenCode Configuration Installation");
     console.log("====================================");
 
-    const successFlags: boolean[] = [];
+    const success = await this.installOpencode();
 
-    for (const agentName of Object.keys(AGENTS_CONFIG)) {
-      const success = await this.installAgent(agentName);
-      successFlags.push(success);
-    }
-
-    if (successFlags.every((flag) => flag)) {
+    if (success) {
       console.log("");
       console.log("✅ Installation complete!");
       console.log("OpenCode configuration is available in ~/.config/opencode/");
@@ -89,7 +82,7 @@ export class ConfigInstaller {
     }
 
     console.log("");
-    console.log("⚠️ Installation completed with some errors. Check the output above for details.");
+    console.log("⚠️ Installation failed. Check the output above for details.");
     return false;
   }
 }

@@ -3,8 +3,8 @@ import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
 
-import { createSymlink, validateSourcePath } from "../src/file-ops";
-import { CopyError } from "../src/types-def";
+import { createSymlink, validateSourcePath } from "./file-ops";
+import { CopyError } from "./types-def";
 
 let tmpDir: string;
 

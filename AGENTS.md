@@ -1,26 +1,35 @@
-# Agents Config
+# OpenCode Config
 
-Repositorio configuraciones y reglas centralizadas para agentes de IA.
+Configuración centralizada para OpenCode con estructura simplificada.
 
 ## Estructura
 
 ```
-agents-config/
-├── agents/
-│   ├── opencode/
-│   │   └── opencode.jsonc       # Configuración específica de OpenCode
-│   └── rules/
-│       └── AGENTS.md            # Reglas globales compartidas
+opencode-config/
+├── opencode/
+│   ├── opencode.jsonc              # Configuración principal de OpenCode
+│   ├── AGENTS.md                   # Reglas globales para OpenCode
+│   ├── command/
+│   │   ├── check.md
+│   │   └── remove-slop.md
+│   └── tool/
+│       ├── mgrep.ts
+│       ├── prompt-engineering.ts
+│       ├── systematic-debugging.ts
+│       └── test-best-practices.ts
 ├── src/
-│   ├── agents-config.ts         # Registro de agentes y assets
-│   ├── file-ops.ts              # Utilidades de paths y symlinks
-│   ├── installer.ts             # Script del instalador
-│   └── types-def.ts             # Tipos e interfaces TypeScript
-├── tests/                       # Tests de instalador y módulos
-├── package.json                 # Dependencias de Bun
-├── tsconfig.json                # Configuración de TypeScript
-├── biome.json                   # Configuración de Biome (linter/formatter)
-└── AGENTS.md                    # Este archivo (reglas para este repo)
+│   ├── installer.ts                # Instalador con detección automática
+│   ├── installer.test.ts           # Tests del instalador
+│   ├── file-ops.ts                 # Utilidades de paths y symlinks
+│   ├── file-ops.test.ts            # Tests de operaciones de archivos
+│   └── types-def.ts                # Tipos e interfaces TypeScript
+├── .husky/
+│   └── pre-commit
+├── package.json                    # Dependencias de Bun
+├── tsconfig.json                   # Configuración de TypeScript
+├── biome.json                      # Configuración de Biome (linter/formatter)
+├── .gitignore
+└── AGENTS.md                       # Este archivo (documentación del repo)
 ```
 
 ## Script de Instalación
@@ -31,13 +40,13 @@ Ejecutar el instalador:
 bun run setup
 ```
 
+El instalador detecta automáticamente todos los archivos y directorios en `opencode/` y los vincula a `~/.config/opencode/`.
+
 ## Desarrollo
 
 ### Quality Gate
 
 ```bash
-bun run lint
-bun run format
 bun run check
 bun run typecheck
 bun test
@@ -45,12 +54,23 @@ bun test
 
 ### Modificaciones comunes
 
-| Tarea                                | Archivos clave                              |
-| ------------------------------------ | ------------------------------------------- |
-| Ajustar la configuración de OpenCode | `agents/opencode/opencode.jsonc`            |
-| Actualizar reglas compartidas        | `agents/rules/AGENTS.md`                    |
-| Registrar nuevos agentes o assets    | `src/agents-config.ts` y `src/installer.ts` |
-| Modificar lógica de instalación      | `src/file-ops.ts` e `src/installer.ts`      |
+| Tarea                                | Archivos clave            |
+| ------------------------------------ | ------------------------- |
+| Ajustar la configuración de OpenCode | `opencode/opencode.jsonc` |
+| Actualizar reglas globales           | `opencode/AGENTS.md`      |
+| Agregar nuevos comandos              | `opencode/command/`       |
+| Agregar nuevas herramientas          | `opencode/tool/`          |
+| Modificar lógica de instalación      | `src/installer.ts`        |
+
+## Extensibilidad
+
+El instalador utiliza **detección automática** de assets. Al agregar nuevos directorios o archivos en `opencode/`:
+
+1. El instalador los detectará automáticamente
+2. Se crearán symlinks en `~/.config/opencode/` con el mismo nombre
+3. No es necesario modificar código del instalador
+
+Ejemplo: Si agregas `opencode/skill/`, el instalador automáticamente lo enlazará a `~/.config/opencode/skill/`.
 
 ## Stack Técnico
 
@@ -60,6 +80,4 @@ bun test
 
 ## Documentación
 
-Siempre consulta la documentación oficial antes de hacer cambios:
-
-- OpenCode: https://opencode.ai/docs
+Consulta la documentación oficial de OpenCode: https://opencode.ai/docs

@@ -6,19 +6,19 @@ import { CopyError } from "./types-def";
 export async function validateSourcePath(
   repoDir: string,
   relativePath: string,
-  isFile: boolean,
+  isFile?: boolean,
 ): Promise<string | null> {
   const fullPath = path.join(repoDir, relativePath);
 
   try {
     const stat = await fs.stat(fullPath);
 
-    if (isFile && !stat.isFile()) {
+    if (isFile === true && !stat.isFile()) {
       console.warn(`Warning: ${relativePath} is not a file, skipping...`);
       return null;
     }
 
-    if (!isFile && !stat.isDirectory()) {
+    if (isFile === false && !stat.isDirectory()) {
       console.warn(`Warning: ${relativePath} is not a directory, skipping...`);
       return null;
     }
@@ -38,8 +38,10 @@ export async function createSymlink(source: string, target: string): Promise<boo
     await fs.mkdir(targetDir, { recursive: true });
 
     try {
-      const targetStat = await fs.stat(target);
-      if (targetStat.isDirectory()) {
+      const targetStat = await fs.lstat(target);
+      if (targetStat.isSymbolicLink()) {
+        await fs.unlink(target);
+      } else if (targetStat.isDirectory()) {
         await fs.rm(target, { recursive: true, force: true });
       } else {
         await fs.unlink(target);
