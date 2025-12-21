@@ -1,6 +1,6 @@
 # Agents Config
 
-Repositorio centralizado de configuraciones y reglas que unifican cómo se instalan agentes de IA.
+Repositorio configuraciones y reglas centralizadas para agentes de IA.
 
 ## Estructura
 
@@ -23,17 +23,7 @@ agents-config/
 └── AGENTS.md                    # Este archivo (reglas para este repo)
 ```
 
-## Setup de desarrollo
-
-```bash
-# Instalar dependencias (requiere Bun)
-bun install
-
-# Verificar que todo funciona
-bun test
-```
-
-## Uso
+## Script de Instalación
 
 Ejecutar el instalador:
 
@@ -43,30 +33,14 @@ bun run setup
 
 ## Desarrollo
 
-### Tests
-
-Ejecutar los tests:
+### Quality Gate
 
 ```bash
-bun test
-```
-
-### Linting y Formato
-
-Verificar código con Biome:
-
-```bash
-# Lint
 bun run lint
-
-# Formatear (si es necesario)
 bun run format
-
-# Lint + format check combinados
 bun run check
-
-# Verificar tipos TypeScript
 bun run typecheck
+bun test
 ```
 
 ### Modificaciones comunes
@@ -78,19 +52,11 @@ bun run typecheck
 | Registrar nuevos agentes o assets    | `src/agents-config.ts` y `src/installer.ts` |
 | Modificar lógica de instalación      | `src/file-ops.ts` e `src/installer.ts`      |
 
-## Flujo de trabajo
-
-1. Revisa la documentación relevante antes de tocar configuraciones.
-2. Modifica los archivos adecuados según la tarea.
-3. Ejecuta `bun test` para validar cambios.
-4. Ejecuta `bun run check` para verificar formato y lint.
-
 ## Stack Técnico
 
 - **Runtime:** Bun
 - **Lenguaje:** TypeScript
 - **Linter/Formatter:** Biome
-- **Tests:** bun:test
 
 ## Documentación
 
