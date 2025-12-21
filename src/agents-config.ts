@@ -19,6 +19,11 @@ export const AGENTS_CONFIG: AgentsConfigMap = {
         target: "command",
         type: "dir",
       },
+      {
+        source: "agents/opencode/tool",
+        target: "tool",
+        type: "dir",
+      },
     ],
   },
 };
