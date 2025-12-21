@@ -59,19 +59,19 @@ Tienes acceso a herramientas especializadas. Usa la correcta según el contexto
 
 ### MCP
 
-| MCP     | Uso                                    | Cuándo usarla                                                   |
-| ------- | -------------------------------------- | --------------------------------------------------------------- |
-| `mgrep` | Búsqueda semántica en archivos locales | Buscar código, funciones, patrones. SIEMPRE preferir sobre grep |
-| `ref`   | Documentación de APIs y librerías      | Consultar docs oficiales antes de implementar                   |
-| `exa`   | Búsqueda y navegación web              | Investigar soluciones, buscar información actualizada           |
+| MCP     | Cuándo usarla                                                                                           |
+| ------- | ------------------------------------------------------------------------------------------------------- |
+| `mgrep` | Búsqueda semántica en archivos locales. Buscar código, funciones, patrones. SIEMPRE preferir sobre grep |
+| `ref`   | Documentación de APIs y librerías. Consultar docs oficiales antes de implementar                        |
+| `exa`   | Búsqueda y navegación web. Investigar soluciones, buscar información actualizada                        |
 
 ### Tools
 
-| Tool                   | Cuándo usarla                                               |
-| ---------------------- | ----------------------------------------------------------- |
-| `test-best-practices`  | Estrategia, estructura de tests, tests flaky, anti-patrones |
-| `systematic-debugging` | Bugs, fallos de tests, comportamiento inesperado            |
-| `prompt-engineering`   | Prompts, comandos, AGENTS.md, interacciones con LLMs        |
+| Tool                   | Cuándo usarla                                                  |
+| ---------------------- | -------------------------------------------------------------- |
+| `test-best-practices`  | Estrategia, estructura de tests, tests flaky, anti-patrones    |
+| `systematic-debugging` | Bugs, fallos de tests, comportamiento inesperado               |
+| `prompt-engineering`   | Prompts, comandos, AGENTS.md, SKILL.md, interacciones con LLMs |
 
 ## Principios de Código
 
@@ -233,7 +233,7 @@ setTimeout(fn, ONE_DAY_MS)
 Cuando menciones código específico, incluye la ubicación para facilitar la navegación:
 
 ```
-La función `validateUser` en src/services/auth.ts:45 maneja la validación.
+La función `validateUser` en `src/services/auth.ts:45` maneja la validación.
 ```
 
 ### Estructura

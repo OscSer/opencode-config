@@ -54,13 +54,13 @@ bun test
 
 ### Modificaciones comunes
 
-| Tarea                                | Archivos clave            |
-| ------------------------------------ | ------------------------- |
-| Ajustar la configuración de OpenCode | `opencode/opencode.jsonc` |
-| Actualizar reglas globales           | `opencode/AGENTS.md`      |
-| Agregar nuevos comandos              | `opencode/command/`       |
-| Agregar nuevas herramientas          | `opencode/tool/`          |
-| Modificar lógica de instalación      | `src/installer.ts`        |
+| Tarea                                | Archivos clave            | Pasos adicionales                                                 |
+| ------------------------------------ | ------------------------- | ----------------------------------------------------------------- |
+| Ajustar la configuración de OpenCode | `opencode/opencode.jsonc` | -                                                                 |
+| Actualizar reglas globales           | `opencode/AGENTS.md`      | -                                                                 |
+| Agregar nuevos comandos              | `opencode/command/`       | -                                                                 |
+| Agregar nuevas herramientas          | `opencode/tool/`          | Actualizar tabla de Tools en `opencode/AGENTS.md` si es relevante |
+| Modificar lógica de instalación      | `src/installer.ts`        | -                                                                 |
 
 ## Extensibilidad
 
