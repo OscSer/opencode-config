@@ -169,7 +169,7 @@ Minimal test: [smallest change to verify]
 
 export default tool({
   description:
-    "BEFORE proposing any fix for bugs, test failures, or unexpected behavior. Enforces 4-phase methodology: Root Cause → Pattern Analysis → Hypothesis → Implementation.",
+    "Use when: encountering bugs, test failures, or unexpected behavior. Enforces 4-phase methodology: Root Cause Investigation → Pattern Analysis → Hypothesis → Implementation",
   args: {},
   async execute() {
     return SKILL;

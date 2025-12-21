@@ -345,7 +345,7 @@ When designing a prompt, ask:
 
 export default tool({
   description:
-    "Use this skill when writing AGENTS.md, SKILL.md, slash commands, or prompts for agents/sub-agents or any other LLM interaction, including optimizing prompts, improving LLM outputs, or designing production prompt templates. Covers: few-shot learning, chain-of-thought, template systems, system prompt design, persuasion principles (authority, commitment, scarcity, social proof, unity), and optimization patterns.",
+    "Use when: working with prompts in AGENTS.md, SKILL.md, slash commands, agents/subagents, or any other LLM interaction, including prompt optimization, LLM result improvement, or production prompt template design",
   args: {},
   async execute() {
     return SKILL;
