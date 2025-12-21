@@ -559,7 +559,7 @@ When designing a prompt, ask:
 
 export default tool({
   description:
-    "Use this skill when writing commands, hooks, skills for Agent, or prompts for sub agents or any other LLM interaction, including optimizing prompts, improving LLM outputs, or designing production prompt templates. Covers: few-shot learning, chain-of-thought, template systems, system prompt design, persuasion principles (authority, commitment, scarcity, social proof, unity), and optimization patterns.",
+    "Use this skill when writing commands, skills, or prompts for agents or any other LLM interaction, including optimizing prompts, improving LLM outputs, or designing production prompt templates. Covers: few-shot learning, chain-of-thought, template systems, system prompt design, persuasion principles (authority, commitment, scarcity, social proof, unity), and optimization patterns.",
   args: {},
   async execute() {
     return SKILL;
