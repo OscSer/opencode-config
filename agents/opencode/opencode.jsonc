@@ -8,7 +8,7 @@
       }
     },
     "build": {
-      "model": "github-copilot/gpt-5.1-codex-max",
+      "model": "github-copilot/claude-haiku-4.5",
       "permission": {
         "edit": "allow"
       }
@@ -41,16 +41,30 @@
       "format *": "deny",
       "fdisk *": "deny",
       "dd *": "deny",
+      "find *": "deny",
       "curl *": "ask",
       "wget *": "ask",
-      "gh *": "ask",
+      "gh *": "allow",
+      "gh auth *": "deny",
+      "gh repo delete *": "deny",
+      "gh repo archive *": "deny",
+      "gh issue delete *": "deny",
+      "gh pr merge *": "deny",
+      "gh pr revert *": "deny",
+      "gh release *": "deny",
+      "gh secret *": "deny",
+      "gh variable *": "deny",
+      "gh ssh-key *": "deny",
+      "gh gpg-key *": "deny",
+      "gh run *": "deny",
+      "gh workflow *": "deny",
+      "gh extension *": "deny",
+      "gh config *": "deny",
       "git add *": "deny",
       "git commit *": "deny",
       "git push *": "deny",
       "git reset *": "deny",
       "git restore *": "deny",
-      "git branch -d *": "deny",
-      "git branch -D *": "deny",
       "* install *": "ask",
       "* update *": "ask",
       "* add *": "ask",
@@ -69,6 +83,5 @@
     "command_list": "<leader>p",
     "terminal_suspend": "<leader>z"
   },
-  "theme": "system",
-  "autoupdate": false
+  "theme": "system"
 }
