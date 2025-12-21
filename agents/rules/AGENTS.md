@@ -1,26 +1,278 @@
-# Instrucciones
+# Instrucciones Globales
 
-Estas son tus instrucciones globales y no son negociables. Debes seguirlas estrictamente en todo momento.
+Estas son tus instrucciones globales. DEBES seguirlas estrictamente en todo momento. No son negociables.
 
-## Lenguaje
+## Reglas No Negociables
 
-- SIEMPRE debes comunicarte en ESPAÑOL
-- El código debe estar en INGLÉS
+- SIEMPRE comunícate en **ESPAÑOL**
+- SIEMPRE escribe código en **INGLÉS** (nombres de variables, funciones, clases)
+- NUNCA ignores estas reglas, sin excepciones
+
+## Flujo de Trabajo
+
+### Planificación
+
+DEBES usar el sistema de tareas para cualquier trabajo que requiera más de 3 pasos. Esto te ayuda a:
+
+- Organizar el trabajo antes de comenzar
+- Dar visibilidad del progreso
+- No olvidar pasos importantes
+
+Marca cada tarea como completada INMEDIATAMENTE después de terminarla. No acumules tareas completadas.
+
+### Investigar Antes de Cambiar
+
+ANTES de modificar código existente:
+
+1. Entiende el contexto y el propósito del código actual
+2. Identifica dependencias y posibles efectos secundarios
+3. Verifica si existen patrones similares en el proyecto
+
+### Quality Gate
+
+INMEDIATAMENTE después de hacer cambios, ejecuta las validaciones del proyecto:
+
+- Tests
+- Linter
+- Verificación de tipos
+- Cualquier otra validación configurada
+
+No propongas cambios que rompan el quality gate.
+
+### Cambios Incrementales
+
+- Un commit = un cambio lógico
+- Cambios pequeños y atómicos
+- Fáciles de revisar y revertir
+
+### Verificación Final
+
+ANTES de considerar una tarea completada, verifica:
+
+- El código cumple los principios de esta guía
+- El quality gate pasa correctamente
+- No hay código muerto o comentado
 
 ## Herramientas
 
-- Usa `ref` para obtener documentación de APIs, servicios y librerías
-- Usa `exa` para buscar y navegar en la web
+Tienes acceso a herramientas especializadas. Usa la correcta según el contexto:
 
-## Principios
+| Herramienta | Uso                                    | Cuándo usarla                                                   |
+| ----------- | -------------------------------------- | --------------------------------------------------------------- |
+| `mgrep`     | Búsqueda semántica en archivos locales | Buscar código, funciones, patrones. SIEMPRE preferir sobre grep |
+| `ref`       | Documentación de APIs y librerías      | Consultar docs oficiales antes de implementar                   |
+| `exa`       | Búsqueda y navegación web              | Investigar soluciones, buscar información actualizada           |
 
-- Código limpio, sencillo, fácil de leer, nombres descriptivos
-- Autoexplicativo y sin comentarios
-- Diseño modular con responsabilidades bien definidas
+## Principios de Código
+
+El código debe ser **claro**, **legible** y **modular**. Debe explicarse por sí mismo sin necesidad de comentarios.
+
+### Early Return y Guard Clauses
+
+Maneja casos excepcionales al inicio. Evita anidación excesiva.
+
+```typescript
+// MAL: anidación excesiva, difícil de seguir
+function processOrder(order: Order | null) {
+  if (order) {
+    if (order.isValid) {
+      if (order.hasItems) {
+        return calculateTotal(order);
+      }
+    }
+  }
+  return null;
+}
+
+// BIEN: guard clauses, flujo claro
+function processOrder(order: Order | null) {
+  if (!order) return null;
+  if (!order.isValid) return null;
+  if (!order.hasItems) return null;
+
+  return calculateTotal(order);
+}
+```
+
+### Nombres Descriptivos
+
+Los nombres deben revelar intención. Si necesitas un comentario para explicar qué hace una variable, el nombre es malo.
+
+```typescript
+// MAL: nombres crípticos
+const d = Date.now() - s;
+const arr = data.filter((x) => x.a > 10);
+const flag = user.role === "admin";
+
+// BIEN: nombres que revelan intención
+const elapsedMs = Date.now() - startTime;
+const highValueItems = data.filter((item) => item.amount > THRESHOLD);
+const isAdmin = user.role === "admin";
+```
+
+### Funciones Pequeñas y Enfocadas
+
+Una función = una responsabilidad. Si puedes describir lo que hace usando "y", probablemente hace demasiado.
+
+```typescript
+// MAL: función que hace múltiples cosas
+function handleUserRegistration(userData: UserInput) {
+  // valida datos
+  // hashea password
+  // guarda en base de datos
+  // envía email de bienvenida
+  // registra analytics
+  // ...100 líneas más
+}
+
+// BIEN: composición de funciones pequeñas
+function handleUserRegistration(userData: UserInput) {
+  const validatedData = validateUserData(userData);
+  const user = createUser(validatedData);
+  await saveUser(user);
+  await sendWelcomeEmail(user);
+  trackRegistration(user);
+}
+```
+
+### Evitar Else Innecesario
+
+Si el bloque `if` termina con `return`, el `else` es redundante.
+
+```typescript
+// MAL: else innecesario
+function getDiscount(user: User) {
+  if (user.isPremium) {
+    return 0.2;
+  } else {
+    return 0;
+  }
+}
+
+// BIEN: sin else redundante
+function getDiscount(user: User) {
+  if (user.isPremium) {
+    return 0.2;
+  }
+  return 0;
+}
+```
+
+### Preferir Inmutabilidad
+
+Evita mutar datos. Crea nuevas estructuras en lugar de modificar las existentes.
+
+```typescript
+// MAL: mutación de datos
+function addItem(cart: Cart, item: Item) {
+  cart.items.push(item);
+  cart.total += item.price;
+  return cart;
+}
+
+// BIEN: inmutabilidad
+function addItem(cart: Cart, item: Item): Cart {
+  return {
+    ...cart,
+    items: [...cart.items, item],
+    total: cart.total + item.price,
+  };
+}
+```
+
+### Evitar Comentarios Obvios
+
+El código debe ser autoexplicativo. Los comentarios deben explicar el "por qué", no el "qué".
+
+```typescript
+// MAL: comentarios que describen lo obvio
+// Incrementa el contador
+counter++;
+// Obtiene el usuario por ID
+const user = getUserById(id);
+
+// BIEN: comentario que explica el por qué (cuando es necesario)
+// Rate limiting: máximo 100 requests por minuto según política de la API
+const delay = calculateBackoff(requestCount);
+```
+
+### Constantes con Nombre
+
+Evita números y strings mágicos. Usa constantes con nombres descriptivos.
+
+```typescript
+// MAL: números mágicos
+if (password.length < 8) { ... }
+if (retryCount > 3) { ... }
+setTimeout(fn, 86400000)
+
+// BIEN: constantes con nombre
+const MIN_PASSWORD_LENGTH = 8
+const MAX_RETRY_ATTEMPTS = 3
+const ONE_DAY_MS = 24 * 60 * 60 * 1000
+
+if (password.length < MIN_PASSWORD_LENGTH) { ... }
+if (retryCount > MAX_RETRY_ATTEMPTS) { ... }
+setTimeout(fn, ONE_DAY_MS)
+```
 
 ## Testing
 
-- Enfoque en el comportamiento y no en detalles de implementación
-- Usar los tests como documentación viva del sistema
-- Evitar mocks excesivos que acoplen los tests a la implementación
-- Preferir pruebas integradas cuando aporten más valor al comportamiento
+### Enfoque en Comportamiento
+
+Los tests deben verificar **qué** hace el código, no **cómo** lo hace. Esto permite refactorizar sin romper tests.
+
+```typescript
+// MAL: test acoplado a implementación
+test("uses cache internally", () => {
+  const spy = vi.spyOn(cache, "get");
+  getUser(1);
+  expect(spy).toHaveBeenCalledWith("user:1");
+});
+
+// BIEN: test enfocado en comportamiento
+test("returns user data for valid id", () => {
+  const user = getUser(1);
+  expect(user).toEqual({ id: 1, name: "John" });
+});
+```
+
+### Tests como Documentación
+
+El nombre del test debe describir el comportamiento esperado. Alguien que lea solo los nombres de tests debe entender qué hace el sistema.
+
+```typescript
+// MAL: nombres genéricos
+test("getUser works");
+test("validation test");
+test("error case");
+
+// BIEN: nombres descriptivos
+test("returns null when user does not exist");
+test("throws ValidationError when email format is invalid");
+test("retries request up to 3 times on network failure");
+```
+
+### Evitar Mocks Excesivos
+
+Mocks excesivos acoplan los tests a la implementación. Prefiere:
+
+- Tests de integración cuando aporten más valor
+- Fakes o stubs sobre mocks cuando sea posible
+- Mockear solo en los bordes del sistema (APIs externas, base de datos)
+
+## Formato de Respuestas
+
+### Referencias a Código
+
+Cuando menciones código específico, incluye la ubicación para facilitar la navegación:
+
+```
+La función `validateUser` en src/services/auth.ts:45 maneja la validación.
+```
+
+### Estructura
+
+- Respuestas concisas y al punto
+- Usa markdown para formatear (headers, listas, código)
+- Prioriza la información más relevante primero
