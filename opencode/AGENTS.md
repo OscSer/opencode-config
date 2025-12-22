@@ -59,10 +59,10 @@ Tienes acceso a herramientas especializadas. Usa la correcta según el contexto
 
 ### MCP
 
-| MCP     | Cuándo usarla                                                                                           |
-| ------- | ------------------------------------------------------------------------------------------------------- |
-| `mgrep` | Búsqueda semántica en archivos locales. Buscar código, funciones, patrones. SIEMPRE preferir sobre grep |
-| `ref`   | Documentación de APIs y librerías. Consultar docs oficiales antes de implementar                        |
+| MCP     | Cuándo usarla                                                                                                           |
+| ------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `mgrep` | Búsqueda semántica en archivos locales. Buscar código, funciones, patrones. Complementar con la tool `Grep` de opencode |
+| `ref`   | Documentación de APIs y librerías. Consultar docs oficiales antes de implementar                                        |
 
 ### Tools
 

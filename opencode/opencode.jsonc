@@ -41,6 +41,7 @@
       "fdisk *": "deny",
       "dd *": "deny",
       "find *": "deny",
+      "grep *": "deny",
       "curl *": "ask",
       "wget *": "ask",
       "gh *": "allow",
