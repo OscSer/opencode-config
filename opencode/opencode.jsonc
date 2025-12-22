@@ -1,25 +1,18 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "theme": "system",
+  "small_model": "opencode/big-pickle",
+  "default_agent": "plan",
   "agent": {
     "plan": {
-      "model": "anthropic/claude-opus-4-5",
-      // "model": "github-copilot/claude-opus-4.5",
       "permission": {
         "edit": "deny"
       }
     },
     "build": {
-      "model": "anthropic/claude-haiku-4-5",
-      // "model": "github-copilot/claude-haiku-4.5",
       "permission": {
         "edit": "allow"
       }
-    },
-    "general": {
-      "disable": true
-    },
-    "explore": {
-      "model": "github-copilot/gemini-3-flash-preview"
     }
   },
   "mcp": {
@@ -83,6 +76,5 @@
     "session_new": "ctrl+n",
     "command_list": "<leader>p",
     "terminal_suspend": "none"
-  },
-  "theme": "system"
+  }
 }
