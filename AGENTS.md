@@ -13,7 +13,6 @@ opencode-config/
 │   │   ├── check.md
 │   │   └── remove-slop.md
 │   └── tool/
-│       ├── mgrep.ts
 │       ├── prompt-engineering.ts
 │       ├── systematic-debugging.ts
 │       └── test-best-practices.ts

@@ -14,6 +14,12 @@
       "permission": {
         "edit": "allow"
       }
+    },
+    "general": {
+      "disable": true
+    },
+    "explore": {
+      "model": "github-copilot/gemini-3-flash-preview"
     }
   },
   "mcp": {
@@ -23,11 +29,6 @@
       "headers": {
         "x-ref-api-key": "{env:REF_API_KEY}"
       }
-    },
-
-    "mgrep": {
-      "type": "local",
-      "command": ["mgrep", "mcp"]
     }
   },
   "permission": {
@@ -81,7 +82,7 @@
     "input_clear": "ctrl+d",
     "session_new": "ctrl+n",
     "command_list": "<leader>p",
-    "terminal_suspend": "<leader>z"
+    "terminal_suspend": "none"
   },
   "theme": "system"
 }

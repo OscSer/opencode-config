@@ -28,7 +28,7 @@ describe("installer", () => {
     await fs.mkdir(path.join(opencodeSourceDir, "command"), { recursive: true });
     await fs.writeFile(path.join(opencodeSourceDir, "command", "check.md"), "command");
     await fs.mkdir(path.join(opencodeSourceDir, "tool"), { recursive: true });
-    await fs.writeFile(path.join(opencodeSourceDir, "tool", "mgrep.ts"), "tool");
+    await fs.writeFile(path.join(opencodeSourceDir, "tool", "prompt-engineering.ts"), "tool");
 
     const targetDir = path.join(tmpDir, "opencode");
     const installer = new ConfigInstaller(repoDir, targetDir);

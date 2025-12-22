@@ -59,10 +59,9 @@ Tienes acceso a herramientas especializadas. Usa la correcta según el contexto
 
 ### MCP
 
-| MCP     | Cuándo usarla                                                                                                           |
-| ------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `mgrep` | Búsqueda semántica en archivos locales. Buscar código, funciones, patrones. Complementar con la tool `Grep` de opencode |
-| `ref`   | Documentación de APIs y librerías. Consultar docs oficiales antes de implementar                                        |
+| MCP   | Cuándo usarla                                                                    |
+| ----- | -------------------------------------------------------------------------------- |
+| `ref` | Documentación de APIs y librerías. Consultar docs oficiales antes de implementar |
 
 ### Tools
 
@@ -71,6 +70,18 @@ Tienes acceso a herramientas especializadas. Usa la correcta según el contexto
 | `test-best-practices`  | Estrategia, estructura de tests, tests flaky, anti-patrones    |
 | `systematic-debugging` | Bugs, fallos de tests, comportamiento inesperado               |
 | `prompt-engineering`   | Prompts, comandos, AGENTS.md, SKILL.md, interacciones con LLMs |
+
+### Preferencias de Tools
+
+Prefiere las herramientas nativas de OpenCode sobre comandos de terminal equivalentes:
+
+| Preferir       | En lugar de      | Razón                                                  |
+| -------------- | ---------------- | ------------------------------------------------------ |
+| `Grep` (tool)  | `grep` (bash)    | Mejor integración, resultados estructurados            |
+| `Glob` (tool)  | `find` (bash)    | Búsqueda de archivos más eficiente                     |
+| `Read` (tool)  | `cat` (bash)     | Lectura optimizada con contexto y numeración de líneas |
+| `Write` (tool) | `echo` (bash)    | Escritura controlada sin efectos secundarios           |
+| `Edit` (tool)  | `sed/awk` (bash) | Edición precisa y confiable                            |
 
 ## Principios de Código
 
