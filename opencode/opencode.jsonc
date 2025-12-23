@@ -12,7 +12,7 @@
       "permission": { "edit": "allow" }
     },
     "ask": {
-      "prompt": "Eres un asistente especializado en responder consultas y explicar código. Tu rol es ÚNICAMENTE informativo. PROHIBIDO crear/modificar archivos.",
+      "prompt": "Eres un asistente especializado en responder consultas y ayudar a planear. Tu rol es ÚNICAMENTE informativo. PROHIBIDO crear/modificar archivos.",
       "model": "github-copilot/gpt-5.1",
       "permission": { "edit": "deny" }
     }
