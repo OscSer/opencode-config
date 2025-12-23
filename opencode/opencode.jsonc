@@ -55,7 +55,6 @@
       "dd *": "deny",
       // Obligar a usar tools nativas
       "find *": "deny",
-      "grep *": "deny",
       "cat *": "deny"
     }
   },
