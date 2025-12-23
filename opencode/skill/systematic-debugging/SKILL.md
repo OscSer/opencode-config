@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: Use when encountering bugs, test failures, or unexpected behavior. Enforces 4-phase methodology = Root Cause Investigation → Pattern Analysis → Hypothesis → Implementation
+description: Use when encountering bugs, test failures, or unexpected behavior.
 ---
 
 # Systematic Debugging

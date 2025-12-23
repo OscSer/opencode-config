@@ -1,6 +1,6 @@
 ---
 name: test-guidance
-description: Use when deciding test strategy, structuring cases, reviewing test quality, or failing/flaky tests. Guidance on test patterns, ROI decisions, anti-patterns, pyramid strategy
+description: Use when deciding test strategy, structuring test cases, reviewing test quality, or debugging failing and flaky tests
 ---
 
 # Test Best Practices
