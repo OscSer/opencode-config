@@ -1,20 +1,13 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "theme": "system",
-  "default_agent": "ask",
+  "default_agent": "plan",
   "agent": {
     "plan": {
-      "model": "anthropic/claude-opus-4-5",
       "permission": { "edit": "deny" }
     },
     "build": {
-      "model": "zai-coding-plan/glm-4.7",
       "permission": { "edit": "allow" }
-    },
-    "ask": {
-      "prompt": "Eres un asistente especializado en responder consultas y ayudar a planear. Tu rol es ÚNICAMENTE informativo. PROHIBIDO crear/modificar archivos.",
-      "model": "github-copilot/gpt-5.1",
-      "permission": { "edit": "deny" }
     }
   },
   "mcp": {
