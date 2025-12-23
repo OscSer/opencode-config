@@ -6,12 +6,14 @@
   "agent": {
     "plan": {
       // "model": "github-copilot/claude-opus-4.5",
-      "model": "anthropic/claude-opus-4-5",
+      // "model": "anthropic/claude-opus-4-5",
+      "model": "github-copilot/gpt-5.1",
       "permission": { "edit": "deny" }
     },
     "build": {
       // "model": "opencode/glm-4.7-free",
-      "model": "github-copilot/claude-haiku-4.5",
+      // "model": "github-copilot/claude-haiku-4.5",
+      "model": "anthropic/claude-sonnet-4-5",
       "permission": { "edit": "allow" }
     }
   },
@@ -27,7 +29,18 @@
   "permission": {
     "webfetch": "allow",
     "bash": {
+      // Allow by default
       "*": "allow",
+      // Sensitive commands
+      "curl *": "ask",
+      "wget *": "ask",
+      "gh *": "ask",
+      "git reset *": "ask",
+      "git restore *": "ask",
+      "* install *": "ask",
+      "* update *": "ask",
+      "* add *": "ask",
+      // Problematic commands
       "sudo *": "deny",
       "chmod *": "deny",
       "chown *": "deny",
@@ -36,42 +49,10 @@
       "dd *": "deny",
       "find *": "deny",
       "grep *": "deny",
-      "curl *": "ask",
-      "wget *": "ask",
-      "gh *": "allow",
-      "gh auth *": "deny",
-      "gh repo delete *": "deny",
-      "gh repo archive *": "deny",
-      "gh issue delete *": "deny",
-      "gh pr merge *": "deny",
-      "gh pr revert *": "deny",
-      "gh release *": "deny",
-      "gh secret *": "deny",
-      "gh variable *": "deny",
-      "gh ssh-key *": "deny",
-      "gh gpg-key *": "deny",
-      "gh run *": "deny",
-      "gh workflow *": "deny",
-      "gh extension *": "deny",
-      "gh config *": "deny",
+      "cat *": "deny",
       "git add *": "deny",
       "git commit *": "deny",
-      "git push *": "deny",
-      "git reset *": "deny",
-      "git restore *": "deny",
-      "* install *": "ask",
-      "* update *": "ask",
-      "* add *": "ask",
-      "cat >*": "deny",
-      "cat > *": "deny",
-      "cat >>*": "deny",
-      "cat >> *": "deny",
-      "cat <<*": "deny",
-      "cat << *": "deny",
-      "cat * >*": "deny",
-      "cat * > *": "deny",
-      "cat * >>*": "deny",
-      "cat * >> *": "deny"
+      "git push *": "deny"
     }
   },
   "keybinds": {
