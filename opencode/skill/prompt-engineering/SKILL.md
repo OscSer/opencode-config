@@ -1,6 +1,8 @@
-import { tool } from "@opencode-ai/plugin";
+---
+name: prompt-engineering
+description: Use when working with prompts in AGENTS.md, SKILL.md, slash commands, agents/subagents, or any other LLM interaction, including prompt optimization, LLM result improvement, or production prompt template design
+---
 
-const SKILL = `
 # Prompt Engineering Patterns
 
 Advanced prompt engineering techniques to maximize LLM performance, reliability, and controllability.
@@ -13,7 +15,7 @@ Teach the model by showing examples instead of explaining rules. Include 2-5 inp
 
 **Example:**
 
-\`\`\`markdown
+```markdown
 Extract key information from support tickets:
 
 Input: "My login doesn't work and I keep getting error 403"
@@ -23,7 +25,7 @@ Input: "Feature request: add dark mode to settings"
 Output: {"issue": "feature_request", "error_code": null, "priority": "low"}
 
 Now process: "Can't upload files larger than 10MB, getting timeout"
-\`\`\`
+```
 
 ### 2. Chain-of-Thought Prompting
 
@@ -31,10 +33,11 @@ Request step-by-step reasoning before the final answer. Add "Let's think step by
 
 **Example:**
 
-\`\`\`markdown
+```markdown
 Analyze this bug report and determine root cause.
 
 Think step by step:
+
 1. What is the expected behavior?
 2. What is the actual behavior?
 3. What changed recently that could cause this?
@@ -42,26 +45,26 @@ Think step by step:
 5. What is the most likely root cause?
 
 Bug: "Users can't save drafts after the cache update deployed yesterday"
-\`\`\`
+```
 
 ### 3. Prompt Optimization
 
 Start simple, measure performance, iterate. Test on diverse inputs including edge cases.
 
-\`\`\`markdown
+```markdown
 V1: "Summarize this article" → Inconsistent
 V2: "Summarize in 3 bullet points" → Better structure
 V3: "Identify 3 main findings, then summarize each" → Consistent, accurate
-\`\`\`
+```
 
 ### 4. Template Systems
 
 Build reusable prompt structures with variables. Reduces duplication, ensures consistency.
 
-\`\`\`python
+```python
 template = "Review this {language} code for {focus_area}. Code: {code_block}"
 prompt = template.format(language="Python", focus_area="security", code_block=user_code)
-\`\`\`
+```
 
 ### 5. System Prompt Design
 
@@ -69,10 +72,11 @@ Set global behavior and constraints that persist across the conversation. Define
 
 **Example:**
 
-\`\`\`markdown
+```markdown
 System: You are a senior backend engineer specializing in API design.
 
 Rules:
+
 - Always consider scalability and performance
 - Suggest RESTful patterns by default
 - Flag security concerns immediately
@@ -80,11 +84,12 @@ Rules:
 - Use early return pattern
 
 Format responses as:
+
 1. Analysis
 2. Recommendation
 3. Code example
 4. Trade-offs
-\`\`\`
+```
 
 ## Key Patterns
 
@@ -99,9 +104,9 @@ Start simple, add complexity only when needed:
 
 ### Instruction Hierarchy
 
-\`\`\`
+```
 [System Context] → [Task Instruction] → [Examples] → [Input Data] → [Output Format]
-\`\`\`
+```
 
 ### Error Recovery
 
@@ -126,7 +131,7 @@ Include fallback instructions, request confidence scores, specify how to indicat
 
 ### With RAG + Validation
 
-\`\`\`python
+```python
 prompt = f"""Context: {retrieved_context}
 
 Question: {user_question}
@@ -134,7 +139,7 @@ Question: {user_question}
 Answer based solely on context. If insufficient, state what's missing.
 
 Verify: 1) Answers directly 2) Uses only context 3) Cites sources 4) Acknowledges uncertainty"""
-\`\`\`
+```
 
 ---
 
@@ -158,23 +163,25 @@ The context window is the model's "working memory" (200K tokens). Key implicatio
 
 Challenge each piece: "Does this paragraph justify its token cost?"
 
-\`\`\`markdown
+```markdown
 # Good (~50 tokens)
-Use pdfplumber: \`pdf.pages[0].extract_text()\`
+
+Use pdfplumber: `pdf.pages[0].extract_text()`
 
 # Bad (~150 tokens)
+
 PDF files are a common format... there are many libraries... we recommend pdfplumber because...
-\`\`\`
+```
 
 ### Set appropriate degrees of freedom
 
 Match specificity to task fragility:
 
-| Freedom | When to use | Example |
-|---------|-------------|---------|
-| **High** | Multiple valid approaches, context-dependent | "Review code for bugs and readability" |
-| **Medium** | Preferred pattern exists, some variation OK | \`generate_report(data, format="markdown")\` |
-| **Low** | Fragile operations, exact sequence required | \`python scripts/migrate.py --verify --backup\` (no modifications) |
+| Freedom    | When to use                                  | Example                                                          |
+| ---------- | -------------------------------------------- | ---------------------------------------------------------------- |
+| **High**   | Multiple valid approaches, context-dependent | "Review code for bugs and readability"                           |
+| **Medium** | Preferred pattern exists, some variation OK  | `generate_report(data, format="markdown")`                       |
+| **Low**    | Fragile operations, exact sequence required  | `python scripts/migrate.py --verify --backup` (no modifications) |
 
 **Analogy**: Narrow bridge (one safe path) → low freedom. Open field (many paths) → high freedom.
 
@@ -208,10 +215,10 @@ LLMs respond to the same persuasion principles as humans. Understanding this psy
 
 **Example:**
 
-\`\`\`markdown
+```markdown
 ✅ Write code before test? Delete it. Start over. No exceptions.
 ❌ Consider writing tests first when feasible.
-\`\`\`
+```
 
 ### 2. Commitment
 
@@ -231,10 +238,10 @@ LLMs respond to the same persuasion principles as humans. Understanding this psy
 
 **Example:**
 
-\`\`\`markdown
+```markdown
 ✅ When you find a skill, you MUST announce: "I'm using [Skill Name]"
 ❌ Consider letting your partner know which skill you're using.
-\`\`\`
+```
 
 ### 3. Scarcity
 
@@ -254,10 +261,10 @@ LLMs respond to the same persuasion principles as humans. Understanding this psy
 
 **Example:**
 
-\`\`\`markdown
+```markdown
 ✅ After completing a task, IMMEDIATELY request code review before proceeding.
 ❌ You can review code when convenient.
-\`\`\`
+```
 
 ### 4. Social Proof
 
@@ -277,10 +284,10 @@ LLMs respond to the same persuasion principles as humans. Understanding this psy
 
 **Example:**
 
-\`\`\`markdown
+```markdown
 ✅ Checklists without TodoWrite tracking = steps get skipped. Every time.
 ❌ Some people find TodoWrite helpful for checklists.
-\`\`\`
+```
 
 ### 5. Unity
 
@@ -299,10 +306,10 @@ LLMs respond to the same persuasion principles as humans. Understanding this psy
 
 **Example:**
 
-\`\`\`markdown
+```markdown
 ✅ We're colleagues working together. I need your honest technical judgment.
 ❌ You should probably tell me if I'm wrong.
-\`\`\`
+```
 
 ### 6. Reciprocity & 7. Liking — Avoid These
 
@@ -313,12 +320,12 @@ LLMs respond to the same persuasion principles as humans. Understanding this psy
 
 ## Principle Combinations by Prompt Type
 
-| Prompt Type | Use | Avoid |
-|------------|-----|-------|
+| Prompt Type          | Use                                   | Avoid               |
+| -------------------- | ------------------------------------- | ------------------- |
 | Discipline-enforcing | Authority + Commitment + Social Proof | Liking, Reciprocity |
-| Guidance/technique | Moderate Authority + Unity | Heavy authority |
-| Collaborative | Unity + Commitment | Authority, Liking |
-| Reference | Clarity only | All persuasion |
+| Guidance/technique   | Moderate Authority + Unity            | Heavy authority     |
+| Collaborative        | Unity + Commitment                    | Authority, Liking   |
+| Reference            | Clarity only                          | All persuasion      |
 
 ## Why This Works
 
@@ -341,13 +348,3 @@ When designing a prompt, ask:
 3. **Which principle(s) apply?** (Usually authority + commitment for discipline)
 4. **Am I combining too many?** (Don't use all seven)
 5. **Is this ethical?** (Serves user's genuine interests?)
-`;
-
-export default tool({
-  description:
-    "Use when: working with prompts in AGENTS.md, SKILL.md, slash commands, agents/subagents, or any other LLM interaction, including prompt optimization, LLM result improvement, or production prompt template design",
-  args: {},
-  async execute() {
-    return SKILL;
-  },
-});

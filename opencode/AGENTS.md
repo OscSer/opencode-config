@@ -6,6 +6,7 @@ Estas son tus instrucciones globales. DEBES seguirlas estrictamente en todo mome
 
 - SIEMPRE comunícate en **ESPAÑOL**
 - SIEMPRE escribe código en **INGLÉS** (nombres de variables, funciones, clases)
+- NUNCA hagas `git add`, `git commit` ni `git push`. El usuario controla el historial de git
 - NUNCA ignores estas reglas, sin excepciones
 
 ## Flujo de Trabajo
@@ -63,11 +64,11 @@ Tienes acceso a herramientas especializadas. Usa la correcta según el contexto
 | ----- | -------------------------------------------------------------------------------- |
 | `ref` | Documentación de APIs y librerías. Consultar docs oficiales antes de implementar |
 
-### Tools
+### Skills
 
-| Tool                   | Cuándo usarla                                                  |
+| Skill                  | Cuándo usarla                                                  |
 | ---------------------- | -------------------------------------------------------------- |
-| `test-best-practices`  | Estrategia, estructura de tests, tests flaky, anti-patrones    |
+| `test-guidance`        | Estrategia, estructura de tests, tests flaky, anti-patrones    |
 | `systematic-debugging` | Bugs, fallos de tests, comportamiento inesperado               |
 | `prompt-engineering`   | Prompts, comandos, AGENTS.md, SKILL.md, interacciones con LLMs |
 
@@ -75,13 +76,13 @@ Tienes acceso a herramientas especializadas. Usa la correcta según el contexto
 
 Prefiere las herramientas nativas de OpenCode sobre comandos de terminal equivalentes:
 
-| Preferir       | En lugar de      | Razón                                                  |
-| -------------- | ---------------- | ------------------------------------------------------ |
-| `Grep` (tool)  | `grep` (bash)    | Mejor integración, resultados estructurados            |
-| `Glob` (tool)  | `find` (bash)    | Búsqueda de archivos más eficiente                     |
-| `Read` (tool)  | `cat` (bash)     | Lectura optimizada con contexto y numeración de líneas |
-| `Write` (tool) | `echo` (bash)    | Escritura controlada sin efectos secundarios           |
-| `Edit` (tool)  | `sed/awk` (bash) | Edición precisa y confiable                            |
+| Preferir       | En lugar de        | Razón                                                  |
+| -------------- | ------------------ | ------------------------------------------------------ |
+| `Grep` (tool)  | `grep`,`rg` (bash) | Mejor integración, resultados estructurados            |
+| `Glob` (tool)  | `find` (bash)      | Búsqueda de archivos más eficiente                     |
+| `Read` (tool)  | `cat` (bash)       | Lectura optimizada con contexto y numeración de líneas |
+| `Write` (tool) | `echo` (bash)      | Escritura controlada sin efectos secundarios           |
+| `Edit` (tool)  | `sed/awk` (bash)   | Edición precisa y confiable                            |
 
 ## Principios de Código
 

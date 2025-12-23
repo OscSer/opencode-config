@@ -9,13 +9,8 @@ opencode-config/
 ├── opencode/
 │   ├── opencode.jsonc              # Configuración principal de OpenCode
 │   ├── AGENTS.md                   # Reglas globales para OpenCode
-│   ├── command/
-│   │   ├── check.md
-│   │   └── remove-slop.md
-│   └── tool/
-│       ├── prompt-engineering.ts
-│       ├── systematic-debugging.ts
-│       └── test-best-practices.ts
+│   ├── command/                    # Comandos personalizados
+│   └── skill/                      # Skills personalizados
 ├── src/
 │   ├── installer.ts                # Instalador con detección automática
 │   ├── installer.test.ts           # Tests del instalador
@@ -53,13 +48,13 @@ bun test
 
 ### Modificaciones comunes
 
-| Tarea                                | Archivos clave            | Pasos adicionales                                                 |
-| ------------------------------------ | ------------------------- | ----------------------------------------------------------------- |
-| Ajustar la configuración de OpenCode | `opencode/opencode.jsonc` | -                                                                 |
-| Actualizar reglas globales           | `opencode/AGENTS.md`      | -                                                                 |
-| Agregar nuevos comandos              | `opencode/command/`       | -                                                                 |
-| Agregar nuevas herramientas          | `opencode/tool/`          | Actualizar tabla de Tools en `opencode/AGENTS.md` si es relevante |
-| Modificar lógica de instalación      | `src/installer.ts`        | -                                                                 |
+| Tarea                                | Archivos clave            | Pasos adicionales |
+| ------------------------------------ | ------------------------- | ----------------- |
+| Ajustar la configuración de OpenCode | `opencode/opencode.jsonc` | -                 |
+| Actualizar reglas globales           | `opencode/AGENTS.md`      | -                 |
+| Agregar nuevos comandos              | `opencode/command/`       | -                 |
+| Agregar nuevas skills                | `opencode/skill/`         | -                 |
+| Modificar lógica de instalación      | `src/installer.ts`        | -                 |
 
 ## Extensibilidad
 

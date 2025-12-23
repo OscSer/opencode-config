@@ -5,14 +5,14 @@
   "default_agent": "plan",
   "agent": {
     "plan": {
-      "permission": {
-        "edit": "deny"
-      }
+      // "model": "github-copilot/claude-opus-4.5",
+      "model": "anthropic/claude-opus-4-5",
+      "permission": { "edit": "deny" }
     },
     "build": {
-      "permission": {
-        "edit": "allow"
-      }
+      // "model": "opencode/glm-4.7-free",
+      "model": "github-copilot/claude-haiku-4.5",
+      "permission": { "edit": "allow" }
     }
   },
   "mcp": {
@@ -67,7 +67,11 @@
       "cat >>*": "deny",
       "cat >> *": "deny",
       "cat <<*": "deny",
-      "cat << *": "deny"
+      "cat << *": "deny",
+      "cat * >*": "deny",
+      "cat * > *": "deny",
+      "cat * >>*": "deny",
+      "cat * >> *": "deny"
     }
   },
   "keybinds": {
