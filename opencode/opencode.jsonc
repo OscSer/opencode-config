@@ -52,7 +52,6 @@
     }
   },
   "keybinds": {
-    "input_newline": "ctrl+l",
     "input_clear": "ctrl+d",
     "session_new": "ctrl+n",
     "app_exit": "ctrl+c",
