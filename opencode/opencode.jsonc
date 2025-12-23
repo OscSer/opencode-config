@@ -62,7 +62,10 @@
     "input_newline": "ctrl+l",
     "input_clear": "ctrl+d",
     "session_new": "ctrl+n",
-    "command_list": "<leader>p",
-    "terminal_suspend": "none"
+    "app_exit": "ctrl+c",
+    "model_list": "shift+tab",
+    "command_list": "f2",
+    "terminal_suspend": "none",
+    "model_cycle_recent": "none"
   }
 }
