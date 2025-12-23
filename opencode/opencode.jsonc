@@ -6,14 +6,11 @@
   "agent": {
     "plan": {
       // "model": "github-copilot/claude-opus-4.5",
-      // "model": "anthropic/claude-opus-4-5",
-      "model": "github-copilot/gpt-5.1",
+      "model": "anthropic/claude-opus-4-5",
       "permission": { "edit": "deny" }
     },
     "build": {
-      // "model": "opencode/glm-4.7-free",
-      // "model": "github-copilot/claude-haiku-4.5",
-      "model": "anthropic/claude-sonnet-4-5",
+      "model": "zai-coding-plan/glm-4.7",
       "permission": { "edit": "allow" }
     }
   },
@@ -29,30 +26,35 @@
   "permission": {
     "webfetch": "allow",
     "bash": {
-      // Allow by default
       "*": "allow",
-      // Sensitive commands
-      "curl *": "ask",
-      "wget *": "ask",
-      "gh *": "ask",
-      "git reset *": "ask",
-      "git restore *": "ask",
       "* install *": "ask",
       "* update *": "ask",
       "* add *": "ask",
-      // Problematic commands
+      "curl *": "ask",
+      "wget *": "ask",
+
+      "git reset *": "ask",
+      "git restore *": "ask",
+      "git add *": "deny",
+      "git commit *": "deny",
+      "git push *": "deny",
+
+      "gh *": "ask",
+      "gh pr view *": "allow",
+      "gh pr diff *": "allow",
+
+      // Herramientas peligrosas
       "sudo *": "deny",
       "chmod *": "deny",
       "chown *": "deny",
       "format *": "deny",
       "fdisk *": "deny",
       "dd *": "deny",
+
+      // Obligar a usar tools nativas
       "find *": "deny",
       "grep *": "deny",
-      "cat *": "deny",
-      "git add *": "deny",
-      "git commit *": "deny",
-      "git push *": "deny"
+      "cat *": "deny"
     }
   },
   "keybinds": {
