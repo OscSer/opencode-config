@@ -1,17 +1,20 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "theme": "system",
-  "small_model": "opencode/big-pickle",
-  "default_agent": "plan",
+  "default_agent": "ask",
   "agent": {
     "plan": {
-      // "model": "github-copilot/claude-opus-4.5",
       "model": "anthropic/claude-opus-4-5",
       "permission": { "edit": "deny" }
     },
     "build": {
       "model": "zai-coding-plan/glm-4.7",
       "permission": { "edit": "allow" }
+    },
+    "ask": {
+      "prompt": "Eres un asistente especializado en responder consultas y explicar código. Tu rol es ÚNICAMENTE informativo. PROHIBIDO crear/modificar archivos.",
+      "model": "github-copilot/gpt-5.1",
+      "permission": { "edit": "deny" }
     }
   },
   "mcp": {
@@ -27,30 +30,29 @@
     "webfetch": "allow",
     "bash": {
       "*": "allow",
+      // Comandos sensibles
       "* install *": "ask",
       "* update *": "ask",
       "* add *": "ask",
       "curl *": "ask",
       "wget *": "ask",
-
+      // Git
       "git reset *": "ask",
       "git restore *": "ask",
       "git add *": "deny",
       "git commit *": "deny",
       "git push *": "deny",
-
+      // GitHub CLI
       "gh *": "ask",
       "gh pr view *": "allow",
       "gh pr diff *": "allow",
-
-      // Herramientas peligrosas
+      // Comandos peligrosos
       "sudo *": "deny",
       "chmod *": "deny",
       "chown *": "deny",
       "format *": "deny",
       "fdisk *": "deny",
       "dd *": "deny",
-
       // Obligar a usar tools nativas
       "find *": "deny",
       "grep *": "deny",
