@@ -53,7 +53,7 @@ Presentar hallazgos consolidados:
 
 ### Slop Detection
 
-**src/installer.ts**
+⚠️ **src/installer.ts**
 - Línea 23: Comentario redundante "// Get the user"
 - Línea 45: Casteo innecesario a `any`
 
@@ -71,11 +71,9 @@ Presentar hallazgos consolidados:
 
 Si el usuario confirma:
 
-1. Crear TodoWrite con cada hallazgo
-2. Priorizar: tipos > lint > slop > tests
-3. Corregir uno a la vez
-4. Re-ejecutar ambas fases
-5. Repetir hasta cero hallazgos
+1. Crear TodoWrite con el plan de corrección
+2. Realizar correcciones
+3. Re-ejecutar ambas fases
 
 ## Criterios de Slop Detection
 
