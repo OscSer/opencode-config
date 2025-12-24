@@ -17,16 +17,14 @@ describe("installer", () => {
   });
 
   it("should install opencode successfully with auto-detected assets", async () => {
-    // Create sample repo with opencode directory and assets
     const repoDir = path.join(tmpDir, "repo");
     const opencodeSourceDir = path.join(repoDir, "opencode");
     await fs.mkdir(opencodeSourceDir, { recursive: true });
 
-    // Create sample files and directories
     await fs.writeFile(path.join(opencodeSourceDir, "opencode.jsonc"), "config");
     await fs.writeFile(path.join(opencodeSourceDir, "AGENTS.md"), "rules");
     await fs.mkdir(path.join(opencodeSourceDir, "command"), { recursive: true });
-    await fs.writeFile(path.join(opencodeSourceDir, "command", "check.md"), "command");
+    await fs.writeFile(path.join(opencodeSourceDir, "command", "pre-commit.md"), "command");
     await fs.mkdir(path.join(opencodeSourceDir, "tool"), { recursive: true });
     await fs.writeFile(path.join(opencodeSourceDir, "tool", "prompt-engineering.ts"), "tool");
 
@@ -37,7 +35,6 @@ describe("installer", () => {
 
     expect(success).toBe(true);
 
-    // Check that symlinks were created for auto-detected assets
     const stats = {
       jsonc: await fs.lstat(path.join(targetDir, "opencode.jsonc")),
       agents: await fs.lstat(path.join(targetDir, "AGENTS.md")),
@@ -69,7 +66,6 @@ describe("installer", () => {
     const opencodeSourceDir = path.join(repoDir, "opencode");
     await fs.mkdir(opencodeSourceDir, { recursive: true });
 
-    // Create multiple assets
     for (let i = 1; i <= 5; i++) {
       await fs.writeFile(path.join(opencodeSourceDir, `file${i}.txt`), `content${i}`);
     }
@@ -81,7 +77,6 @@ describe("installer", () => {
 
     expect(success).toBe(true);
 
-    // Verify all symlinks were created
     for (let i = 1; i <= 5; i++) {
       const stat = await fs.lstat(path.join(targetDir, `file${i}.txt`));
       expect(stat.isSymbolicLink()).toBe(true);

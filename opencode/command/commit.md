@@ -1,6 +1,5 @@
 ---
 description: Generate conventional commit messages
-agent: general
 ---
 
 Diff of staged changes:

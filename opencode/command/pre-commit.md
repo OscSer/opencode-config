@@ -17,7 +17,7 @@ If no changes, report "No pending changes" and exit.
 
 ### 1. Parallel Analysis
 
-Run simultaneously using `general` agents:
+Run simultaneously both phases:
 
 **Quality Gate:**
 
