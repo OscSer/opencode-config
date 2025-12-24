@@ -77,39 +77,125 @@ If user confirms:
 
 ## Slop Detection Criteria
 
+### Comments
+
+**Context determines validity.** Evaluate BEFORE flagging:
+
+| Context                          | Action                 |
+| -------------------------------- | ---------------------- |
+| JSDoc/TSDoc documenting API      | ✅ Preserve            |
+| TODO/FIXME with ticket or reason | ✅ Preserve            |
+| Explains "why" (decision/intent) | ✅ Preserve            |
+| Legal/license headers            | ✅ Preserve            |
+| Describes "what" code does       | ⚠️ Likely slop         |
+| Paraphrases function name        | ❌ Remove              |
+| Section dividers (`// ===`)      | ⚠️ Check project style |
+
+**Ambiguous? Ask user before flagging.**
+
+### Emojis
+
+**Location determines validity:**
+
+| Location                        | Action      |
+| ------------------------------- | ----------- |
+| UI strings / user messages      | ✅ Preserve |
+| CLI logs (✅❌⚠️ as indicators) | ✅ Preserve |
+| Markdown / documentation        | ✅ Preserve |
+| Config files (existing pattern) | ✅ Preserve |
+| Variable / function names       | ❌ Remove   |
+| Decorative comments             | ⚠️ Evaluate |
+
+**Ambiguous? Check if project already uses emojis in similar contexts.**
+
+### Validations
+
 **Remove if:**
 
-- Comment describes what code already says
-- Validation duplicates type system
-- Cast to `any` exists only to silence errors
+- Validation duplicates what type system already guarantees
+- Check is unreachable due to TypeScript narrowing
 
 **Preserve if:**
 
-- Comment explains "why", not "what"
-- Validation protects against external input (APIs, users)
-- Cast is necessary due to external library limitations
+- Protects against external input (APIs, user data, files)
+- Runtime boundary (data from JSON.parse, fetch, etc.)
+- Explicit defensive programming for critical paths
+
+### Casts to `any`
+
+**Remove if:**
+
+- Cast exists only to silence compiler errors
+- Proper typing is feasible with minimal effort
+
+**Preserve if:**
+
+- External library has incorrect/missing types
+- Intentional escape hatch with explanatory comment
+- Migration in progress (documented TODO)
 
 ## Slop Examples
 
 ### Redundant Comment
 
 ```typescript
-// ❌ Describes the obvious
+// ❌ SLOP: Describes the obvious
 // Function to get the current user
 async function getCurrentUser(id: string) {
   return db.users.findUnique({ where: { id } });
 }
 
-// ✅ Without unnecessary comment
+// ✅ Clean: Without unnecessary comment
 async function getCurrentUser(id: string) {
   return db.users.findUnique({ where: { id } });
 }
 ```
 
+### Valid Comments (NOT slop)
+
+```typescript
+// ✅ JSDoc for public API - VALID
+/**
+ * Retrieves user by ID.
+ * @throws {NotFoundError} When user doesn't exist
+ */
+async function getUser(id: string): Promise<User> {
+  return db.users.findUniqueOrThrow({ where: { id } });
+}
+
+// ✅ Explains "why", not "what" - VALID
+// Using Map instead of Object for O(1) deletion during cleanup
+const cache = new Map<string, CacheEntry>();
+
+// ✅ TODO with context - VALID
+// TODO(#123): Replace with Redis when we scale beyond single instance
+const sessionStore = new MemoryStore();
+```
+
+### Valid Emojis (NOT slop)
+
+```typescript
+// ✅ CLI output indicators - VALID
+console.log("✅ Build completed successfully");
+console.log("❌ Tests failed");
+console.log("⚠️ Deprecated API detected");
+
+// ✅ User-facing messages - VALID
+throw new UserError("⚠️ Your session has expired. Please log in again.");
+
+// ✅ Markdown documentation - VALID
+const HELP_TEXT = `
+## Status Icons
+- ✅ Passing
+- ❌ Failing
+- ⏳ In progress
+`;
+```
+
 ### Excessive Validation
 
 ```typescript
-// ❌ Redundant when type already guarantees existence
+// ❌ SLOP: Redundant when type already guarantees existence
 function processUser(user: User) {
   if (!user) throw new Error("User is required");
   if (!user.id) throw new Error("User ID is required");
@@ -122,10 +208,35 @@ function processUser(user: User) {
 }
 ```
 
+### Valid Validation (NOT slop)
+
+```typescript
+// ✅ External input boundary - VALID
+async function handleWebhook(req: Request) {
+  const body = await req.json();
+
+  // Runtime validation required: body is unknown at compile time
+  if (!body || typeof body.event !== "string") {
+    throw new BadRequestError("Invalid webhook payload");
+  }
+
+  return processEvent(body as WebhookEvent);
+}
+
+// ✅ Critical path defensive check - VALID
+function processPayment(amount: number) {
+  // Defense against floating point issues in financial calculations
+  if (!Number.isFinite(amount) || amount < 0) {
+    throw new ValidationError("Invalid payment amount");
+  }
+  // ...
+}
+```
+
 ### Cast to any
 
 ```typescript
-// ❌ Cast to silence compiler
+// ❌ SLOP: Cast to silence compiler
 const data = response.body as any;
 const name = data.user.name;
 
@@ -135,6 +246,19 @@ interface ApiResponse {
 }
 const data: ApiResponse = response.body;
 const name = data.user.name;
+```
+
+### Valid Cast (NOT slop)
+
+```typescript
+// ✅ Library with incorrect types - VALID
+// @ts-expect-error: library types missing optional callback parameter
+externalLib.init(config, onReady);
+
+// ✅ Intentional escape hatch with documentation - VALID
+// Using any here because thirdPartySDK returns untyped legacy format
+// TODO(#456): Remove when SDK v3 migration is complete
+const legacyData = sdk.getData() as any;
 ```
 
 ## Rules

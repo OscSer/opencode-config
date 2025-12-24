@@ -8,44 +8,72 @@ Diff of staged changes:
 
 Recent commits:
 
-!`git log --oneline -5`
+!`git log --oneline -10`
 
-Analyze changes and generate a commit message following **Conventional Commits** format:
+Analyze changes and generate a commit message following **Conventional Commits** format.
 
-**Message format:**
+## Step 1: Analyze Changed Files
 
-```
-<type>[optional scope]: <description>
-```
+For each file, determine its nature:
 
-**Commit types (select the most appropriate):**
+| File Type           | Examples                                  | Nature          |
+| ------------------- | ----------------------------------------- | --------------- |
+| Human documentation | `README.md`, `docs/*.md`, `CHANGELOG.md`  | Documentation   |
+| LLM prompts/config  | `AGENTS.md`, `command/*.md`, `skill/*.md` | Functional code |
+| Source code         | `src/*.ts`, `*.py`, `*.go`                | Functional code |
+| Config files        | `package.json`, `tsconfig.json`, `.env`   | Configuration   |
+| CI/CD               | `.github/workflows/*`, `.gitlab-ci.yml`   | Pipeline        |
 
-- `feat`: New feature or capability
-- `fix`: Bug fix
-- `refactor`: Code changes without adding features or fixing bugs
-- `docs`: Documentation changes only
-- `style`: Formatting, spacing, no functional impact
-- `test`: Add or modify tests
-- `ci`: CI/CD changes
-- `build`: Build system or dependency changes
-- `chore`: Maintenance tasks, configuration
-- `perf`: Performance improvements
+## Step 2: Determine Change Nature
 
-**Message rules:**
+Ask yourself:
 
-- Use **lowercase** for type
-- Scope is optional: identify affected module/library (e.g., `auth`, `products-api`, `db`, `ui`)
-- Description must be **concise**, in **imperative** (e.g., "add" not "added")
-- **ONLY one line** — NEVER include body or footer
-- Message MUST be in **English** (industry standard)
-- ONLY execute `git commit`, **NEVER** execute `git push`
+1. **Does this ADD a new capability that didn't exist?** → `feat`
+2. **Does this FIX broken behavior?** → `fix`
+3. **Does this IMPROVE existing code without changing behavior?** → `refactor`
+4. **Is this ONLY human-readable docs (README, guides)?** → `docs`
+5. **Is this formatting/whitespace only?** → `style`
+6. **Does this add/modify tests?** → `test`
+7. **Does this change CI/CD pipelines?** → `ci`
+8. **Does this change build system/dependencies?** → `build`
+9. **Is this maintenance/tooling?** → `chore`
+10. **Does this improve performance?** → `perf`
 
-If user provided arguments ($ARGUMENTS), use that info to guide analysis:
+## Step 3: Select Type
 
-- Ex: `/commit refactor authentication` → prioritize `refactor(auth):`
-- Ex: `/commit fix utilities` → prioritize `fix(utils):`
+**Commit types:**
 
-Generate message based on diff analysis.
+| Type       | Use when                                                  |
+| ---------- | --------------------------------------------------------- |
+| `feat`     | New feature or capability                                 |
+| `fix`      | Bug fix                                                   |
+| `refactor` | Code restructuring, clarity improvements, NO new features |
+| `docs`     | **ONLY** human documentation (README, guides, comments)   |
+| `style`    | Formatting, whitespace, no logic changes                  |
+| `test`     | Add or modify tests                                       |
+| `ci`       | CI/CD pipeline changes                                    |
+| `build`    | Build system, dependencies                                |
+| `chore`    | Maintenance, tooling                                      |
+| `perf`     | Performance improvements                                  |
+
+**Critical rule:** Files in `opencode/`, `command/`, `skill/`, or `AGENTS.md` are **functional LLM configuration**, NOT documentation. Never use `docs` for these.
+
+## Step 4: Generate Message
+
+**Format:** `<type>[optional scope]: <description>`
+
+**Rules:**
+
+- Lowercase type
+- Scope: affected module (e.g., `auth`, `api`, `ui`, `command`, `skill`)
+- Description: concise, imperative ("add" not "added")
+- Single line only — no body or footer
+- English only
+
+If user provided arguments ($ARGUMENTS), prioritize that guidance:
+
+- `/commit refactor auth` → `refactor(auth): ...`
+- `/commit fix utils` → `fix(utils): ...`
 
 Execute commit with generated message.
 
