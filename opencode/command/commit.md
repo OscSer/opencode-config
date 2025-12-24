@@ -1,59 +1,59 @@
 ---
-description: Genera un conventional commit
+description: Generate conventional commit messages
 agent: general
 ---
 
-Diff de los cambios staged:
+Diff of staged changes:
 
 !`git diff --cached`
 
-Commits recientes:
+Recent commits:
 
 !`git log --oneline -5`
 
-Analizar los cambios y generar un mensaje de commit siguiendo el formato **Conventional Commits**:
+Analyze changes and generate a commit message following **Conventional Commits** format:
 
-**Formato del mensaje:**
+**Message format:**
 
 ```
 <type>[optional scope]: <description>
 ```
 
-**Tipos de commits (seleccionar el más apropiado):**
+**Commit types (select the most appropriate):**
 
-- `feat`: Nueva funcionalidad o característica
-- `fix`: Corrección de un bug
-- `refactor`: Cambios de código sin agregar funcionalidad ni corregir bugs
-- `docs`: Cambios en documentación únicamente
-- `style`: Cambios de formato, espacios, sin impacto funcional
-- `test`: Agregar o modificar tests
-- `ci`: Cambios en CI/CD
-- `build`: Cambios en sistema de build o dependencias
-- `chore`: Tareas de mantenimiento, configuración
-- `perf`: Mejoras de performance
+- `feat`: New feature or capability
+- `fix`: Bug fix
+- `refactor`: Code changes without adding features or fixing bugs
+- `docs`: Documentation changes only
+- `style`: Formatting, spacing, no functional impact
+- `test`: Add or modify tests
+- `ci`: CI/CD changes
+- `build`: Build system or dependency changes
+- `chore`: Maintenance tasks, configuration
+- `perf`: Performance improvements
 
-**Reglas para el mensaje:**
+**Message rules:**
 
-- Usar **minúsculas** para el tipo
-- El scope es opcional: identificar el modulo/libreria afectada (ej: `auth`, `products-api`, `db`, `ui`)
-- La descripción debe ser **concisa**, en **imperativo** (ej: "add" no "added")
-- **SOLO una línea** — NUNCA incluir body ni footer
-- El mensaje DEBE estar en **inglés** (estándar de la industria)
-- SOLO ejecutar `git commit`, **NUNCA** ejecutar `git push`
+- Use **lowercase** for type
+- Scope is optional: identify affected module/library (e.g., `auth`, `products-api`, `db`, `ui`)
+- Description must be **concise**, in **imperative** (e.g., "add" not "added")
+- **ONLY one line** — NEVER include body or footer
+- Message MUST be in **English** (industry standard)
+- ONLY execute `git commit`, **NEVER** execute `git push`
 
-Si el usuario proporcionó argumentos ($ARGUMENTS), usar esa información para guiar el análisis:
+If user provided arguments ($ARGUMENTS), use that info to guide analysis:
 
-- Ej: `/commit refactor de autenticación` → priorizar `refactor(auth):`
-- Ej: `/commit fix en utilidades` → priorizar `fix(utils):`
+- Ex: `/commit refactor authentication` → prioritize `refactor(auth):`
+- Ex: `/commit fix utilities` → prioritize `fix(utils):`
 
-Generar el mensaje basado en el análisis del diff.
+Generate message based on diff analysis.
 
-Ejecutar el commit con el mensaje generado.
+Execute commit with generated message.
 
-Si el commit **falla por algun motivo**, explica el error de forma clara
+If commit **fails for any reason**, explain error clearly
 
-Si el commit es **exitoso**, informa:
+If commit is **successful**, report:
 
 ```
-Commit exitoso: <hash corto> - <mensaje>
+Commit successful: <short hash> - <message>
 ```

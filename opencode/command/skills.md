@@ -1,11 +1,11 @@
 ---
-description: Activa skills relevantes para la petición
+description: Activate relevant skills based on user request
 ---
 
-Petición del usuario: "$ARGUMENTS"
+User request: "$ARGUMENTS"
 
-1. **Identificar skills**: Evalúa las skills disponibles y determina cuáles coinciden con la petición.
+1. **Identify skills**: Evaluate available skills and determine which ones match the request.
 
-2. **Cargar skills**: Usa la herramienta `skill` para cargar las skills relevantes.
+2. **Load skills**: Use `skill` tool to load relevant skills.
 
-Si ninguna skill es relevante, continúa normalmente sin cargar ninguna.
+If no skill is relevant, continue normally without loading any.

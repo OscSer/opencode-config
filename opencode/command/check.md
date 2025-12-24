@@ -1,23 +1,23 @@
 ---
-description: Quality gate y detección de slop en cambios locales
+description: Run quality gate and detect AI-generated code slop
 ---
 
-Archivos con cambios sin confirmar:
+Files with uncommitted changes:
 
 !`git status --porcelain`
 
-Si no hay cambios, informa "Sin cambios pendientes" y termina.
+If no changes, report "No pending changes" and exit.
 
-## Fases (en paralelo)
+## Phases (in parallel)
 
-1. **Quality Gate** - Errores técnicos
-2. **Slop Detection** - Código basura de IA
+1. **Quality Gate** - Technical errors
+2. **Slop Detection** - AI-generated code slop
 
-## Proceso
+## Process
 
-### 1. Análisis en Paralelo
+### 1. Parallel Analysis
 
-Ejecutar simultáneamente y registrar hallazgos en TodoWrite:
+Run simultaneously using `general` agents:
 
 **Quality Gate:**
 
@@ -27,18 +27,18 @@ Ejecutar simultáneamente y registrar hallazgos en TodoWrite:
 
 **Slop Detection:**
 
-- Comentarios redundantes
-- Validaciones excesivas
-- Casteos a `any`
+- Redundant comments
+- Excessive validations
+- Casts to `any`
 - Emojis
-- Inconsistencias de estilo
+- Style inconsistencies
 
-### 2. Reporte Detallado
+### 2. Detailed Report
 
-Presentar hallazgos consolidados:
+Present consolidated findings:
 
 ```
-## Hallazgos
+## Findings
 
 ### Quality Gate
 
@@ -49,87 +49,87 @@ Presentar hallazgos consolidados:
 - `src/file.ts:8` - Unexpected console statement
 
 **Tests**
-✅ Pasando
+✅ Passing
 
 ### Slop Detection
 
 ⚠️ **src/installer.ts**
-- Línea 23: Comentario redundante "// Get the user"
-- Línea 45: Casteo innecesario a `any`
+- Line 23: Redundant comment "// Get the user"
+- Line 45: Unnecessary cast to `any`
 
 **src/file-ops.ts**
-✅ Sin problemas
+✅ No issues
 ```
 
-### 3. Confirmación
+### 3. Confirmation
 
 ```
-¿Procedo con las correcciones? (sí/no)
+Proceed with corrections? (yes/no)
 ```
 
-### 4. Corrección Iterativa
+### 4. Iterative Correction
 
-Si el usuario confirma:
+If user confirms:
 
-1. Crear TodoWrite con el plan de corrección
-2. Realizar correcciones
-3. Re-ejecutar ambas fases
+1. Create TodoWrite with correction plan
+2. Perform corrections
+3. Re-run both phases
 
-## Criterios de Slop Detection
+## Slop Detection Criteria
 
-**Eliminar si:**
+**Remove if:**
 
-- El comentario describe lo que el código ya dice
-- La validación duplica el sistema de tipos
-- El casteo a `any` existe solo para silenciar errores
+- Comment describes what code already says
+- Validation duplicates type system
+- Cast to `any` exists only to silence errors
 
-**Preservar si:**
+**Preserve if:**
 
-- El comentario explica el "por qué", no el "qué"
-- La validación protege contra input externo (APIs, usuarios)
-- El casteo es necesario por limitaciones de librerías externas
+- Comment explains "why", not "what"
+- Validation protects against external input (APIs, users)
+- Cast is necessary due to external library limitations
 
-## Ejemplos de Slop
+## Slop Examples
 
-### Comentario redundante
+### Redundant Comment
 
 ```typescript
-// ❌ Describe lo obvio
+// ❌ Describes the obvious
 // Function to get the current user
 async function getCurrentUser(id: string) {
   return db.users.findUnique({ where: { id } });
 }
 
-// ✅ Sin comentario innecesario
+// ✅ Without unnecessary comment
 async function getCurrentUser(id: string) {
   return db.users.findUnique({ where: { id } });
 }
 ```
 
-### Validación excesiva
+### Excessive Validation
 
 ```typescript
-// ❌ Redundante cuando el tipo ya garantiza existencia
+// ❌ Redundant when type already guarantees existence
 function processUser(user: User) {
   if (!user) throw new Error("User is required");
   if (!user.id) throw new Error("User ID is required");
   // ...
 }
 
-// ✅ Confía en el sistema de tipos
+// ✅ Trust the type system
 function processUser(user: User) {
   // ...
 }
 ```
 
-### Casteo a any
+### Cast to any
 
 ```typescript
-// ❌ Casteo para silenciar el compilador
+// ❌ Cast to silence compiler
 const data = response.body as any;
 const name = data.user.name;
 
-// ✅ Tipo explícito
+// ✅ Explicit type
 interface ApiResponse {
   user: { name: string };
 }
@@ -137,18 +137,18 @@ const data: ApiResponse = response.body;
 const name = data.user.name;
 ```
 
-## Reglas
+## Rules
 
 **Failure modes:**
 
-- Corregir sin reportar → usuario pierde visibilidad
-- Corregir múltiples errores antes de re-validar → riesgo de nuevos errores
+- Fix without reporting → user loses visibility
+- Fix multiple errors before re-validating → risk of new errors
 
-**Obligatorio:**
+**Mandatory:**
 
-- SIEMPRE reportar hallazgos ANTES de corregir
-- SIEMPRE esperar confirmación del usuario
-- NUNCA eliminar código funcional solo por "parecer IA"
-- PRESERVAR el estilo existente del archivo
-- Reportar AMBAS fases aunque solo una tenga hallazgos
-- Priorizar quality gate sobre code review en conflictos
+- ALWAYS report findings BEFORE fixing
+- ALWAYS wait for user confirmation
+- NEVER remove functional code just because it "looks like AI"
+- PRESERVE existing file style
+- Report BOTH phases even if only one has findings
+- Prioritize quality gate over code review in conflicts
