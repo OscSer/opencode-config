@@ -66,11 +66,11 @@ Tienes acceso a herramientas especializadas. Usa la correcta según el contexto
 
 ### Skills
 
-| Skill                    | Cuándo usarla                                                                                                                         |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `testing-best-practices` | Use when deciding test strategy, structuring test cases, reviewing test quality, or debugging failing and flaky tests                 |
-| `systematic-debugging`   | Use when encountering bugs, test failures, or unexpected behavior.                                                                    |
-| `prompt-engineering`     | Use when creating or improving prompts for LLM interactions including AGENTS.md, commands, skills, subagents, or production templates |
+| Skill                    | Cuándo usarla                                                                         |
+| ------------------------ | ------------------------------------------------------------------------------------- |
+| `testing-best-practices` | Use for testing, test cases, test quality, or flaky tests                             |
+| `systematic-debugging`   | Use for bugs, failures, or unexpected behavior                                        |
+| `prompt-engineering`     | Use for prompts, LLM interactions including AGENTS.md, commands, skills, or subagents |
 
 ### Preferencias de Tools
 

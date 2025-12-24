@@ -1,6 +1,6 @@
 ---
 name: prompt-engineering
-description: Use when creating or improving prompts for LLM interactions including AGENTS.md, commands, skills, subagents, or production templates
+description: Use for prompts, LLM interactions including AGENTS.md, commands, skills, or subagents
 ---
 
 # Prompt Engineering Patterns
