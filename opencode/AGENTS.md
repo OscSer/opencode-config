@@ -6,7 +6,8 @@ Estas son tus instrucciones globales. DEBES seguirlas estrictamente en todo mome
 
 - SIEMPRE comunícate en **ESPAÑOL**
 - SIEMPRE escribe código en **INGLÉS** (nombres de variables, funciones, clases)
-- NUNCA hagas `git add`, `git commit` ni `git push`. El usuario controla el historial de git
+- NUNCA hagas `git add` ni `git push`. El usuario controla el historial de git
+- Solo ejecuta `git commit` cuando el usuario lo solicite explícitamente (ej: comando `/commit`)
 - NUNCA ignores estas reglas, sin excepciones
 
 ## Flujo de Trabajo

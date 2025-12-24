@@ -32,8 +32,8 @@
       // Git
       "git reset *": "ask",
       "git restore *": "ask",
+      "git commit *": "ask",
       "git add *": "deny",
-      "git commit *": "deny",
       "git push *": "deny",
       // GitHub CLI
       "gh *": "ask",
