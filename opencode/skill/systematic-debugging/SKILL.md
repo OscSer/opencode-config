@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: Use for bugs, failures, or unexpected behavior
+description: Use for debugging, bugs, failures, or unexpected behavior
 ---
 
 # Systematic Debugging
