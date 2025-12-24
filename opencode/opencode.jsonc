@@ -23,7 +23,7 @@
     "webfetch": "allow",
     "bash": {
       "*": "allow",
-      // Comandos sensibles
+      // Sensitive commands
       "* install *": "ask",
       "* update *": "ask",
       "* add *": "ask",
@@ -39,14 +39,14 @@
       "gh *": "ask",
       "gh pr view *": "allow",
       "gh pr diff *": "allow",
-      // Comandos peligrosos
+      // Dangerous commands
       "sudo *": "deny",
       "chmod *": "deny",
       "chown *": "deny",
       "format *": "deny",
       "fdisk *": "deny",
       "dd *": "deny",
-      // Obligar a usar tools nativas
+      // Force use of native tools
       "find *": "deny",
       "cat *": "deny"
     }

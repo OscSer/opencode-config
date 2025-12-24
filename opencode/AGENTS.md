@@ -1,100 +1,100 @@
-# Instrucciones Globales
+# Global Instructions
 
-Estas son tus instrucciones globales. DEBES seguirlas estrictamente en todo momento. No son negociables.
+These are your global instructions. You MUST follow them strictly at all times. They are not negotiable.
 
-## Reglas No Negociables
+## Non-Negotiable Rules
 
-- SIEMPRE comunícate en **ESPAÑOL**
-- SIEMPRE escribe código en **INGLÉS** (nombres de variables, funciones, clases)
-- NUNCA hagas `git add` ni `git push`. El usuario controla el historial de git
-- Solo ejecuta `git commit` cuando el usuario lo solicite explícitamente (ej: comando `/commit`)
-- NUNCA ignores estas reglas, sin excepciones
+- ALWAYS communicate in **SPANISH**
+- ALWAYS write code in **ENGLISH** (variable, function, class names)
+- NEVER do `git add` nor `git push`. The user controls the git history
+- Only execute `git commit` when the user explicitly requests it (e.g., `/commit` command)
+- NEVER ignore these rules, no exceptions
 
-## Flujo de Trabajo
+## Workflow
 
-### Planificación
+### Planning
 
-DEBES usar `TodoWrite` y `TodoRead` para cualquier trabajo que requiera más de 3 pasos. Esto te ayuda a:
+MUST use `TodoWrite` and `TodoRead` for any work that requires more than 3 steps. This helps you:
 
-- Organizar el trabajo antes de comenzar
-- Dar visibilidad del progreso
-- No olvidar pasos importantes
+- Organize work before starting
+- Give visibility of progress
+- Don't forget important steps
 
-Marca cada tarea como completada INMEDIATAMENTE después de terminarla. No acumules tareas completadas.
+Mark each task as completed IMMEDIATELY after finishing it. Don't accumulate completed tasks.
 
-### Investigar Antes de Cambiar
+### Investigate Before Changing
 
-ANTES de modificar código existente:
+BEFORE modifying existing code:
 
-1. Entiende el contexto y el propósito del código actual
-2. Identifica dependencias y posibles efectos secundarios
-3. Verifica si existen patrones similares en el proyecto
+1. Understand the context and purpose of the current code
+2. Identify dependencies and possible side effects
+3. Verify if there are similar patterns in the project
 
 ### Quality Gate
 
-INMEDIATAMENTE después de hacer cambios, ejecuta las validaciones del proyecto:
+IMMEDIATELY after making changes, run the project validations:
 
 - Tests
 - Linter
-- Verificación de tipos
-- Cualquier otra validación configurada
+- Type verification
+- Any other configured validation
 
-No propongas cambios que rompan el quality gate.
+Don't propose changes that break the quality gate.
 
-### Cambios Incrementales
+### Incremental Changes
 
-- Un commit = un cambio lógico
-- Cambios pequeños y atómicos
-- Fáciles de revisar y revertir
+- One commit = one logical change
+- Small and atomic changes
+- Easy to review and revert
 
-### Verificación Final
+### Final Verification
 
-ANTES de considerar una tarea completada, verifica:
+BEFORE considering a task completed, verify:
 
-- El código cumple los principios de esta guía
-- El quality gate pasa correctamente
-- No hay código muerto o comentado
+- The code follows the principles of this guide
+- The quality gate passes correctly
+- There is no dead or commented code
 
-## Herramientas
+## Tools
 
-Tienes acceso a herramientas especializadas. Usa la correcta según el contexto
+You have access to specialized tools. Use the correct one according to the context
 
 ### MCP
 
-| MCP   | Cuándo usarla                                                                    |
-| ----- | -------------------------------------------------------------------------------- |
-| `ref` | Documentación de APIs y librerías. Consultar docs oficiales antes de implementar |
+| MCP   | When to use it                                                                 |
+| ----- | ------------------------------------------------------------------------------ |
+| `ref` | Documentation of APIs and libraries. Consult official docs before implementing |
 
 ### Skills
 
-| Skill                    | Cuándo usarla                                                                         |
+| Skill                    | When to use it                                                                        |
 | ------------------------ | ------------------------------------------------------------------------------------- |
 | `testing-best-practices` | Use for testing, test cases, test quality, or flaky tests                             |
 | `systematic-debugging`   | Use for bugs, failures, or unexpected behavior                                        |
 | `prompt-engineering`     | Use for prompts, LLM interactions including AGENTS.md, commands, skills, or subagents |
 
-### Preferencias de Tools
+### Tool Preferences
 
-Prefiere las herramientas nativas de OpenCode sobre comandos de terminal equivalentes:
+Prefer native OpenCode tools over equivalent terminal commands:
 
-| Preferir       | En lugar de        | Razón                                                  |
-| -------------- | ------------------ | ------------------------------------------------------ |
-| `Grep` (tool)  | `grep`,`rg` (bash) | Mejor integración, resultados estructurados            |
-| `Glob` (tool)  | `find` (bash)      | Búsqueda de archivos más eficiente                     |
-| `Read` (tool)  | `cat` (bash)       | Lectura optimizada con contexto y numeración de líneas |
-| `Write` (tool) | `echo` (bash)      | Escritura controlada sin efectos secundarios           |
-| `Edit` (tool)  | `sed/awk` (bash)   | Edición precisa y confiable                            |
+| Prefer         | Instead of         | Reason                                            |
+| -------------- | ------------------ | ------------------------------------------------- |
+| `Grep` (tool)  | `grep`,`rg` (bash) | Better integration, structured results            |
+| `Glob` (tool)  | `find` (bash)      | More efficient file search                        |
+| `Read` (tool)  | `cat` (bash)       | Optimized reading with context and line numbering |
+| `Write` (tool) | `echo` (bash)      | Controlled writing without side effects           |
+| `Edit` (tool)  | `sed/awk` (bash)   | Precise and reliable editing                      |
 
-## Principios de Código
+## Code Principles
 
-El código debe ser **claro**, **legible** y **modular**. Debe explicarse por sí mismo sin necesidad de comentarios.
+Code should be **clear**, **readable**, and **modular**. It should explain itself without needing comments.
 
-### Early Return y Guard Clauses
+### Early Return and Guard Clauses
 
-Maneja casos excepcionales al inicio. Evita anidación excesiva.
+Handle exceptional cases at the start. Avoid excessive nesting.
 
 ```typescript
-// MAL: anidación excesiva, difícil de seguir
+// BAD: excessive nesting, hard to follow
 function processOrder(order: Order | null) {
   if (order) {
     if (order.isValid) {
@@ -106,7 +106,7 @@ function processOrder(order: Order | null) {
   return null;
 }
 
-// BIEN: guard clauses, flujo claro
+// GOOD: guard clauses, clear flow
 function processOrder(order: Order | null) {
   if (!order) return null;
   if (!order.isValid) return null;
@@ -116,38 +116,38 @@ function processOrder(order: Order | null) {
 }
 ```
 
-### Nombres Descriptivos
+### Descriptive Names
 
-Los nombres deben revelar intención. Si necesitas un comentario para explicar qué hace una variable, el nombre es malo.
+Names should reveal intention. If you need a comment to explain what a variable does, the name is bad.
 
 ```typescript
-// MAL: nombres crípticos
+// BAD: cryptic names
 const d = Date.now() - s;
 const arr = data.filter((x) => x.a > 10);
 const flag = user.role === "admin";
 
-// BIEN: nombres que revelan intención
+// GOOD: names that reveal intention
 const elapsedMs = Date.now() - startTime;
 const highValueItems = data.filter((item) => item.amount > THRESHOLD);
 const isAdmin = user.role === "admin";
 ```
 
-### Funciones Pequeñas y Enfocadas
+### Small and Focused Functions
 
-Una función = una responsabilidad. Si puedes describir lo que hace usando "y", probablemente hace demasiado.
+One function = one responsibility. If you can describe what it does using "and", it probably does too much.
 
 ```typescript
-// MAL: función que hace múltiples cosas
+// BAD: function that does multiple things
 function handleUserRegistration(userData: UserInput) {
-  // valida datos
-  // hashea password
-  // guarda en base de datos
-  // envía email de bienvenida
-  // registra analytics
-  // ...100 líneas más
+  // validates data
+  // hashes password
+  // saves to database
+  // sends welcome email
+  // registers analytics
+  // ...100 more lines
 }
 
-// BIEN: composición de funciones pequeñas
+// GOOD: composition of small functions
 function handleUserRegistration(userData: UserInput) {
   const validatedData = validateUserData(userData);
   const user = createUser(validatedData);
@@ -157,12 +157,12 @@ function handleUserRegistration(userData: UserInput) {
 }
 ```
 
-### Evitar Else Innecesario
+### Avoid Unnecessary Else
 
-Si el bloque `if` termina con `return`, el `else` es redundante.
+If the `if` block ends with `return`, the `else` is redundant.
 
 ```typescript
-// MAL: else innecesario
+// BAD: unnecessary else
 function getDiscount(user: User) {
   if (user.isPremium) {
     return 0.2;
@@ -171,7 +171,7 @@ function getDiscount(user: User) {
   }
 }
 
-// BIEN: sin else redundante
+// GOOD: without redundant else
 function getDiscount(user: User) {
   if (user.isPremium) {
     return 0.2;
@@ -180,19 +180,19 @@ function getDiscount(user: User) {
 }
 ```
 
-### Preferir Inmutabilidad
+### Prefer Immutability
 
-Evita mutar datos. Crea nuevas estructuras en lugar de modificar las existentes.
+Avoid mutating data. Create new structures instead of modifying existing ones.
 
 ```typescript
-// MAL: mutación de datos
+// BAD: data mutation
 function addItem(cart: Cart, item: Item) {
   cart.items.push(item);
   cart.total += item.price;
   return cart;
 }
 
-// BIEN: inmutabilidad
+// GOOD: immutability
 function addItem(cart: Cart, item: Item): Cart {
   return {
     ...cart,
@@ -202,33 +202,33 @@ function addItem(cart: Cart, item: Item): Cart {
 }
 ```
 
-### Evitar Comentarios Obvios
+### Avoid Obvious Comments
 
-El código debe ser autoexplicativo. Los comentarios deben explicar el "por qué", no el "qué".
+Code should be self-explanatory. Comments should explain "why", not "what".
 
 ```typescript
-// MAL: comentarios que describen lo obvio
-// Incrementa el contador
+// BAD: comments that describe the obvious
+// Increments the counter
 counter++;
-// Obtiene el usuario por ID
+// Gets the user by ID
 const user = getUserById(id);
 
-// BIEN: comentario que explica el por qué (cuando es necesario)
-// Rate limiting: máximo 100 requests por minuto según política de la API
+// GOOD: comment that explains the why (when necessary)
+// Rate limiting: maximum 100 requests per minute per API policy
 const delay = calculateBackoff(requestCount);
 ```
 
-### Constantes con Nombre
+### Named Constants
 
-Evita números y strings mágicos. Usa constantes con nombres descriptivos.
+Avoid magic numbers and strings. Use constants with descriptive names.
 
 ```typescript
-// MAL: números mágicos
+// BAD: magic numbers
 if (password.length < 8) { ... }
 if (retryCount > 3) { ... }
 setTimeout(fn, 86400000)
 
-// BIEN: constantes con nombre
+// GOOD: named constants
 const MIN_PASSWORD_LENGTH = 8
 const MAX_RETRY_ATTEMPTS = 3
 const ONE_DAY_MS = 24 * 60 * 60 * 1000
@@ -238,18 +238,18 @@ if (retryCount > MAX_RETRY_ATTEMPTS) { ... }
 setTimeout(fn, ONE_DAY_MS)
 ```
 
-## Formato de Respuestas
+## Response Format
 
-### Referencias a Código
+### Code References
 
-Cuando menciones código específico, incluye la ubicación para facilitar la navegación:
+When mentioning specific code, include the location to facilitate navigation:
 
 ```
-La función `validateUser` en `src/services/auth.ts:45` maneja la validación.
+The `validateUser` function in `src/services/auth.ts:45` handles validation.
 ```
 
-### Estructura
+### Structure
 
-- Respuestas concisas y al punto
-- Usa markdown para formatear (headers, listas, código)
-- Prioriza la información más relevante primero
+- Concise and to the point responses
+- Use markdown for formatting (headers, lists, code)
+- Prioritize the most relevant information first

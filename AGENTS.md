@@ -1,42 +1,42 @@
 # OpenCode Config
 
-Configuración centralizada para OpenCode con estructura simplificada.
+Centralized configuration for OpenCode.
 
-## Estructura
+## Structure
 
 ```
 opencode-config/
 ├── opencode/
-│   ├── opencode.jsonc              # Configuración principal de OpenCode
-│   ├── AGENTS.md                   # Reglas globales para OpenCode
-│   ├── command/                    # Comandos personalizados
-│   └── skill/                      # Skills personalizados
+│   ├── opencode.jsonc              # Main OpenCode configuration
+│   ├── AGENTS.md                   # Global rules for OpenCode
+│   ├── command/                    # Custom commands
+│   └── skill/                      # Custom skills
 ├── src/
-│   ├── installer.ts                # Instalador con detección automática
-│   ├── installer.test.ts           # Tests del instalador
-│   ├── file-ops.ts                 # Utilidades de paths y symlinks
-│   ├── file-ops.test.ts            # Tests de operaciones de archivos
-│   └── types-def.ts                # Tipos e interfaces TypeScript
+│   ├── installer.ts                # Installer with auto-detection
+│   ├── installer.test.ts           # Installer tests
+│   ├── file-ops.ts                 # Path and symlink utilities
+│   ├── file-ops.test.ts            # File operation tests
+│   └── types-def.ts                # TypeScript types and interfaces
 ├── .husky/
 │   └── pre-commit
-├── package.json                    # Dependencias de Bun
-├── tsconfig.json                   # Configuración de TypeScript
-├── biome.json                      # Configuración de Biome (linter/formatter)
+├── package.json                    # Bun dependencies
+├── tsconfig.json                   # TypeScript configuration
+├── biome.json                      # Biome configuration (linter/formatter)
 ├── .gitignore
-└── AGENTS.md                       # Este archivo (documentación del repo)
+└── AGENTS.md                       # This file (repo documentation)
 ```
 
-## Script de Instalación
+## Installation Script
 
-Ejecutar el instalador:
+Run the installer:
 
 ```bash
 bun run setup
 ```
 
-El instalador detecta automáticamente todos los archivos y directorios en `opencode/` y los vincula a `~/.config/opencode/`.
+The installer automatically detects all files and directories in `opencode/` and links them to `~/.config/opencode/`.
 
-## Desarrollo
+## Development
 
 ### Quality Gate
 
@@ -46,32 +46,32 @@ bun run typecheck
 bun test
 ```
 
-### Modificaciones comunes
+### Common Modifications
 
-| Tarea                                | Archivos clave            | Pasos adicionales |
-| ------------------------------------ | ------------------------- | ----------------- |
-| Ajustar la configuración de OpenCode | `opencode/opencode.jsonc` | -                 |
-| Actualizar reglas globales           | `opencode/AGENTS.md`      | -                 |
-| Agregar nuevos comandos              | `opencode/command/`       | -                 |
-| Agregar nuevas skills                | `opencode/skill/`         | -                 |
-| Modificar lógica de instalación      | `src/installer.ts`        | -                 |
+| Task                          | Key files                 | Additional steps |
+| ----------------------------- | ------------------------- | ---------------- |
+| Adjust OpenCode configuration | `opencode/opencode.jsonc` | -                |
+| Update global rules           | `opencode/AGENTS.md`      | -                |
+| Add new commands              | `opencode/command/`       | -                |
+| Add new skills                | `opencode/skill/`         | -                |
+| Modify installation logic     | `src/installer.ts`        | -                |
 
-## Extensibilidad
+## Extensibility
 
-El instalador utiliza **detección automática** de assets. Al agregar nuevos directorios o archivos en `opencode/`:
+The installer uses **automatic asset detection**. When adding new directories or files in `opencode/`:
 
-1. El instalador los detectará automáticamente
-2. Se crearán symlinks en `~/.config/opencode/` con el mismo nombre
-3. No es necesario modificar código del instalador
+1. The installer will automatically detect them
+2. Symlinks will be created in `~/.config/opencode/` with the same name
+3. No need to modify installer code
 
-Ejemplo: Si agregas `opencode/skill/`, el instalador automáticamente lo enlazará a `~/.config/opencode/skill/`.
+Example: If you add `opencode/example/`, the installer will automatically link it to `~/.config/opencode/example/`.
 
-## Stack Técnico
+## Tech Stack
 
 - **Runtime:** Bun
-- **Lenguaje:** TypeScript
+- **Language:** TypeScript
 - **Linter/Formatter:** Biome
 
-## Documentación
+## Documentation
 
-Consulta la documentación oficial de OpenCode: https://opencode.ai/docs
+Visit the official OpenCode documentation: https://opencode.ai/docs
