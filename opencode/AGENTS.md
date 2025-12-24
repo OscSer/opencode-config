@@ -65,7 +65,7 @@ You have access to specialized tools. Use the correct one according to the conte
 | ----- | ------------------------------------------------------------------------------ |
 | `ref` | Documentation of APIs and libraries. Consult official docs before implementing |
 
-### Tool Preferences
+### Preferences
 
 Prefer native OpenCode tools over equivalent terminal commands:
 
@@ -232,14 +232,6 @@ setTimeout(fn, ONE_DAY_MS)
 
 ## Response Format
 
-### Code References
-
-When mentioning specific code, include the location to facilitate navigation:
-
-```
-The `validateUser` function in `src/services/auth.ts:45` handles validation.
-```
-
 ### Structure
 
 - Concise and to the point responses
@@ -250,7 +242,7 @@ The `validateUser` function in `src/services/auth.ts:45` handles validation.
 
 Format tables with padding for readability. Align separators with column content.
 
-```markdown
+```text
 // BAD: compact, hard to read
 |Name|Type|Description|
 |-|-|-|
@@ -260,4 +252,12 @@ Format tables with padding for readability. Align separators with column content
 | Name | Type     | Description       |
 | ---- | -------- | ----------------- |
 | id   | `string` | Unique identifier |
+```
+
+### Code References
+
+When mentioning specific code, include the location to facilitate navigation:
+
+```
+The `validateUser` function in `src/services/auth.ts:45` handles validation.
 ```
