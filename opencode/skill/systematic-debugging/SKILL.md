@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: Use for debugging, bugs, failures, or unexpected behavior
+description: Use when encountering errors, test failures, or unexpected runtime behavior that needs root cause analysis
 ---
 
 # Systematic Debugging

@@ -1,6 +1,6 @@
 ---
 name: testing-best-practices
-description: Use for testing, analizing test cases, evaluating test quality, or fixing flaky tests
+description: Use for writing new tests, reviewing test quality, fixing flaky tests, or evaluating test coverage strategy
 ---
 
 # Test Best Practices
