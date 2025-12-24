@@ -65,14 +65,6 @@ You have access to specialized tools. Use the correct one according to the conte
 | ----- | ------------------------------------------------------------------------------ |
 | `ref` | Documentation of APIs and libraries. Consult official docs before implementing |
 
-### Skills
-
-| Skill                    | When to use it                                                                        |
-| ------------------------ | ------------------------------------------------------------------------------------- |
-| `testing-best-practices` | Use for testing, test cases, test quality, or flaky tests                             |
-| `systematic-debugging`   | Use for bugs, failures, or unexpected behavior                                        |
-| `prompt-engineering`     | Use for prompts, LLM interactions including AGENTS.md, commands, skills, or subagents |
-
 ### Tool Preferences
 
 Prefer native OpenCode tools over equivalent terminal commands:
@@ -251,5 +243,21 @@ The `validateUser` function in `src/services/auth.ts:45` handles validation.
 ### Structure
 
 - Concise and to the point responses
-- Use markdown for formatting (headers, lists, code)
+- Use markdown for formatting (headers, lists, code, tables)
 - Prioritize the most relevant information first
+
+### Markdown
+
+Format tables with padding for readability. Align separators with column content.
+
+```markdown
+// BAD: compact, hard to read
+|Name|Type|Description|
+|-|-|-|
+|id|string|Unique identifier|
+
+// GOOD: padded, aligned columns
+| Name | Type     | Description       |
+| ---- | -------- | ----------------- |
+| id   | `string` | Unique identifier |
+```
