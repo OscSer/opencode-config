@@ -36,25 +36,13 @@ bun run setup
 
 The installer automatically detects all files and directories in `opencode/` and links them to `~/.config/opencode/`.
 
-## Development
-
-### Quality Gate
+## Quality Gate
 
 ```bash
 bun run check
 bun run typecheck
 bun test
 ```
-
-### Common Modifications
-
-| Task                          | Key files                 | Additional steps |
-| ----------------------------- | ------------------------- | ---------------- |
-| Adjust OpenCode configuration | `opencode/opencode.jsonc` | -                |
-| Update global rules           | `opencode/AGENTS.md`      | -                |
-| Add new commands              | `opencode/command/`       | -                |
-| Add new skills                | `opencode/skill/`         | -                |
-| Modify installation logic     | `src/installer.ts`        | -                |
 
 ## Extensibility
 
