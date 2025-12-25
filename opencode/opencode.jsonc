@@ -43,6 +43,7 @@
       // Git
       "git reset *": "ask",
       "git restore *": "ask",
+      "git checkout *": "ask",
       "git commit *": "ask",
       "git add *": "deny",
       "git push *": "deny",
