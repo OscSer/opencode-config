@@ -34,23 +34,19 @@ Complete each phase before proceeding to the next.
 **BEFORE attempting ANY fix:**
 
 1. **Read Error Messages Carefully**
-
    - Read stack traces completely
    - Note line numbers, file paths, error codes
    - They often contain the exact solution
 
 2. **Reproduce Consistently**
-
    - Can you trigger it reliably?
    - If not reproducible → gather more data, don't guess
 
 3. **Check Recent Changes**
-
    - Git diff, recent commits
    - New dependencies, config changes
 
 4. **Gather Evidence in Multi-Component Systems**
-
    - Log what data enters/exits each component boundary
    - Run once to gather evidence showing WHERE it breaks
    - THEN investigate that specific component
@@ -70,12 +66,10 @@ Complete each phase before proceeding to the next.
 ### Phase 3: Hypothesis and Testing
 
 1. **Form Single Hypothesis**
-
    - State clearly: "I think X is the root cause because Y"
    - Be specific, not vague
 
 2. **Test Minimally**
-
    - Make the SMALLEST possible change to test hypothesis
    - One variable at a time
 
@@ -87,23 +81,19 @@ Complete each phase before proceeding to the next.
 ### Phase 4: Implementation
 
 1. **Create Failing Test Case**
-
    - Simplest possible reproduction
    - MUST have before fixing
 
 2. **Implement Single Fix**
-
    - Address the root cause identified
    - ONE change at a time
    - No "while I'm here" improvements
 
 3. **Verify Fix**
-
    - Test passes now?
    - No other tests broken?
 
 4. **If Fix Doesn't Work**
-
    - If < 3 attempts: Return to Phase 1, re-analyze
    - **If ≥ 3 attempts: STOP and question the architecture**
 
