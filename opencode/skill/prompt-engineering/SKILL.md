@@ -1,6 +1,6 @@
 ---
 name: prompt-engineering
-description: Use for analyzing, writing, or improving prompts, system instructions, agent configurations, or any LLM interaction design
+description: Provides advanced prompt engineering techniques including few-shot learning, chain-of-thought prompting, template systems, and system prompt design. Use when analyzing, writing, or improving prompts, system instructions, agent configurations, or LLM interaction patterns.
 ---
 
 # Prompt Engineering Patterns

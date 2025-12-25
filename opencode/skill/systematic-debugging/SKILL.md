@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: Use when encountering errors, test failures, or unexpected runtime behavior that needs root cause analysis
+description: Guides through four-phase debugging methodology (root cause investigation, pattern analysis, hypothesis testing, implementation). Use when encountering errors, test failures, or unexpected runtime behavior requiring systematic analysis.
 ---
 
 # Systematic Debugging
