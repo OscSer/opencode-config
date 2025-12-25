@@ -19,6 +19,7 @@
       }
     }
   },
+  "plugin": ["@franlol/opencode-md-table-formatter"],
   "permission": {
     "webfetch": "allow",
     "bash": {
@@ -39,6 +40,7 @@
       "gh *": "ask",
       "gh pr view *": "allow",
       "gh pr diff *": "allow",
+      "gh search code *": "allow",
       // Dangerous commands
       "sudo *": "deny",
       "chmod *": "deny",

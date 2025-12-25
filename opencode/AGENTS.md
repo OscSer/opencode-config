@@ -61,9 +61,9 @@ You have access to specialized tools. Use the correct one according to the conte
 
 ### MCP
 
-| MCP   | When to use it                                                                 |
-| ----- | ------------------------------------------------------------------------------ |
-| `ref` | Documentation of APIs and libraries. Consult official docs before implementing |
+| MCP   | When to use it                                                                                                                                          |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ref` | Official documentation for APIs, SDKs, and libraries. Use it BEFORE implementing or debugging instead of guessing; always consult `ref` first for APIs. |
 
 ### Preferences
 
@@ -237,22 +237,6 @@ setTimeout(fn, ONE_DAY_MS)
 - Concise and to the point responses
 - Use markdown for formatting (headers, lists, code, tables)
 - Prioritize the most relevant information first
-
-### Markdown
-
-Format tables with padding for readability. Align separators with column content.
-
-```text
-// BAD: compact, hard to read
-|Name|Type|Description|
-|-|-|-|
-|id|string|Unique identifier|
-
-// GOOD: padded, aligned columns
-| Name | Type     | Description       |
-| ---- | -------- | ----------------- |
-| id   | `string` | Unique identifier |
-```
 
 ### Code References
 
