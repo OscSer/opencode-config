@@ -1,6 +1,7 @@
 ---
 description: Generate conventional commit messages
 agent: build
+model: github-copilot/claude-haiku-4.5
 ---
 
 Diff of staged changes:
