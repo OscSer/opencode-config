@@ -62,4 +62,6 @@ Example: If you add `opencode/example/`, the installer will automatically link i
 
 ## Documentation
 
-Visit the official OpenCode documentation: https://opencode.ai/docs
+OpenCode: https://opencode.ai/docs
+AGENTS.md: https://agents.md
+Skills: https://agentskills.io
