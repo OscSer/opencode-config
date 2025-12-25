@@ -114,44 +114,21 @@ Include fallback instructions, request confidence scores, specify how to indicat
 
 ## Best Practices
 
-1. **Be Specific**: Vague → inconsistent results
-2. **Show, Don't Tell**: Examples > descriptions
-3. **Test Extensively**: Diverse inputs + edge cases
-4. **Iterate Rapidly**: Small changes → large impacts
-5. **Version Control**: Treat prompts as code
-
-## Common Pitfalls
-
-- **Over-engineering**: Try simple first
-- **Example pollution**: Examples must match target task
-- **Context overflow**: Balance examples vs. token limits
-- **Ambiguity**: Leave no room for interpretation
-
-## Integration Patterns
-
-### With RAG + Validation
-
-```python
-prompt = f"""Context: {retrieved_context}
-
-Question: {user_question}
-
-Answer based solely on context. If insufficient, state what's missing.
-
-Verify: 1) Answers directly 2) Uses only context 3) Cites sources 4) Acknowledges uncertainty"""
-```
+1. **Start simple** — Try the minimal prompt first; add complexity only when needed
+2. **Show, don't tell** — Examples beat descriptions; 2-3 good examples > long explanations
+3. **Be unambiguous** — Vague instructions → inconsistent results; leave no room for interpretation
+4. **Test on edge cases** — Diverse inputs reveal failure modes before production
+5. **Version control prompts** — Treat them as code; small changes → large impacts
 
 ---
 
 # Agent Prompting Best Practices
 
-Based on Anthropic's official best practices for agent prompting.
-
 ## Core principles
 
 ### Context Window
 
-The context window is the model's "working memory" (200K tokens). Key implications:
+The context window is the model's "working memory". Key implications:
 
 - Tokens accumulate linearly with each turn
 - Your prompt shares space with system prompt, history, and other skills
@@ -159,7 +136,7 @@ The context window is the model's "working memory" (200K tokens). Key implicatio
 
 ### Concise is key
 
-**Default assumption**: Claude is already very smart. Only add context Claude doesn't already have.
+**Default assumption**: The model is already very capable. Only add context the model doesn't already have.
 
 Challenge each piece: "Does this paragraph justify its token cost?"
 
@@ -185,166 +162,64 @@ Match specificity to task fragility:
 
 **Analogy**: Narrow bridge (one safe path) → low freedom. Open field (many paths) → high freedom.
 
+---
+
 # Persuasion Principles for Agent Communication
 
-Useful for writing prompts, including but not limited to: commands, hooks, skills, or prompts for sub agents and any other LLM interaction.
+LLMs respond to the same persuasion principles as humans. Use these to ensure critical practices are followed.
 
-## Overview
+**Research:** Meincke et al. (2025) found persuasion techniques doubled compliance (33% → 72%).
 
-LLMs respond to the same persuasion principles as humans. Understanding this psychology helps you design more effective skills - not to manipulate, but to ensure critical practices are followed even under pressure.
+## Primary Principles (Most Effective)
 
-**Research foundation:** Meincke et al. (2025) tested 7 persuasion principles with N=28,000 AI conversations. Persuasion techniques more than doubled compliance rates (33% → 72%, p < .001).
+### 1. Authority ⭐
 
-## The Seven Principles
-
-### 1. Authority
-
-**What it is:** Deference to expertise, credentials, or official sources.
-
-**How it works in prompts:**
-
-- Imperative language: "YOU MUST", "Never", "Always"
-- Non-negotiable framing: "No exceptions"
-- Eliminates decision fatigue and rationalization
-
-**When to use:**
-
-- Discipline-enforcing skills (TDD, verification requirements)
-- Safety-critical practices
-- Established best practices
-
-**Example:**
+Deference to expertise and imperative language.
 
 ```markdown
 ✅ Write code before test? Delete it. Start over. No exceptions.
 ❌ Consider writing tests first when feasible.
 ```
 
-### 2. Commitment
+**Use for:** Discipline-enforcing skills, safety-critical practices, established best practices.
 
-**What it is:** Consistency with prior actions, statements, or public declarations.
+### 2. Commitment ⭐
 
-**How it works in prompts:**
-
-- Require announcements: "Announce skill usage"
-- Force explicit choices: "Choose A, B, or C"
-- Use tracking: TodoWrite for checklists
-
-**When to use:**
-
-- Ensuring skills are actually followed
-- Multi-step processes
-- Accountability mechanisms
-
-**Example:**
+Consistency with prior statements or public declarations.
 
 ```markdown
 ✅ When you find a skill, you MUST announce: "I'm using [Skill Name]"
 ❌ Consider letting your partner know which skill you're using.
 ```
 
-### 3. Scarcity
+**Use for:** Multi-step processes, accountability mechanisms.
 
-**What it is:** Urgency from time limits or limited availability.
+### 3. Social Proof ⭐
 
-**How it works in prompts:**
-
-- Time-bound requirements: "Before proceeding"
-- Sequential dependencies: "Immediately after X"
-- Prevents procrastination
-
-**When to use:**
-
-- Immediate verification requirements
-- Time-sensitive workflows
-- Preventing "I'll do it later"
-
-**Example:**
-
-```markdown
-✅ After completing a task, IMMEDIATELY request code review before proceeding.
-❌ You can review code when convenient.
-```
-
-### 4. Social Proof
-
-**What it is:** Conformity to what others do or what's considered normal.
-
-**How it works in prompts:**
-
-- Universal patterns: "Every time", "Always"
-- Failure modes: "X without Y = failure"
-- Establishes norms
-
-**When to use:**
-
-- Documenting universal practices
-- Warning about common failures
-- Reinforcing standards
-
-**Example:**
+Conformity to universal patterns and norms.
 
 ```markdown
 ✅ Checklists without TodoWrite tracking = steps get skipped. Every time.
 ❌ Some people find TodoWrite helpful for checklists.
 ```
 
-### 5. Unity
+**Use for:** Documenting universal practices, warning about common failures.
 
-**What it is:** Shared identity, "we-ness", in-group belonging.
+## Secondary Principles
 
-**How it works in prompts:**
+| Principle    | Use case                        | Example                                                   |
+| ------------ | ------------------------------- | --------------------------------------------------------- |
+| **Scarcity** | Time-sensitive workflows        | "IMMEDIATELY request review before proceeding"            |
+| **Unity**    | Collaborative, non-hierarchical | "We're colleagues. I need your honest technical judgment" |
 
-- Collaborative language: "our codebase", "we're colleagues"
-- Shared goals: "we both want quality"
+**Avoid:** Reciprocity and Liking — rarely effective, can create sycophancy.
 
-**When to use:**
-
-- Collaborative workflows
-- Establishing team culture
-- Non-hierarchical practices
-
-**Example:**
-
-```markdown
-✅ We're colleagues working together. I need your honest technical judgment.
-❌ You should probably tell me if I'm wrong.
-```
-
-### 6. Reciprocity & 7. Liking — Avoid These
-
-- **Reciprocity**: Rarely effective, can feel manipulative
-- **Liking**: Creates sycophancy, conflicts with honest feedback
-
-**When to avoid:** Almost always. Other principles are more effective.
-
-## Principle Combinations by Prompt Type
+## Quick Reference
 
 | Prompt Type          | Use                                   | Avoid               |
 | -------------------- | ------------------------------------- | ------------------- |
 | Discipline-enforcing | Authority + Commitment + Social Proof | Liking, Reciprocity |
 | Guidance/technique   | Moderate Authority + Unity            | Heavy authority     |
 | Collaborative        | Unity + Commitment                    | Authority, Liking   |
-| Reference            | Clarity only                          | All persuasion      |
 
-## Why This Works
-
-- **Bright-line rules**: "YOU MUST" removes decision fatigue, eliminates "is this an exception?" questions
-- **Implementation intentions**: "When X, do Y" → automatic execution
-- **LLMs are parahuman**: Trained on human text containing these persuasion patterns
-
-## Ethical Use
-
-**The test:** Would this technique serve the user's genuine interests if they fully understood it?
-
-Legitimate: Ensuring critical practices, preventing failures. Illegitimate: Manipulation, false urgency, guilt-based compliance.
-
-## Quick Reference
-
-When designing a prompt, ask:
-
-1. **What type is it?** (Discipline vs. guidance vs. reference)
-2. **What behavior am I trying to change?**
-3. **Which principle(s) apply?** (Usually authority + commitment for discipline)
-4. **Am I combining too many?** (Don't use all seven)
-5. **Is this ethical?** (Serves user's genuine interests?)
+**Ethics test:** Would this serve the user's genuine interests if they fully understood it?
