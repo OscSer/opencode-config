@@ -8,6 +8,9 @@
     },
     "build": {
       "permission": { "edit": "allow" }
+    },
+    "explore": {
+      "model": "github-copilot/claude-haiku-4.5"
     }
   },
   "mcp": {

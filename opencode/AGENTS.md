@@ -55,9 +55,7 @@ BEFORE considering a task completed, verify:
 - The quality gate passes correctly
 - There is no dead or commented code
 
-## Tools
-
-You have access to specialized tools. Use the correct one according to the context
+## Preferences
 
 ### MCP
 
@@ -66,7 +64,13 @@ You have access to specialized tools. Use the correct one according to the conte
 | `ref`   | Official documentation for APIs, SDKs, and libraries. Use it BEFORE implementing or debugging instead of guessing; always consult `ref` first for APIs.                             |
 | `zread` | Open source repository knowledge: search docs, issues, PRs, get repo structure, and read files from GitHub repos. Use to understand projects, troubleshoot, or analyze source code. |
 
-### Preferences
+### Subagents
+
+| Subagent  | When to use it                                                                                                            |
+| --------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `explore` | Codebase exploration: search files by patterns, find code by keywords, answer questions about structure. Use proactively. |
+
+### Integrated Tools
 
 Prefer native OpenCode tools over equivalent terminal commands:
 
