@@ -77,12 +77,6 @@ If user provided arguments ($ARGUMENTS), prioritize that guidance:
 - `/commit refactor auth` → `refactor(auth): ...`
 - `/commit fix utils` → `fix(utils): ...`
 
-Execute commit with generated message.
+## Step 5: Execute Commit
 
-If commit **fails for any reason**, explain error clearly
-
-If commit is **successful**, report:
-
-```
-Commit successful: <short hash> - <message>
-```
+Execute the commit `git commit -m "<generated message>"` and finishes without reporting anything else.
