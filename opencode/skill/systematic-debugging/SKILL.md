@@ -117,14 +117,12 @@ If you catch yourself:
 
 ## Common Rationalizations
 
-| Excuse                        | Reality                                  |
-| ----------------------------- | ---------------------------------------- |
-| "Issue is simple"             | Simple issues have root causes too       |
-| "Emergency, no time"          | Systematic is FASTER than thrashing      |
-| "Just try this first"         | First fix sets the pattern. Do it right. |
-| "I'll write test after"       | Untested fixes don't stick               |
-| "Multiple fixes saves time"   | Can't isolate what worked                |
-| "One more attempt" (after 2+) | 3+ failures = architectural problem      |
+| Excuse                      | Reality                             |
+| --------------------------- | ----------------------------------- |
+| "Issue is simple"           | Simple issues have root causes too  |
+| "Emergency, no time"        | Systematic is FASTER than thrashing |
+| "I'll write test after"     | Untested fixes don't stick          |
+| "Multiple fixes saves time" | Can't isolate what worked           |
 
 ## Output Format
 
@@ -135,24 +133,73 @@ When using this skill, structure your response as:
 
 ### Phase 1: Root Cause Investigation
 - Error message: [key details]
+  → What does the error actually say? Read the full stack trace.
 - Reproduction: [steps or "not yet reproducible"]
+  → Can you trigger it reliably? What are the exact steps?
 - Recent changes: [relevant changes]
+  → What changed in git? New dependencies? Config changes?
 - Evidence gathered: [what you found]
+  → Where exactly does the data flow break?
 
 ### Phase 2: Pattern Analysis
 - Working example: [similar code that works]
+  → Is there similar code in the codebase that works correctly?
 - Key differences: [what's different]
+  → What differs between working and broken code?
 
 ### Phase 3: Hypothesis
 "I believe [X] is the root cause because [Y]"
+  → Be specific. Vague hypotheses lead to vague fixes.
 
 Minimal test: [smallest change to verify]
+  → What's the ONE thing you can change to test this hypothesis?
 
 ### Phase 4: Implementation
 - Test case: [the failing test]
+  → Does a test exist that reproduces this bug?
 - Fix: [the actual fix]
+  → ONE change addressing the root cause.
 - Verification: [test results]
+  → Does the test pass? Are other tests still green?
 ```
+
+## Example: Real Debugging Session
+
+**Bug:** "API returns 500 error when creating a user with special characters in name"
+
+### Phase 1: Root Cause Investigation
+
+- **Error message:** `500 Internal Server Error` with stack trace pointing to `UserService.create()` line 47: `TypeError: Cannot read property 'normalize' of undefined`
+- **Reproduction:** POST `/api/users` with `{ "name": "José García" }` → 500 error. Works with `{ "name": "John Smith" }`.
+- **Recent changes:** Commit `a1b2c3d` added Unicode normalization for names 2 days ago.
+- **Evidence:** The `normalize` method is called on `config.unicodeForm`, but `config` is undefined when the feature flag `UNICODE_SUPPORT` is disabled.
+
+### Phase 2: Pattern Analysis
+
+- **Working example:** `ProductService.create()` also uses Unicode normalization but checks if config exists first.
+- **Key differences:** ProductService has `if (config?.unicodeForm)` guard. UserService assumes config is always present.
+
+### Phase 3: Hypothesis
+
+"I believe the root cause is that `UserService.create()` doesn't guard against undefined config when `UNICODE_SUPPORT` feature flag is disabled, because the config object is only initialized when the flag is enabled."
+
+**Minimal test:** Add optional chaining `config?.unicodeForm` at line 47.
+
+### Phase 4: Implementation
+
+- **Test case:**
+
+```
+test_creates_user_with_special_chars_when_unicode_disabled:
+  disableFeatureFlag('UNICODE_SUPPORT')
+  result = userService.create({ name: 'José García' })
+  assert(result.name == 'José García')
+```
+
+- **Fix:** Changed `config.unicodeForm` to `config?.unicodeForm ?? 'NFC'`
+- **Verification:** New test passes. All 47 existing tests still green.
+
+---
 
 ## Quick Reference
 
