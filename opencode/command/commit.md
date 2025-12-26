@@ -71,6 +71,7 @@ Ask yourself:
 **Rules:**
 
 - Lowercase type
+- Do NOT add the `[scope]` section
 - Description: concise, imperative ("add" not "added")
 - Single line only — no body or footer
 - English only
