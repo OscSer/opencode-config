@@ -1,18 +1,22 @@
 ---
 description: Generate conventional commit messages
 agent: build
-model: github-copilot/claude-haiku-4.5
+model: github-copilot/gemini-3-flash-preview
 ---
 
-Diff of staged changes:
+## User Arguments:
+
+```text
+$ARGUMENTS
+```
+
+## Diff of staged changes:
 
 !`git diff --cached`
 
-Recent commits:
+## Recent commits:
 
 !`git log --oneline -10`
-
-Analyze changes and generate a commit message following **Conventional Commits** format.
 
 ## Step 1: Analyze Changed Files
 
@@ -58,24 +62,20 @@ Ask yourself:
 | `chore`    | Maintenance, tooling                                      |
 | `perf`     | Performance improvements                                  |
 
-**Critical rule:** Files in `opencode/`, `command/`, `skill/`, or `AGENTS.md` are **functional LLM configuration**, NOT documentation. Never use `docs` for these.
+**Critical rule:** Files like `SKILL.md` or `AGENTS.md` are **functional LLM configuration**, NOT documentation. Never use `docs` for these.
 
 ## Step 4: Generate Message
 
-**Format:** `<type>[optional scope]: <description>`
+**Format:** `<type>: <description>`
 
 **Rules:**
 
 - Lowercase type
-- Scope: affected module (e.g., `auth`, `api`, `ui`, `command`, `skill`)
 - Description: concise, imperative ("add" not "added")
 - Single line only — no body or footer
 - English only
 
-If user provided arguments ($ARGUMENTS), prioritize that guidance:
-
-- `/commit refactor auth` → `refactor(auth): ...`
-- `/commit fix utils` → `fix(utils): ...`
+If user provided arguments, prioritize that context in the message.
 
 ## Step 5: Execute Commit
 
