@@ -122,11 +122,11 @@ Include fallback instructions, request confidence scores, specify how to indicat
 
 ---
 
-# Agent Prompting Best Practices
+## Agent Prompting Best Practices
 
-## Core principles
+### Core principles
 
-### Context Window
+#### Context Window
 
 The context window is the model's "working memory". Key implications:
 
@@ -134,7 +134,7 @@ The context window is the model's "working memory". Key implications:
 - Your prompt shares space with system prompt, history, and other skills
 - Every token has a cost—make them count
 
-### Concise is key
+#### Concise is key
 
 **Default assumption**: The model is already very capable. Only add context the model doesn't already have.
 
@@ -150,7 +150,7 @@ Use pdfplumber: `pdf.pages[0].extract_text()`
 PDF files are a common format... there are many libraries... we recommend pdfplumber because...
 ```
 
-### Set appropriate degrees of freedom
+#### Set appropriate degrees of freedom
 
 Match specificity to task fragility:
 
@@ -164,15 +164,15 @@ Match specificity to task fragility:
 
 ---
 
-# Persuasion Principles for Agent Communication
+## Persuasion Principles for Agent Communication
 
 LLMs respond to the same persuasion principles as humans. Use these to ensure critical practices are followed.
 
 **Research:** Meincke et al. (2025) found persuasion techniques doubled compliance (33% → 72%).
 
-## Primary Principles (Most Effective)
+### Primary Principles (Most Effective)
 
-### 1. Authority ⭐
+#### 1. Authority
 
 Deference to expertise and imperative language.
 
@@ -183,7 +183,7 @@ Deference to expertise and imperative language.
 
 **Use for:** Discipline-enforcing skills, safety-critical practices, established best practices.
 
-### 2. Commitment ⭐
+#### 2. Commitment
 
 Consistency with prior statements or public declarations.
 
@@ -194,7 +194,7 @@ Consistency with prior statements or public declarations.
 
 **Use for:** Multi-step processes, accountability mechanisms.
 
-### 3. Social Proof ⭐
+#### 3. Social Proof
 
 Conformity to universal patterns and norms.
 
@@ -205,7 +205,7 @@ Conformity to universal patterns and norms.
 
 **Use for:** Documenting universal practices, warning about common failures.
 
-## Secondary Principles
+### Secondary Principles
 
 | Principle    | Use case                        | Example                                                   |
 | ------------ | ------------------------------- | --------------------------------------------------------- |
@@ -214,7 +214,7 @@ Conformity to universal patterns and norms.
 
 **Avoid:** Reciprocity and Liking — rarely effective, can create sycophancy.
 
-## Quick Reference
+### Quick Reference
 
 | Prompt Type          | Use                                   | Avoid               |
 | -------------------- | ------------------------------------- | ------------------- |
@@ -223,3 +223,51 @@ Conformity to universal patterns and norms.
 | Collaborative        | Unity + Commitment                    | Authority, Liking   |
 
 **Ethics test:** Would this serve the user's genuine interests if they fully understood it?
+
+---
+
+## Validation Checklist
+
+Use this checklist to evaluate prompts. A prompt is **complete** when ALL required criteria pass.
+
+### Required Criteria (Must Pass)
+
+| #   | Criterion                                                                   | Question to Ask                                       |
+| --- | --------------------------------------------------------------------------- | ----------------------------------------------------- |
+| 1   | **Clear task** — ONE unambiguous primary objective                          | Can you state the goal in one sentence?               |
+| 2   | **Actionable** — Executable without clarifying questions                    | Can the model start immediately without asking "how"? |
+| 3   | **Output format** — Expected response structure specified or obvious        | Is it clear what the output should look like?         |
+| 4   | **No ambiguity** — Key terms defined, no room for interpretation            | Could two people interpret this differently?          |
+| 5   | **Appropriate scope** — Not too broad, not unnecessarily narrow             | Is the task focused but complete?                     |
+| 6   | **Token efficient** — No redundant content, each section justifies its cost | Does every paragraph earn its tokens?                 |
+
+### Quality Enhancements (Optional)
+
+Pursue these ONLY AFTER all required criteria pass:
+
+| Enhancement              | Add when...                                         |
+| ------------------------ | --------------------------------------------------- |
+| Few-shot examples        | Outputs are inconsistent despite clear instructions |
+| Chain-of-thought         | Task requires multi-step reasoning or complex logic |
+| Constraints / guardrails | Edge cases are causing failures                     |
+| System context / role    | Persona or expertise level improves output quality  |
+| Persuasion principles    | Critical practices need stronger compliance         |
+
+### Type-Specific Checks
+
+After passing the 6 required criteria, verify type-specific requirements:
+
+| Prompt Type       | Additional Check                                          |
+| ----------------- | --------------------------------------------------------- |
+| **System prompt** | Defines persistent role, expertise, and constraints       |
+| **Command**       | Specifies task, parameters, and expected behavior         |
+| **Agent**         | Defines scope of autonomy and decision boundaries         |
+| **Skill**         | Provides actionable guidance, not just reference material |
+
+### Verdict
+
+- **✅ COMPLETE**: All 6 required criteria pass + type-specific checks pass
+- **⚠️ ENHANCE**: All required pass, but quality issues persist → add enhancements from table above
+- **❌ INCOMPLETE**: One or more required criteria fail → fix before proceeding
+
+When evaluating a prompt, explicitly state the verdict and list any failing criteria.
