@@ -112,33 +112,17 @@ Start simple, add complexity only when needed:
 
 Include fallback instructions, request confidence scores, specify how to indicate missing information.
 
-## Best Practices
-
-1. **Start simple** — Try the minimal prompt first; add complexity only when needed
-2. **Show, don't tell** — Examples beat descriptions; 2-3 good examples > long explanations
-3. **Be unambiguous** — Vague instructions → inconsistent results; leave no room for interpretation
-4. **Test on edge cases** — Diverse inputs reveal failure modes before production
-5. **Version control prompts** — Treat them as code; small changes → large impacts
-
 ---
 
-## Agent Prompting Best Practices
+## Agent Prompting
 
-### Core principles
+### Principles
 
 #### Context Window
 
-The context window is the model's "working memory". Key implications:
+The model's "working memory". Tokens accumulate linearly—every token has a cost.
 
-- Tokens accumulate linearly with each turn
-- Your prompt shares space with system prompt, history, and other skills
-- Every token has a cost—make them count
-
-#### Concise is key
-
-**Default assumption**: The model is already very capable. Only add context the model doesn't already have.
-
-Challenge each piece: "Does this paragraph justify its token cost?"
+**Default assumption**: The model is already capable. Only add context it doesn't have.
 
 ```markdown
 # Good (~50 tokens)
@@ -150,132 +134,105 @@ Use pdfplumber: `pdf.pages[0].extract_text()`
 PDF files are a common format... there are many libraries... we recommend pdfplumber because...
 ```
 
-#### Set appropriate degrees of freedom
+#### Degrees of Freedom
 
 Match specificity to task fragility:
 
-| Freedom    | When to use                                  | Example                                                          |
-| ---------- | -------------------------------------------- | ---------------------------------------------------------------- |
-| **High**   | Multiple valid approaches, context-dependent | "Review code for bugs and readability"                           |
-| **Medium** | Preferred pattern exists, some variation OK  | `generate_report(data, format="markdown")`                       |
-| **Low**    | Fragile operations, exact sequence required  | `python scripts/migrate.py --verify --backup` (no modifications) |
-
-**Analogy**: Narrow bridge (one safe path) → low freedom. Open field (many paths) → high freedom.
+| Freedom    | When to use               | Example                                            |
+| ---------- | ------------------------- | -------------------------------------------------- |
+| **High**   | Multiple valid approaches | "Review code for bugs"                             |
+| **Medium** | Preferred pattern exists  | `generate_report(data, format="markdown")`         |
+| **Low**    | Exact sequence required   | `python migrate.py --verify --backup` (no changes) |
 
 ---
 
-## Persuasion Principles for Agent Communication
+## Persuasion Principles
 
-LLMs respond to the same persuasion principles as humans. Use these to ensure critical practices are followed.
+LLMs respond to persuasion principles. Research shows these techniques double compliance (33% → 72%).
 
-**Research:** Meincke et al. (2025) found persuasion techniques doubled compliance (33% → 72%).
-
-### Primary Principles (Most Effective)
+### Primary (Most Effective)
 
 #### 1. Authority
 
-Deference to expertise and imperative language.
+Imperative language for critical practices.
 
 ```markdown
-✅ Write code before test? Delete it. Start over. No exceptions.
+✅ Write code before test? Delete it. No exceptions.
 ❌ Consider writing tests first when feasible.
 ```
 
-**Use for:** Discipline-enforcing skills, safety-critical practices, established best practices.
-
 #### 2. Commitment
 
-Consistency with prior statements or public declarations.
+Require explicit declarations.
 
 ```markdown
-✅ When you find a skill, you MUST announce: "I'm using [Skill Name]"
+✅ You MUST announce: "I'm using [Skill Name]"
 ❌ Consider letting your partner know which skill you're using.
 ```
 
-**Use for:** Multi-step processes, accountability mechanisms.
-
 #### 3. Social Proof
 
-Conformity to universal patterns and norms.
+Reference universal patterns.
 
 ```markdown
-✅ Checklists without TodoWrite tracking = steps get skipped. Every time.
-❌ Some people find TodoWrite helpful for checklists.
+✅ Checklists without tracking = steps get skipped. Every time.
+❌ Some people find tracking helpful for checklists.
 ```
 
-**Use for:** Documenting universal practices, warning about common failures.
+### Secondary
 
-### Secondary Principles
+| Principle    | Example                                                   |
+| ------------ | --------------------------------------------------------- |
+| **Scarcity** | "IMMEDIATELY request review before proceeding"            |
+| **Unity**    | "We're colleagues. I need your honest technical judgment" |
 
-| Principle    | Use case                        | Example                                                   |
-| ------------ | ------------------------------- | --------------------------------------------------------- |
-| **Scarcity** | Time-sensitive workflows        | "IMMEDIATELY request review before proceeding"            |
-| **Unity**    | Collaborative, non-hierarchical | "We're colleagues. I need your honest technical judgment" |
-
-**Avoid:** Reciprocity and Liking — rarely effective, can create sycophancy.
-
-### Quick Reference
-
-| Prompt Type          | Use                                   | Avoid               |
-| -------------------- | ------------------------------------- | ------------------- |
-| Discipline-enforcing | Authority + Commitment + Social Proof | Liking, Reciprocity |
-| Guidance/technique   | Moderate Authority + Unity            | Heavy authority     |
-| Collaborative        | Unity + Commitment                    | Authority, Liking   |
-
-**Ethics test:** Would this serve the user's genuine interests if they fully understood it?
+**Avoid:** Reciprocity and Liking—can create sycophancy.
 
 ---
 
 ## Validation Checklist
 
-Use this checklist to evaluate prompts. Score each criterion, sum the points, and determine the verdict.
+| #   | Criterion             | Description                                       |
+| --- | --------------------- | ------------------------------------------------- |
+| 1   | **Clear task**        | ONE unambiguous primary objective                 |
+| 2   | **Actionable**        | Executable without clarifying questions           |
+| 3   | **Output format**     | Expected response structure specified or obvious  |
+| 4   | **No ambiguity**      | Key terms defined, no room for interpretation     |
+| 5   | **Appropriate scope** | Not too broad, not unnecessarily narrow           |
+| 6   | **Token efficient**   | No redundant content, each section earns its cost |
+| 7   | **Type-specific**     | Meets requirements for its prompt type            |
 
-### Required Criteria
+**Scoring:** 0 = Fails, 1 = Weak, 2 = Pass
 
-| #   | Criterion             | Description                                              | 0 pts | 1 pt | 2 pts |
-| --- | --------------------- | -------------------------------------------------------- | ----- | ---- | ----- |
-| 1   | **Clear task**        | ONE unambiguous primary objective                        | Fails | Weak | Pass  |
-| 2   | **Actionable**        | Executable without clarifying questions                  | Fails | Weak | Pass  |
-| 3   | **Output format**     | Expected response structure specified or obvious         | Fails | Weak | Pass  |
-| 4   | **No ambiguity**      | Key terms defined, no room for interpretation            | Fails | Weak | Pass  |
-| 5   | **Appropriate scope** | Not too broad, not unnecessarily narrow                  | Fails | Weak | Pass  |
-| 6   | **Token efficient**   | No redundant content, each section justifies its cost    | Fails | Weak | Pass  |
-| 7   | **Type-specific**     | Meets requirements for its prompt type (see table below) | Fails | Weak | Pass  |
+### Type-Specific Requirements
 
-### Type-Specific Requirements (Criterion #7)
-
-| Prompt Type       | Requirement                                               |
-| ----------------- | --------------------------------------------------------- |
-| **System prompt** | Defines persistent role, expertise, and constraints       |
-| **Command**       | Specifies trigger, parameters, and expected behavior      |
-| **Agent**         | Defines scope of autonomy and decision boundaries         |
-| **Skill**         | Provides actionable guidance, not just reference material |
+| Prompt Type       | Requirement                                         |
+| ----------------- | --------------------------------------------------- |
+| **System prompt** | Defines persistent role, expertise, and constraints |
+| **Command**       | Specifies trigger, parameters, and behavior         |
+| **Agent**         | Defines scope of autonomy and decision boundaries   |
+| **Skill**         | Actionable guidance, not just reference material    |
 
 ### Verdict
 
-| Score | Verdict           | Description               |
-| ----- | ----------------- | ------------------------- |
-| 0-5   | **❌ INCOMPLETE** | Fundamental criteria fail |
-| 6-9   | **⚠️ IMPROVE**    | Functional but weak       |
-| 10-12 | **✅ COMPLETE**   | Production-ready          |
-| 13-14 | **⭐ EXEMPLARY**  | Reference-quality         |
+| Score | Verdict    |
+| ----- | ---------- |
+| 0-5   | INCOMPLETE |
+| 6-9   | IMPROVE    |
+| 10-12 | COMPLETE   |
+| 13-14 | EXEMPLARY  |
 
-### Quality Enhancements (Conditional)
+### Enhancements (Only if Observed)
 
-Only suggest enhancements if these conditions are met:
+| Enhancement       | Only if you observed...                   |
+| ----------------- | ----------------------------------------- |
+| Few-shot examples | Inconsistent outputs                      |
+| Chain-of-thought  | Wrong multi-step reasoning                |
+| Constraints       | Edge case failures                        |
+| Role/persona      | Quality degraded without context          |
+| Persuasion        | Non-compliance with critical instructions |
 
-1. You observed a SPECIFIC failure (not hypothetical)
-2. The enhancement directly addresses that observed failure
-
-| Enhancement              | ONLY suggest if you observed...                |
-| ------------------------ | ---------------------------------------------- |
-| Few-shot examples        | Actual inconsistent outputs in testing         |
-| Chain-of-thought         | Wrong answers on multi-step reasoning problems |
-| Constraints / guardrails | Actual edge case failures                      |
-| System context / role    | Output quality degraded without persona        |
-| Persuasion principles    | Non-compliance with critical instructions      |
-
-### Evaluation Output Format
+### Output Format
 
 ```
 ## Prompt Evaluation
@@ -292,5 +249,4 @@ Only suggest enhancements if these conditions are met:
 
 **Total: X/14**
 **Verdict: [INCOMPLETE|IMPROVE|COMPLETE|EXEMPLARY]**
-
 ```
