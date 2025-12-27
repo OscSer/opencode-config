@@ -55,10 +55,10 @@ BEFORE considering a task completed, verify:
 
 ## Subagents
 
-| Subagent  | When to use it                                                                                                                                   |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `explore` | Fast exploration of the codebase. Use it to find files, search for patterns, or understand the project structure quickly.                        |
-| `oracle`  | Expert consultant for complex reasoning, code review, and second opinions. Use when facing difficult problems that benefit from deeper analysis. |
+| Subagent | When to use it                                                                                                                                   |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `search` | Fast codebase search. Use for finding files, patterns, or code locations.                                                                        |
+| `oracle` | Expert consultant for complex reasoning, code review, and second opinions. Use when facing difficult problems that benefit from deeper analysis. |
 
 ## MCP
 

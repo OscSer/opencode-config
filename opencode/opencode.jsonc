@@ -4,20 +4,24 @@
   "small_model": "github-copilot/gemini-3-flash-preview",
   "default_agent": "plan",
   "agent": {
+    "explore": { "disable": true },
     "plan": {
       "permission": { "edit": "deny" }
     },
     "build": {
       "permission": { "edit": "allow" }
     },
-    "explore": {
-      "model": "github-copilot/gemini-3-flash-preview"
+    "search": {
+      "description": "Fast codebase search. Use for finding files, patterns, or code locations.",
+      "mode": "subagent",
+      "model": "github-copilot/gemini-3-flash-preview",
+      "prompt": "{file:./prompt/search.md}",
+      "permission": { "edit": "deny" }
     },
     "oracle": {
       "description": "Expert consultant for complex reasoning, code review, and second opinions. Use when facing difficult problems that benefit from deeper analysis.",
       "mode": "subagent",
       "model": "github-copilot/gpt-5.1",
-      "temperature": 0.1,
       "prompt": "{file:./prompt/oracle.md}",
       "permission": { "edit": "deny" }
     }
