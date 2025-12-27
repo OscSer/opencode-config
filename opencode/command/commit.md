@@ -4,17 +4,23 @@ agent: build
 model: github-copilot/gemini-3-flash-preview
 ---
 
-## User Arguments:
+## Constraint
+
+The ONLY command you can execute is `git commit -m "<message>"`. No other commands. No `git add`. No `git push`. No exceptions.
+
+## Context
+
+**User arguments:**
 
 ```text
 $ARGUMENTS
 ```
 
-## Diff of staged changes:
+**Staged changes (this is your ONLY input, do NOT run git diff yourself):**
 
 !`git diff --cached`
 
-## Recent commits:
+**Recent commits (for style reference only):**
 
 !`git log --oneline -10`
 
@@ -80,4 +86,6 @@ If user provided arguments, prioritize that context in the message.
 
 ## Step 5: Execute Commit
 
-Execute the commit `git commit -m "<generated message>"` and finishes without reporting anything else.
+Execute exactly: `git commit -m "<message>"`
+
+No other commands. If there are no staged changes, inform the user. Do NOT attempt to stage files.
