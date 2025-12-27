@@ -62,10 +62,10 @@ BEFORE considering a task completed, verify:
 
 ## MCP
 
-| MCP        | When to use it                                                                                                                                         |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ref`      | Official documentation from primary sources (API/SDK maintainers). Use it first for canonical specs and authoritative references.                      |
-| `context7` | Up-to-date code docs and examples. Resolve library IDs and fetch current snippets straight from source repos; use alongside `ref` to ground responses. |
+| MCP        | When to use it                                                                                                                                 |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ref`      | Official documentation from primary sources (API/SDK maintainers). **Always use first** for canonical specs and authoritative references.      |
+| `context7` | Up-to-date code docs and examples. Use **to complement `ref`** when you need additional code examples or more detailed implementation details. |
 
 ## Code Principles
 
