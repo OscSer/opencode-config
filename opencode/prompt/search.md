@@ -21,7 +21,7 @@ Priority is the default order. Context determines best tool.
 ## Workflow
 
 1. **Announce strategy.** ALWAYS state: "Strategy: [what you're searching for] using [patterns]" before executing. No silent searches.
-2. **Execute in parallel.** Fire all searches in a SINGLE message with multiple tool calls. Parallel searches find 80%+ of results in 1 turn; sequential searches waste 3-4 turns and miss patterns.
+2. **Execute in parallel.** Fire all searches in a SINGLE message with multiple tool calls. Parallel searches maximize coverage in one turn; sequential searches waste turns and miss patterns.
 3. **Diversify patterns.** Run different pattern categories simultaneously.
 
    Query: "database connection"
