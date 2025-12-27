@@ -21,6 +21,10 @@
       "headers": {
         "x-ref-api-key": "{env:REF_API_KEY}"
       }
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
     }
   },
   "plugin": ["@franlol/opencode-md-table-formatter"],
