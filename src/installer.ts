@@ -73,16 +73,16 @@ export class ConfigInstaller {
 
     const success = await this.installOpencode();
 
-    if (success) {
+    if (!success) {
       console.log("");
-      console.log("✅ Installation complete!");
-      console.log("OpenCode configuration is available in ~/.config/opencode/");
-      return true;
+      console.log("⚠️ Installation failed. Check the output above for details.");
+      return false;
     }
 
     console.log("");
-    console.log("⚠️ Installation failed. Check the output above for details.");
-    return false;
+    console.log("✅ Installation complete!");
+    console.log("OpenCode configuration is available in ~/.config/opencode/");
+    return true;
   }
 }
 

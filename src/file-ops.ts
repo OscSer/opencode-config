@@ -37,8 +37,8 @@ export async function createSymlink(source: string, target: string): Promise<boo
     const targetDir = path.dirname(target);
     await fs.mkdir(targetDir, { recursive: true });
 
-    try {
-      const targetStat = await fs.lstat(target);
+    const targetStat = await fs.lstat(target).catch(() => null);
+    if (targetStat) {
       if (targetStat.isSymbolicLink()) {
         await fs.unlink(target);
       } else if (targetStat.isDirectory()) {
@@ -46,8 +46,6 @@ export async function createSymlink(source: string, target: string): Promise<boo
       } else {
         await fs.unlink(target);
       }
-    } catch {
-      // Target doesn't exist, that's fine
     }
 
     const resolvedSource = path.resolve(source);
