@@ -12,6 +12,14 @@
     },
     "explore": {
       "model": "github-copilot/gemini-3-flash-preview"
+    },
+    "oracle": {
+      "description": "Expert consultant for complex reasoning, code review, and second opinions. Use when facing difficult problems that benefit from deeper analysis.",
+      "mode": "subagent",
+      "model": "github-copilot/gpt-5.1",
+      "temperature": 0.1,
+      "prompt": "{file:./prompt/oracle.md}",
+      "permission": { "edit": "deny" }
     }
   },
   "mcp": {
@@ -24,7 +32,7 @@
     },
     "context7": {
       "type": "remote",
-      "url": "https://mcp.context7.com/mcp",
+      "url": "https://mcp.context7.com/mcp"
     }
   },
   "plugin": ["@franlol/opencode-md-table-formatter"],
