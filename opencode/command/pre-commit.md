@@ -4,282 +4,152 @@ description: Run quality gate and detect AI-generated code slop
 
 ## Overview
 
-Execute `git status --porcelain` to get a list of changed files. If no changes, report and exit.
+Execute `git status --porcelain` to get changed files. If no changes, report and exit.
 
-## Parallel Delegation
+## Delegation
 
-You MUST delegate both analysis phases to subagents using the Task tool. Launch both in a SINGLE message to run them in parallel.
-
-**Critical:** Each subagent operates in isolation. Pass ALL required context in the prompt—they cannot access this document or conversation history.
-
-### Task 1: Quality Gate
+Launch BOTH tasks in a SINGLE message (parallel). Subagents are isolated—include ALL context in prompts.
 
 ```
-Task(
-  subagent_type="general",
-  description="Quality Gate analysis",
-  prompt="[QUALITY GATE PROMPT WITH FILE LIST]"
-)
-```
-
-### Task 2: Slop Detection
-
-```
-Task(
-  subagent_type="general",
-  description="Slop Detection analysis",
-  prompt="[SLOP DETECTION PROMPT WITH FILE LIST AND CRITERIA]"
-)
+Task(subagent_type="general", description="Quality Gate", prompt="[QUALITY GATE PROMPT]")
+Task(subagent_type="general", description="Slop Detection", prompt="[SLOP DETECTION PROMPT]")
 ```
 
 ---
 
-## Quality Gate Subagent Prompt
+## Subagent Prompts
 
-Use this template, replacing `{FILES}` with the actual file list:
+Replace `{FILES}` with actual file list in each template.
+
+### Quality Gate Template
 
 ````markdown
 ## Quality Gate Analysis
 
-Analyze these files for technical errors:
+Analyze: {FILES}
 
-{FILES}
+### Checks
 
-### Checks to Run
+Use available commands from project:
 
-1. **Typecheck** - Run `bun run typecheck` or equivalent
-2. **Lint** - Run `bun run check` or equivalent
-3. **Tests** - Run `bun test` or equivalent
+1. **Typecheck** - Type verification command
+2. **Lint** - Linter/formatter command
+3. **Tests** - Test runner command
 
-### Report Format
+Skip unavailable checks. Report which were skipped and why.
 
-Return findings in this EXACT format:
+### Output Format
 
 ```
 ## Quality Gate Report
 
 ### Typecheck
 - `file:line` - Error description
-(or ✅ No issues)
+(or "No issues" / "Skipped: [reason]")
 
 ### Lint
 - `file:line` - Rule: description
-(or ✅ No issues)
+(or "No issues" / "Skipped: [reason]")
 
 ### Tests
 - Test name - Failure reason
-(or ✅ All passing)
-
+(or "All passing" / "Skipped: [reason]")
 ```
 
-### Rules
-
-- Run ALL checks even if one fails
-- Report exact file paths and line numbers
-- Do NOT fix anything—report only
+**Rules:** Run ALL available checks. Report exact paths/lines. Do NOT fix—report only.
 ````
 
----
-
-## Slop Detection Subagent Prompt
-
-Use this template, replacing `{FILES}` with the actual file list:
+### Slop Detection Template
 
 ````markdown
 ## Slop Detection Analysis
 
-Analyze these files for AI-generated code patterns ("slop"):
+Analyze: {FILES}
 
-{FILES}
+### Criteria
 
-### Detection Criteria
+#### Comments
 
-#### 1. Comments
+| Context                               | Action   |
+| ------------------------------------- | -------- |
+| Doc comments (JSDoc, docstrings, etc) | Preserve |
+| TODO/FIXME with reason                | Preserve |
+| Explains "why" (intent/decision)      | Preserve |
+| Describes "what" code does            | Flag     |
+| Paraphrases function name             | Flag     |
 
-**Context determines validity.** Evaluate BEFORE flagging:
-
-| Context                          | Action                 |
-| -------------------------------- | ---------------------- |
-| JSDoc/TSDoc documenting API      | ✅ Preserve            |
-| TODO/FIXME with ticket or reason | ✅ Preserve            |
-| Explains "why" (decision/intent) | ✅ Preserve            |
-| Legal/license headers            | ✅ Preserve            |
-| Describes "what" code does       | ⚠️ Likely slop         |
-| Paraphrases function name        | ❌ Flag                |
-| Section dividers (`// ===`)      | ⚠️ Check project style |
-
-**Ambiguous? Do NOT flag—note for user review.**
-
-Examples:
-
-```typescript
-// ❌ SLOP: Describes the obvious
-// Function to get the current user
-async function getCurrentUser(id: string) { ... }
-
-// ✅ VALID: Explains "why"
-// Using Map instead of Object for O(1) deletion during cleanup
-const cache = new Map<string, CacheEntry>();
-
-// ✅ VALID: JSDoc for API
-/**
- * Retrieves user by ID.
- * @throws {NotFoundError} When user doesn't exist
- */
-async function getUser(id: string): Promise<User> { ... }
+```
+// SLOP: // Function to get user
+// VALID: // Using Map for O(1) deletion during cleanup
 ```
 
-#### 2. Emojis
+#### Emojis
 
-**Location determines validity:**
+| Location                   | Action   |
+| -------------------------- | -------- |
+| UI strings, CLI indicators | Preserve |
+| Markdown, user messages    | Preserve |
+| Variable/function names    | Flag     |
+| Decorative comments        | Evaluate |
 
-| Location                        | Action      |
-| ------------------------------- | ----------- |
-| UI strings / user messages      | ✅ Preserve |
-| CLI logs (✅❌⚠️ as indicators) | ✅ Preserve |
-| Markdown / documentation        | ✅ Preserve |
-| Config files (existing pattern) | ✅ Preserve |
-| Variable / function names       | ❌ Flag     |
-| Decorative comments             | ⚠️ Evaluate |
+#### Excessive Validations
 
-Examples:
+| Context                               | Action   |
+| ------------------------------------- | -------- |
+| External input (API, user data)       | Preserve |
+| Critical path defense                 | Preserve |
+| Type already guarantees (typed param) | Flag     |
 
-```typescript
-// ✅ VALID: CLI output indicators
-console.log("✅ Build completed successfully");
-
-// ✅ VALID: User-facing messages
-throw new UserError("⚠️ Your session has expired.");
+```
+// SLOP: function process(user: User) { if (!user) throw... }
+// VALID: const data = parseInput(raw); if (!data.event) throw...
 ```
 
-#### 3. Excessive Validations
+#### Type Escape Hatches
 
-**Flag if:**
+| Context                           | Action   |
+| --------------------------------- | -------- |
+| Library with incorrect types      | Preserve |
+| Documented escape hatch with TODO | Preserve |
+| Cast to silence compiler          | Flag     |
 
-- Validation duplicates what type system already guarantees
-- Check is unreachable due to TypeScript narrowing
-
-**Preserve if:**
-
-- Protects against external input (APIs, user data, files)
-- Runtime boundary (data from JSON.parse, fetch, etc.)
-- Explicit defensive programming for critical paths
-
-Examples:
-
-```typescript
-// ❌ SLOP: Type already guarantees existence
-function processUser(user: User) {
-  if (!user) throw new Error("User is required");
-  if (!user.id) throw new Error("User ID is required");
-}
-
-// ✅ VALID: External input boundary
-async function handleWebhook(req: Request) {
-  const body = await req.json();
-  if (!body || typeof body.event !== "string") {
-    throw new BadRequestError("Invalid webhook payload");
-  }
-}
-
-// ✅ VALID: Critical path defense
-function processPayment(amount: number) {
-  // Defense against floating point issues
-  if (!Number.isFinite(amount) || amount < 0) {
-    throw new ValidationError("Invalid payment amount");
-  }
-}
-```
-
-#### 4. Casts to `any`
-
-**Flag if:**
-
-- Cast exists only to silence compiler errors
-- Proper typing is feasible with minimal effort
-
-**Preserve if:**
-
-- External library has incorrect/missing types
-- Intentional escape hatch with explanatory comment
-- Migration in progress (documented TODO)
-
-Examples:
-
-```typescript
-// ❌ SLOP: Cast to silence compiler
-const data = response.body as any;
-const name = data.user.name;
-
-// ✅ VALID: Library with incorrect types
-// @ts-expect-error: library types missing optional callback
-externalLib.init(config, onReady);
-
-// ✅ VALID: Documented escape hatch
-// Using any: thirdPartySDK returns untyped legacy format
-// TODO(#456): Remove when SDK v3 migration complete
-const legacyData = sdk.getData() as any;
-```
-
-### Report Format
-
-Return findings in this EXACT format:
+### Output Format
 
 ```
 ## Slop Detection Report
 
 ### Findings
-
-**file.ts**
+**file.ext**
 - Line N: [Category] Description
-- Line M: [Category] Description
-
-**other-file.ts**
-✅ No issues
 
 ### Summary
-- Files analyzed: N
-- Issues found: M
-- Categories: comments (X), validations (Y), casts (Z), emojis (W)
+- Files: N | Issues: M
+- Categories: comments (X), validations (Y), type escapes (Z), emojis (W)
 ```
 
-### Rules
-
-- Read files to analyze content—do NOT guess
-- Flag with justification
-- Preserve existing file style
-- Do NOT fix anything—report only
-- When ambiguous, note for user review instead of flagging
+**Rules:** Read files—do NOT guess. Flag with justification. Ambiguous? Note for user review. Do NOT fix—report only.
 ````
 
 ---
 
 ## Consolidation
 
-After BOTH subagents complete, consolidate their reports:
+After BOTH subagents complete:
 
 ```
 ## Pre-Commit Analysis
 
 ### Quality Gate
-[Insert Quality Gate subagent report]
+[Insert report]
 
 ### Slop Detection
-[Insert Slop Detection subagent report]
+[Insert report]
 
 ### Action Plan
 
-**Priority 1 - Blocking:**
-1. [Error from Quality Gate]
-2. ...
-
-**Priority 2 - Recommended:**
-1. [Slop finding]
-2. ...
-
-**Priority 3 - Optional:**
-1. [Minor issues]
-2. ...
+**Priority 1 - Blocking:** [Quality Gate errors]
+**Priority 2 - Recommended:** [Slop findings]
+**Priority 3 - Optional:** [Minor issues]
 
 ---
 Proceed with corrections? (yes/no)
@@ -291,28 +161,15 @@ Proceed with corrections? (yes/no)
 
 If user confirms:
 
-1. Create TodoWrite with prioritized correction plan
-2. Fix Priority 1 items first
-3. Re-run Quality Gate (delegate to subagent again)
-4. If passing, fix Priority 2 items
-5. Re-run both phases to verify
+1. Create TodoWrite with prioritized plan
+2. Fix Priority 1 -> re-run Quality Gate
+3. Fix Priority 2 -> re-run both phases
 
 ---
 
 ## Rules
 
-**Failure modes:**
-
-- Running phases sequentially → loses parallelism benefit
-- Fixing without reporting → user loses visibility
-- Incomplete subagent prompts → subagent lacks context
-
-**Mandatory:**
-
-- ALWAYS delegate using Task tool with `subagent_type="general"`
-- ALWAYS launch BOTH tasks in a SINGLE message (parallel execution)
-- ALWAYS include complete file list in each subagent prompt
-- ALWAYS include ALL criteria in Slop Detection prompt
-- ALWAYS wait for BOTH subagents before consolidating
-- ALWAYS present consolidated report BEFORE any fixes
+- ALWAYS present consolidated report BEFORE fixes
 - NEVER fix without user confirmation
+
+**Anti-patterns:** Sequential task execution, fixing without report, incomplete subagent prompts.
