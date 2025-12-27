@@ -21,13 +21,6 @@
       "headers": {
         "x-ref-api-key": "{env:REF_API_KEY}"
       }
-    },
-    "zread": {
-      "type": "remote",
-      "url": "https://api.z.ai/api/mcp/zread/mcp",
-      "headers": {
-        "Authorization": "Bearer {env:Z_AI_API_KEY}"
-      }
     }
   },
   "plugin": ["@franlol/opencode-md-table-formatter"],
@@ -59,7 +52,7 @@
       "chown *": "deny",
       "format *": "deny",
       "fdisk *": "deny",
-      "dd *": "deny",
+      "dd *": "deny"
     }
   },
   "keybinds": {

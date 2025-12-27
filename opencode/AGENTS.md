@@ -53,14 +53,11 @@ BEFORE considering a task completed, verify:
 - The quality gate passes correctly
 - There is no dead or commented code
 
-## Preferences
+## MCP
 
-### MCP
-
-| MCP     | When to use it                                                                                                                                                                      |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ref`   | Official documentation for APIs, SDKs, and libraries. Use it BEFORE implementing or debugging instead of guessing; always consult `ref` first for APIs.                             |
-| `zread` | Open source repository knowledge: search docs, issues, PRs, get repo structure, and read files from GitHub repos. Use to understand projects, troubleshoot, or analyze source code. |
+| MCP   | When to use it                                                                                                                                          |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ref` | Official documentation for APIs, SDKs, and libraries. Use it BEFORE implementing or debugging instead of guessing; always consult `ref` first for APIs. |
 
 ## Code Principles
 
