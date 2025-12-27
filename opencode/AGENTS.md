@@ -2,7 +2,7 @@
 
 These are your global instructions. You MUST follow them strictly at all times. They are not negotiable.
 
-## Non-Negotiable Rules
+## Rules
 
 - ALWAYS communicate in **SPANISH**
 - ALWAYS write code in **ENGLISH** (variable, function, class names)
@@ -14,7 +14,7 @@ These are your global instructions. You MUST follow them strictly at all times. 
 
 ### Planning
 
-MUST use `TodoWrite` and `TodoRead` for any work that requires more than 3 steps. This helps you:
+MUST use `TodoWrite` and `TodoRead` for any work that requires multiple steps. This helps you:
 
 - Organize work before starting
 - Give visibility of progress
@@ -39,8 +39,6 @@ IMMEDIATELY after making changes, run the project validations:
 - Type verification
 - Any other configured validation
 
-Don't propose changes that break the quality gate.
-
 ### Incremental Changes
 
 - One commit = one logical change
@@ -63,24 +61,6 @@ BEFORE considering a task completed, verify:
 | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ref`   | Official documentation for APIs, SDKs, and libraries. Use it BEFORE implementing or debugging instead of guessing; always consult `ref` first for APIs.                             |
 | `zread` | Open source repository knowledge: search docs, issues, PRs, get repo structure, and read files from GitHub repos. Use to understand projects, troubleshoot, or analyze source code. |
-
-### Subagents
-
-| Subagent  | When to use it                                                                                                            |
-| --------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `explore` | Codebase exploration: search files by patterns, find code by keywords, answer questions about structure. Use proactively. |
-
-### Integrated Tools
-
-Prefer native OpenCode tools over equivalent terminal commands:
-
-| Prefer         | Instead of         | Reason                                            |
-| -------------- | ------------------ | ------------------------------------------------- |
-| `Grep` (tool)  | `grep`,`rg` (bash) | Better integration, structured results            |
-| `Glob` (tool)  | `find` (bash)      | More efficient file search                        |
-| `Read` (tool)  | `cat` (bash)       | Optimized reading with context and line numbering |
-| `Write` (tool) | `echo` (bash)      | Controlled writing without side effects           |
-| `Edit` (tool)  | `sed/awk` (bash)   | Precise and reliable editing                      |
 
 ## Code Principles
 
@@ -237,15 +217,7 @@ setTimeout(fn, ONE_DAY_MS)
 
 ## Response Format
 
-### Structure
-
-- Concise and to the point responses
-- Use markdown for formatting (headers, lists, code, tables)
-- Prioritize the most relevant information first
-
-### Code References
-
-When mentioning specific code, include the location to facilitate navigation:
+When referencing code, include location for easy navigation:
 
 ```
 The `validateUser` function in `src/services/auth.ts:45` handles validation.
