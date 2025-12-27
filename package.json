@@ -6,8 +6,8 @@
   "scripts": {
     "setup": "bun run src/installer.ts",
     "test": "bun test",
-    "check": "biome check . && prettier --check .",
-    "format": "biome check --write . && prettier --write .",
+    "check": "biome lint . && prettier --check .",
+    "format": "prettier --write . && biome lint --write .",
     "typecheck": "tsc --noEmit",
     "prepare": "husky"
   },
@@ -22,11 +22,11 @@
     "typescript": "^5"
   },
   "lint-staged": {
-    "*.{ts,js}": [
-      "biome check --write --no-errors-on-unmatched"
-    ],
-    "*.md": [
+    "*.{ts,js,json,jsonc,md}": [
       "prettier --write"
+    ],
+    "*.{ts,js}": [
+      "biome lint --write --no-errors-on-unmatched"
     ]
   },
   "dependencies": {

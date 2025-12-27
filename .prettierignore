@@ -1,12 +1,3 @@
-# Prettier only formats Markdown in this project
-# Biome handles TS/JS/JSON
-
-# Ignore everything except .md files
-*.ts
-*.js
-*.json
-*.jsonc
-
 # Dependencies
 node_modules/
 

@@ -6,38 +6,38 @@
   "agent": {
     "explore": { "disable": true },
     "plan": {
-      "permission": { "edit": "deny" }
+      "permission": { "edit": "deny" },
     },
     "build": {
-      "permission": { "edit": "allow" }
+      "permission": { "edit": "allow" },
     },
     "search": {
       "description": "Fast codebase search. Use for finding files, patterns, or code locations.",
       "mode": "subagent",
       "model": "github-copilot/gemini-3-flash-preview",
       "prompt": "{file:./prompt/search.md}",
-      "permission": { "edit": "deny" }
+      "permission": { "edit": "deny" },
     },
     "oracle": {
       "description": "Expert consultant for complex reasoning, code review, and second opinions. Use when facing difficult problems that benefit from deeper analysis.",
       "mode": "subagent",
       "model": "github-copilot/gpt-5.1",
       "prompt": "{file:./prompt/oracle.md}",
-      "permission": { "edit": "deny" }
-    }
+      "permission": { "edit": "deny" },
+    },
   },
   "mcp": {
     "ref": {
       "type": "remote",
       "url": "https://api.ref.tools/mcp",
       "headers": {
-        "x-ref-api-key": "{env:REF_API_KEY}"
-      }
+        "x-ref-api-key": "{env:REF_API_KEY}",
+      },
     },
     "context7": {
       "type": "remote",
-      "url": "https://mcp.context7.com/mcp"
-    }
+      "url": "https://mcp.context7.com/mcp",
+    },
   },
   "plugin": ["@franlol/opencode-md-table-formatter"],
   "permission": {
@@ -68,8 +68,8 @@
       "chown *": "deny",
       "format *": "deny",
       "fdisk *": "deny",
-      "dd *": "deny"
-    }
+      "dd *": "deny",
+    },
   },
   "keybinds": {
     "input_clear": "ctrl+d",
@@ -78,6 +78,6 @@
     "model_list": "shift+tab",
     "command_list": "f2",
     "terminal_suspend": "none",
-    "model_cycle_recent": "none"
-  }
+    "model_cycle_recent": "none",
+  },
 }
