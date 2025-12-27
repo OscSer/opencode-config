@@ -228,46 +228,73 @@ Conformity to universal patterns and norms.
 
 ## Validation Checklist
 
-Use this checklist to evaluate prompts. A prompt is **complete** when ALL required criteria pass.
+Use this checklist to evaluate prompts. Score each criterion, sum the points, and determine the verdict.
 
-### Required Criteria (Must Pass)
+### Required Criteria
 
-| #   | Criterion                                                                   | Question to Ask                                       |
-| --- | --------------------------------------------------------------------------- | ----------------------------------------------------- |
-| 1   | **Clear task** — ONE unambiguous primary objective                          | Can you state the goal in one sentence?               |
-| 2   | **Actionable** — Executable without clarifying questions                    | Can the model start immediately without asking "how"? |
-| 3   | **Output format** — Expected response structure specified or obvious        | Is it clear what the output should look like?         |
-| 4   | **No ambiguity** — Key terms defined, no room for interpretation            | Could two people interpret this differently?          |
-| 5   | **Appropriate scope** — Not too broad, not unnecessarily narrow             | Is the task focused but complete?                     |
-| 6   | **Token efficient** — No redundant content, each section justifies its cost | Does every paragraph earn its tokens?                 |
+| #   | Criterion             | Description                                              | 0 pts | 1 pt | 2 pts |
+| --- | --------------------- | -------------------------------------------------------- | ----- | ---- | ----- |
+| 1   | **Clear task**        | ONE unambiguous primary objective                        | Fails | Weak | Pass  |
+| 2   | **Actionable**        | Executable without clarifying questions                  | Fails | Weak | Pass  |
+| 3   | **Output format**     | Expected response structure specified or obvious         | Fails | Weak | Pass  |
+| 4   | **No ambiguity**      | Key terms defined, no room for interpretation            | Fails | Weak | Pass  |
+| 5   | **Appropriate scope** | Not too broad, not unnecessarily narrow                  | Fails | Weak | Pass  |
+| 6   | **Token efficient**   | No redundant content, each section justifies its cost    | Fails | Weak | Pass  |
+| 7   | **Type-specific**     | Meets requirements for its prompt type (see table below) | Fails | Weak | Pass  |
 
-### Quality Enhancements (Optional)
+### Type-Specific Requirements (Criterion #7)
 
-Pursue these ONLY AFTER all required criteria pass:
-
-| Enhancement              | Add when...                                         |
-| ------------------------ | --------------------------------------------------- |
-| Few-shot examples        | Outputs are inconsistent despite clear instructions |
-| Chain-of-thought         | Task requires multi-step reasoning or complex logic |
-| Constraints / guardrails | Edge cases are causing failures                     |
-| System context / role    | Persona or expertise level improves output quality  |
-| Persuasion principles    | Critical practices need stronger compliance         |
-
-### Type-Specific Checks
-
-After passing the 6 required criteria, verify type-specific requirements:
-
-| Prompt Type       | Additional Check                                          |
+| Prompt Type       | Requirement                                               |
 | ----------------- | --------------------------------------------------------- |
 | **System prompt** | Defines persistent role, expertise, and constraints       |
-| **Command**       | Specifies task, parameters, and expected behavior         |
+| **Command**       | Specifies trigger, parameters, and expected behavior      |
 | **Agent**         | Defines scope of autonomy and decision boundaries         |
 | **Skill**         | Provides actionable guidance, not just reference material |
 
 ### Verdict
 
-- **✅ COMPLETE**: All 6 required criteria pass + type-specific checks pass
-- **⚠️ ENHANCE**: All required pass, but quality issues persist → add enhancements from table above
-- **❌ INCOMPLETE**: One or more required criteria fail → fix before proceeding
+| Score | Verdict           | Description               |
+| ----- | ----------------- | ------------------------- |
+| 0-5   | **❌ INCOMPLETE** | Fundamental criteria fail |
+| 6-9   | **⚠️ IMPROVE**    | Functional but weak       |
+| 10-12 | **✅ COMPLETE**   | Production-ready          |
+| 13-14 | **⭐ EXEMPLARY**  | Reference-quality         |
 
-When evaluating a prompt, explicitly state the verdict and list any failing criteria.
+### Quality Enhancements (Conditional)
+
+Do NOT suggest enhancements if score ≥ 10.
+
+Only suggest enhancements if ALL conditions are met:
+
+1. Score is 6-9
+2. You observed a SPECIFIC failure (not hypothetical)
+3. The enhancement directly addresses that observed failure
+
+| Enhancement              | ONLY suggest if you observed...                |
+| ------------------------ | ---------------------------------------------- |
+| Few-shot examples        | Actual inconsistent outputs in testing         |
+| Chain-of-thought         | Wrong answers on multi-step reasoning problems |
+| Constraints / guardrails | Actual edge case failures                      |
+| System context / role    | Output quality degraded without persona        |
+| Persuasion principles    | Non-compliance with critical instructions      |
+
+### Evaluation Output Format
+
+```
+## Prompt Evaluation
+
+| Criterion         | Score | Notes |
+| ----------------- | ----- | ----- |
+| Clear task        | X/2   | ...   |
+| Actionable        | X/2   | ...   |
+| Output format     | X/2   | ...   |
+| No ambiguity      | X/2   | ...   |
+| Appropriate scope | X/2   | ...   |
+| Token efficient   | X/2   | ...   |
+| Type-specific     | X/2   | ...   |
+
+**Total: X/14**
+**Verdict: [INCOMPLETE|IMPROVE|COMPLETE|EXEMPLARY]**
+
+[If score < 10: List specific issues to fix]
+```
