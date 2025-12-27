@@ -60,9 +60,6 @@
       "format *": "deny",
       "fdisk *": "deny",
       "dd *": "deny",
-      // Force use of native tools
-      "find *": "deny",
-      "cat *": "deny"
     }
   },
   "keybinds": {
