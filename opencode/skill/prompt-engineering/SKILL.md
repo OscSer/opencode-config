@@ -262,13 +262,10 @@ Use this checklist to evaluate prompts. Score each criterion, sum the points, an
 
 ### Quality Enhancements (Conditional)
 
-Do NOT suggest enhancements if score ≥ 10.
+Only suggest enhancements if these conditions are met:
 
-Only suggest enhancements if ALL conditions are met:
-
-1. Score is 6-9
-2. You observed a SPECIFIC failure (not hypothetical)
-3. The enhancement directly addresses that observed failure
+1. You observed a SPECIFIC failure (not hypothetical)
+2. The enhancement directly addresses that observed failure
 
 | Enhancement              | ONLY suggest if you observed...                |
 | ------------------------ | ---------------------------------------------- |
@@ -296,5 +293,4 @@ Only suggest enhancements if ALL conditions are met:
 **Total: X/14**
 **Verdict: [INCOMPLETE|IMPROVE|COMPLETE|EXEMPLARY]**
 
-[If score < 10: List specific issues to fix]
 ```
