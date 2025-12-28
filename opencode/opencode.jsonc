@@ -4,27 +4,13 @@
   "small_model": "github-copilot/gpt-5-mini",
   "default_agent": "plan",
   "agent": {
-    "explore": { "disable": true },
     "plan": {
       "permission": { "edit": "deny" },
     },
     "build": {
       "permission": { "edit": "allow" },
     },
-    "search": {
-      "description": "Codebase search. Use for finding files, patterns, or understanding how something is implemented.",
-      "mode": "subagent",
-      "model": "github-copilot/gpt-5-mini",
-      "prompt": "{file:./prompt/search.md}",
-      "permission": { "edit": "deny" },
-    },
-    "oracle": {
-      "description": "Expert consultant for complex reasoning, code review, and second opinions. Use when facing problems that benefit from deeper analysis.",
-      "mode": "subagent",
-      "model": "github-copilot/gpt-5.2",
-      "prompt": "{file:./prompt/oracle.md}",
-      "permission": { "edit": "deny" },
-    },
+    "explore": { "disable": true },
   },
   "mcp": {
     "ref": {
