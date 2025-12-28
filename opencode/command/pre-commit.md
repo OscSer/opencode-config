@@ -1,7 +1,5 @@
 ---
-description: Run quality gate and detect AI-generated code slop
-agent: general
-model: github-copilot/gemini-3-flash-preview
+description: Run quality gate and detect AI-generated slop
 ---
 
 ## Overview
