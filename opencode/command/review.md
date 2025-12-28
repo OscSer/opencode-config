@@ -95,9 +95,13 @@ If no `Input` and no pending changes → respond "No changes to review" and stop
 
 Use these to inform your review:
 
-- **search agent** - Find how existing code handles similar problems. Check patterns, conventions, and prior art before claiming something doesn't fit.
-- **context7/codesearch** - Verify correct usage of libraries/APIs before flagging something as wrong.
-- **websearch** - Research best practices if you're unsure about a pattern.
+- **oracle agent**: Request a second opinion on complex logic, edge cases you're uncertain about, or architectural concerns. Use when:
+  - You're unsure if something is actually a bug
+  - The logic is complex and requires step-by-step reasoning
+  - There are architectural trade-offs to evaluate
+- **search agent**: Find how existing code handles similar problems. Check patterns, conventions, and prior art before claiming something doesn't fit.
+- **context7/codesearch**: Verify correct usage of libraries/APIs before flagging something as wrong.
+- **websearch**: Research best practices if you're unsure about a pattern.
 
 If you're uncertain about something and can't verify it with these tools, say "I'm not sure about X" rather than flagging it as a definite issue.
 
