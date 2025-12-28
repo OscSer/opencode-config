@@ -1,7 +1,7 @@
 ---
 description: Generate conventional commit messages
 agent: general
-model: github-copilot/gpt-5-mini
+model: github-copilot/gemini-3-flash-preview
 ---
 
 ## Constraint

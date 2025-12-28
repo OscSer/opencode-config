@@ -1,7 +1,7 @@
 ---
 description: Codebase search. Use for finding files, patterns, or understanding how something is implemented.
 mode: subagent
-model: github-copilot/gpt-5-mini
+model: github-copilot/gemini-3-flash-preview
 permission:
   edit: deny
 ---
