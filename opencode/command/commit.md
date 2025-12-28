@@ -1,6 +1,6 @@
 ---
 description: Generate conventional commit messages
-agent: build
+agent: general
 model: github-copilot/gemini-3-flash-preview
 ---
 
