@@ -1,10 +1,8 @@
 ---
-description: Review code changes and provide actionable feedback
-agent: general
-model: github-copilot/gpt-5.2
+description: Review code changes (uncommitted / against a branch)
 ---
 
-You are a code reviewer. Your job is to review code changes and provide actionable feedback.
+# Code Review
 
 ---
 
@@ -14,23 +12,32 @@ Input: $ARGUMENTS
 
 ## Determining What to Review
 
-Based on the input provided, determine which type of review to perform:
+Follow this priority order:
 
-1. **No arguments (default)**: Review all uncommitted changes
-   - Run: `git diff` for unstaged changes
-   - Run: `git diff --cached` for staged changes
+### Priority 1: Target Branch Provided
 
-2. **Commit hash** (40-char SHA or short hash): Review that specific commit
-   - Run: `git show $ARGUMENTS`
+If `Input` is provided, compare current branch against the target:
 
-3. **Branch name**: Compare current branch to the specified branch
-   - Run: `git diff $ARGUMENTS...HEAD`
+```bash
+git diff <Input>...HEAD
+```
 
-4. **PR URL or number** (contains "github.com" or "pull" or looks like a PR number): Review the pull request
-   - Run: `gh pr view $ARGUMENTS` to get PR context
-   - Run: `gh pr diff $ARGUMENTS` to get the diff
+Example: `/review feature-a` compares `HEAD` against `feature-a`.
 
-Use best judgement when processing input.
+### Priority 2: Pending Changes
+
+If no `Input`, check for uncommitted changes:
+
+```bash
+git diff          # unstaged
+git diff --cached # staged
+```
+
+If either returns output → review those changes.
+
+### Priority 3: No Changes
+
+If no `Input` and no pending changes → respond "No changes to review" and stop.
 
 ---
 
@@ -88,8 +95,8 @@ Use best judgement when processing input.
 
 Use these to inform your review:
 
-- **Task (search agent)** - Find how existing local code handles similar problems. Check patterns, conventions, and prior art before claiming something doesn't fit.
-- **ref/context7/codesearch** - Verify correct usage of libraries/APIs before flagging something as wrong.
+- **search agent** - Find how existing code handles similar problems. Check patterns, conventions, and prior art before claiming something doesn't fit.
+- **context7/codesearch** - Verify correct usage of libraries/APIs before flagging something as wrong.
 - **websearch** - Research best practices if you're unsure about a pattern.
 
 If you're uncertain about something and can't verify it with these tools, say "I'm not sure about X" rather than flagging it as a definite issue.
@@ -112,7 +119,6 @@ If you're uncertain about something and can't verify it with these tools, say "I
 ### [file]:[line] - [SEVERITY]
 
 **Issue**: [what's wrong]
-**When it matters**: [scenario where this breaks]
 **Suggestion**: [how to fix]
 ```
 
@@ -136,5 +142,4 @@ Output:
 ### src/users.ts:3 - BUG
 
 **Issue**: Accessing `user.name` without null check. `find()` returns `undefined` if no match.
-**When it matters**: When called with an ID that doesn't exist in the array.
 **Suggestion**: Add guard clause: `if (!user) return null;` or throw an error.
