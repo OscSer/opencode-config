@@ -1,12 +1,12 @@
 ---
 description: Generate conventional commit messages
 agent: general
-model: github-copilot/gemini-3-flash-preview
+model: github-copilot/gpt-5-mini
 ---
 
 ## Constraint
 
-The ONLY command you can execute is `git commit -m "<message>"`. No other commands. No `git add`. No `git push`. No exceptions.
+The ONLY command you can execute is `git commit -m "<message>"`. No other commands. No `git add|push|status|etc`. No `&& <other command>`. No exceptions.
 
 ## Context
 
