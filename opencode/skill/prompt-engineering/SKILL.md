@@ -47,7 +47,68 @@ Think step by step:
 Bug: "Users can't save drafts after the cache update deployed yesterday"
 ```
 
-### 3. Prompt Optimization
+### 3. Tree of Thoughts (ToT)
+
+Extends Chain-of-Thought by exploring multiple reasoning paths in parallel, like a decision tree. The model generates several candidate solutions, evaluates each branch, and can backtrack when a path leads to a dead end. Use for problems with multiple valid approaches where the optimal solution isn't immediately clear—puzzles, planning tasks, or complex architectural decisions. Outperforms CoT on tasks requiring exploration and deliberation.
+
+**Example:**
+
+```markdown
+Design a caching strategy for our API. Explore 3 different approaches:
+
+For each approach:
+
+1. Describe the strategy
+2. List pros and cons
+3. Identify potential failure modes
+4. Rate feasibility (1-10)
+
+After exploring all paths:
+
+- Compare the approaches
+- Select the best option with justification
+- If none are satisfactory, backtrack and consider hybrid solutions
+```
+
+### 4. Self-Consistency
+
+Sample multiple reasoning paths for the same problem and select the most frequent answer through "voting". Instead of relying on a single greedy response, generate 5-10 diverse solutions and aggregate results. Significantly improves accuracy on math (+17% on GSM8K), logic, and reasoning tasks. Trade-off: higher token cost for higher reliability.
+
+**Example:**
+
+```markdown
+Solve this problem 5 times using different reasoning approaches.
+After all attempts, report the most common answer.
+
+Problem: "A store has 50 items. 30% are on sale. Of those on sale,
+half are discounted by 20% and half by 40%. How many items have
+a 40% discount?"
+
+Attempt 1: [solve]
+Attempt 2: [solve differently]
+...
+Final answer: [most frequent result]
+```
+
+### 5. ReAct (Reasoning + Acting)
+
+Combines chain-of-thought reasoning with action execution in an iterative loop. The model: (1) Reasons about the current state, (2) Decides on an action (tool use, search, API call), (3) Observes the result, (4) Repeats until task completion. Essential for agents that interact with external tools, databases, or APIs. Grounds reasoning in real-world feedback.
+
+**Example:**
+
+```markdown
+Task: Find the current stock price of Apple and calculate if it's
+above its 52-week average.
+
+Format your response as:
+Thought: [reasoning about what to do next]
+Action: [tool to use and parameters]
+Observation: [result from the action]
+... (repeat as needed)
+Final Answer: [conclusion based on gathered information]
+```
+
+### 6. Prompt Optimization
 
 Start simple, measure performance, iterate. Test on diverse inputs including edge cases.
 
@@ -57,7 +118,7 @@ V2: "Summarize in 3 bullet points" → Better structure
 V3: "Identify 3 main findings, then summarize each" → Consistent, accurate
 ```
 
-### 4. Template Systems
+### 7. Template Systems
 
 Build reusable prompt structures with variables. Reduces duplication, ensures consistency.
 
@@ -66,7 +127,7 @@ template = "Review this {language} code for {focus_area}. Code: {code_block}"
 prompt = template.format(language="Python", focus_area="security", code_block=user_code)
 ```
 
-### 5. System Prompt Design
+### 8. System Prompt Design
 
 Set global behavior and constraints that persist across the conversation. Define the model's role, expertise level, output format, and safety guidelines. Use system prompts for stable instructions that shouldn't change turn-to-turn, freeing up user message tokens for variable content.
 
@@ -206,12 +267,12 @@ Reference universal patterns.
 
 ### Type-Specific Requirements
 
-| Prompt Type       | Requirement                                         |
-| ----------------- | --------------------------------------------------- |
-| **System prompt** | Defines persistent role, expertise, and constraints |
-| **Command**       | Specifies trigger, parameters, and behavior         |
-| **Agent**         | Defines scope of autonomy and decision boundaries   |
-| **Skill**         | Actionable guidance, not just reference material    |
+| Prompt Type       | Requirement                                                           |
+| ----------------- | --------------------------------------------------------------------- |
+| **System Prompt** | Defines persistent role, expertise, and constraints                   |
+| **Command**       | Specifies trigger, parameters, and behavior                           |
+| **Agent**         | Defines autonomy scope, decision boundaries, and ReAct loop if needed |
+| **Skill**         | Actionable guidance, not just reference material                      |
 
 ### Verdict
 
@@ -224,13 +285,16 @@ Reference universal patterns.
 
 ### Enhancements (Only if Observed)
 
-| Enhancement       | Only if you observed...                   |
-| ----------------- | ----------------------------------------- |
-| Few-shot examples | Inconsistent outputs                      |
-| Chain-of-thought  | Wrong multi-step reasoning                |
-| Constraints       | Edge case failures                        |
-| Role/persona      | Quality degraded without context          |
-| Persuasion        | Non-compliance with critical instructions |
+| Enhancement       | Only if you observed...                         |
+| ----------------- | ----------------------------------------------- |
+| Few-shot examples | Inconsistent outputs                            |
+| Chain-of-thought  | Wrong multi-step reasoning                      |
+| Tree of Thoughts  | CoT fails on problems requiring exploration     |
+| Self-Consistency  | High variance in answers, need reliability      |
+| ReAct             | Task requires external tools or real-world data |
+| Constraints       | Edge case failures                              |
+| Role/persona      | Quality degraded without context                |
+| Persuasion        | Non-compliance with critical instructions       |
 
 ### Output Format
 
