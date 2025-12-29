@@ -8,7 +8,7 @@ model: opencode/grok-code
 
 - If user provided arguments, prioritize that context in the message.
 - If there are no staged changes, inform the user. Do NOT attempt to stage files.
-- The ONLY command you can execute is `git commit -m "<message>"`. No other commands. No `git add|push|status|etc`. No `&& <other command>`. No exceptions.
+- The ONLY command you can execute is `git commit -m "<message>"`. No other commands. No `&& <other command>`. No exceptions.
 
 ## Context
 

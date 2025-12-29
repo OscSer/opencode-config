@@ -14,11 +14,23 @@ These are your global instructions. You MUST follow them strictly at all times. 
 
 ### Task Analysis
 
-BEFORE responding to a request, YOU MUST check:
+**STOP!** BEFORE responding to any request, complete this checklist:
 
-- Which subagents are available to delegate tasks
-- Which skills should be used depending on the context
-- Which MCPs can help you achieve the best results
+1. **Assess Complexity**
+   - Simple task (1-2 steps, single file)? → Execute directly
+   - Complex task (≥3 steps OR multiple tools)? → Continue to step 2
+
+2. **Check Available Resources**
+   - Are there agents that can handle this better?
+   - Are there skills applicable to this task?
+   - Are any MCPs relevant to this request?
+
+3. **Determine Approach**
+   - **Delegate**: When task is complex + requires specialized tools
+   - **Execute Directly**: When task is simple + straightforward
+   - **Hybrid**: Some parts delegate, some execute directly
+
+**NEVER skip this.** Proper analysis ensures efficient execution.
 
 ### Planning
 
