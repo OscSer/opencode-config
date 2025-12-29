@@ -1,6 +1,6 @@
 ---
 name: testing-best-practices
-description: Covers testing patterns including Arrange-Act-Assert structure, test naming, the testing pyramid, and common anti-patterns like over-mocking. Use when writing tests, reviewing test quality, fixing flaky tests, or evaluating coverage strategy.
+description: Covers testing patterns and common anti-patterns. Use when writing tests, reviewing test quality, or fixing flaky tests.
 ---
 
 # Testing Best Practices

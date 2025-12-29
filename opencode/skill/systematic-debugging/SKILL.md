@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: Guides through four-phase debugging methodology (root cause investigation, pattern analysis, hypothesis testing, implementation). Use when encountering errors, test failures, or unexpected runtime behavior requiring systematic analysis.
+description: Systematic analysis for debugging. Use when encountering errors, bugs, or unexpected behaviors.
 ---
 
 # Systematic Debugging
@@ -16,14 +16,6 @@ NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST
 ```
 
 If you haven't completed Phase 1, you cannot propose fixes.
-
-## Activation
-
-When you encounter an error, test failure, or unexpected behavior:
-
-1. STOP
-2. Announce: "Using systematic debugging methodology"
-3. Begin Phase 1
 
 ## The Four Phases
 

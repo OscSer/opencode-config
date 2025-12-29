@@ -1,6 +1,6 @@
 ---
 name: prompt-engineering
-description: Provides advanced prompt engineering techniques and system prompt design. Use when analyzing, writing, or improving prompts, system instructions, agent configurations, or LLM interaction patterns.
+description: Provides prompt engineering techniques. Use when working with AGENTS.md, SKILL.md, commands, agents/subagents, or any kind of prompt.
 ---
 
 # Prompt Engineering Patterns
