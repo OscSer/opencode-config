@@ -1,7 +1,7 @@
 ---
 description: Codebase search. Use for finding files, patterns, or understanding how something is implemented.
 mode: subagent
-model: github-copilot/gemini-3-flash-preview
+model: opencode/big-pickle
 permission:
   edit: deny
 ---
