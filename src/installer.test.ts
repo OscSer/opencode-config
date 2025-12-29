@@ -104,4 +104,97 @@ describe("installer", () => {
 
     expect(resolvedPath).toBeNull();
   });
+
+  it("should clean up broken symlinks after installation", async () => {
+    const repoDir = path.join(tmpDir, "repo");
+    const opencodeSourceDir = path.join(repoDir, "opencode");
+    await fs.mkdir(opencodeSourceDir, { recursive: true });
+
+    await fs.writeFile(path.join(opencodeSourceDir, "opencode.jsonc"), "config");
+    await fs.writeFile(path.join(opencodeSourceDir, "AGENTS.md"), "rules");
+
+    const targetDir = path.join(tmpDir, "opencode");
+    await fs.mkdir(targetDir, { recursive: true });
+
+    await fs.symlink("/nonexistent/path", path.join(targetDir, "broken-link.txt"));
+
+    const installer = new ConfigInstaller(repoDir, targetDir);
+
+    const success = await installer.installAll();
+
+    expect(success).toBe(true);
+
+    const brokenLinkExists = await fs
+      .lstat(path.join(targetDir, "broken-link.txt"))
+      .then(() => true)
+      .catch(() => false);
+
+    expect(brokenLinkExists).toBe(false);
+
+    const validLinkExists = await fs.lstat(path.join(targetDir, "opencode.jsonc"));
+    expect(validLinkExists.isSymbolicLink()).toBe(true);
+  });
+
+  it("should not remove valid symlinks during cleanup", async () => {
+    const repoDir = path.join(tmpDir, "repo");
+    const opencodeSourceDir = path.join(repoDir, "opencode");
+    await fs.mkdir(opencodeSourceDir, { recursive: true });
+
+    await fs.writeFile(path.join(opencodeSourceDir, "opencode.jsonc"), "config");
+
+    const targetDir = path.join(tmpDir, "opencode");
+    await fs.mkdir(targetDir, { recursive: true });
+
+    await fs.symlink(
+      path.join(opencodeSourceDir, "opencode.jsonc"),
+      path.join(targetDir, "valid-link.jsonc"),
+    );
+
+    const installer = new ConfigInstaller(repoDir, targetDir);
+
+    const success = await installer.installAll();
+
+    expect(success).toBe(true);
+
+    const validLinkExists = await fs.lstat(path.join(targetDir, "valid-link.jsonc"));
+    expect(validLinkExists.isSymbolicLink()).toBe(true);
+  });
+
+  it("should remove multiple broken symlinks", async () => {
+    const repoDir = path.join(tmpDir, "repo");
+    const opencodeSourceDir = path.join(repoDir, "opencode");
+    await fs.mkdir(opencodeSourceDir, { recursive: true });
+
+    await fs.writeFile(path.join(opencodeSourceDir, "opencode.jsonc"), "config");
+
+    const targetDir = path.join(tmpDir, "opencode");
+    await fs.mkdir(targetDir, { recursive: true });
+
+    await fs.symlink("/broken1", path.join(targetDir, "broken1.txt"));
+    await fs.symlink("/broken2", path.join(targetDir, "broken2.txt"));
+    await fs.symlink("/broken3", path.join(targetDir, "broken3.txt"));
+
+    const installer = new ConfigInstaller(repoDir, targetDir);
+
+    const success = await installer.installAll();
+
+    expect(success).toBe(true);
+
+    const broken1Exists = await fs
+      .lstat(path.join(targetDir, "broken1.txt"))
+      .then(() => true)
+      .catch(() => false);
+    const broken2Exists = await fs
+      .lstat(path.join(targetDir, "broken2.txt"))
+      .then(() => true)
+      .catch(() => false);
+    const broken3Exists = await fs
+      .lstat(path.join(targetDir, "broken3.txt"))
+      .then(() => true)
+      .catch(() => false);
+
+    expect(broken1Exists).toBe(false);
+    expect(broken2Exists).toBe(false);
+    expect(broken3Exists).toBe(false);
+  });
 });

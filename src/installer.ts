@@ -2,7 +2,7 @@ import { promises as fs } from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 
-import { createSymlink, validateSourcePath } from "./file-ops";
+import { createSymlink, isBrokenSymlink, validateSourcePath } from "./file-ops";
 import { InstallError } from "./types-def";
 
 const OPENCODE_SOURCE_DIR = "opencode";
@@ -40,6 +40,31 @@ export class ConfigInstaller {
     return assets;
   }
 
+  async cleanupBrokenSymlinks(): Promise<number> {
+    let removedCount = 0;
+
+    try {
+      const entries = await fs.readdir(this.opencodeDir, { withFileTypes: true });
+
+      for (const entry of entries) {
+        const targetPath = path.join(this.opencodeDir, entry.name);
+
+        if (entry.isSymbolicLink()) {
+          const isBroken = await isBrokenSymlink(targetPath);
+          if (isBroken) {
+            await fs.unlink(targetPath);
+            console.log(`🗑️  Removed broken symlink: ${entry.name}`);
+            removedCount++;
+          }
+        }
+      }
+    } catch {
+      // Directory might not exist yet
+    }
+
+    return removedCount;
+  }
+
   async installOpencode(): Promise<boolean> {
     console.log("Installing OpenCode configuration...");
 
@@ -56,6 +81,11 @@ export class ConfigInstaller {
         console.log(`Linking ${asset.source} to ${targetPath}...`);
         await createSymlink(sourcePath, targetPath);
         console.log(`✓ Linked ${asset.target}`);
+      }
+
+      const removedCount = await this.cleanupBrokenSymlinks();
+      if (removedCount > 0) {
+        console.log(`✓ Cleaned up ${removedCount} broken symlink(s)`);
       }
 
       return true;

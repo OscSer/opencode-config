@@ -30,6 +30,19 @@ export async function validateSourcePath(
   }
 }
 
+export async function isBrokenSymlink(targetPath: string): Promise<boolean> {
+  try {
+    const stat = await fs.lstat(targetPath);
+    if (!stat.isSymbolicLink()) {
+      return false;
+    }
+    await fs.stat(targetPath);
+    return false;
+  } catch {
+    return true;
+  }
+}
+
 export async function createSymlink(source: string, target: string): Promise<boolean> {
   try {
     const sourceStat = await fs.stat(source);
