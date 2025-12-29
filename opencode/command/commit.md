@@ -1,7 +1,7 @@
 ---
 description: Generate conventional commit messages
 agent: general
-model: opencode/big-pickle
+model: opencode/grok-code
 ---
 
 ## Constraints
