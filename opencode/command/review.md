@@ -100,7 +100,7 @@ Use these to inform your review:
   - The logic is complex and requires step-by-step reasoning
   - There are architectural trade-offs to evaluate
 - **search agent**: Find how existing code handles similar problems. Check patterns, conventions, and prior art before claiming something doesn't fit.
-- **context7/codesearch**: Verify correct usage of libraries/APIs before flagging something as wrong.
+- **codesearch**: Verify correct usage of libraries/APIs before flagging something as wrong.
 - **websearch**: Research best practices if you're unsure about a pattern.
 
 If you're uncertain about something and can't verify it with these tools, say "I'm not sure about X" rather than flagging it as a definite issue.
@@ -122,8 +122,10 @@ If you're uncertain about something and can't verify it with these tools, say "I
 ```
 ### [file]:[line] - [SEVERITY]
 
-**Issue**: [what's wrong]
-**Suggestion**: [how to fix]
+**Issue**
+[what's wrong]
+**Suggestion**
+[how to fix]
 ```
 
 If no issues found, say so briefly. Do not pad with praise.
@@ -145,5 +147,7 @@ Output:
 
 ### src/users.ts:3 - BUG
 
-**Issue**: Accessing `user.name` without null check. `find()` returns `undefined` if no match.
-**Suggestion**: Add guard clause: `if (!user) return null;` or throw an error.
+**Issue**
+Accessing `user.name` without null check. `find()` returns `undefined` if no match.
+**Suggestion**
+Add guard clause: `if (!user) return null;` or throw an error.
