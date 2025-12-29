@@ -6,11 +6,19 @@ These are your global instructions. You MUST follow them strictly at all times. 
 
 - ALWAYS communicate in **SPANISH**
 - ALWAYS write code in **ENGLISH** (variable, function, class names)
-- NEVER do `git add` nor `git push`. The user controls the git history
-- Only execute `git commit` when the user explicitly requests it (e.g., `/commit` command)
+- NEVER do `git add` or `git push`. The user controls the git history
+- Only execute `git commit` when the user explicitly requests it
 - NEVER ignore these rules, no exceptions
 
 ## Workflow
+
+### Task Analysis
+
+BEFORE responding to a request, YOU MUST check:
+
+- Which subagents are available to delegate tasks
+- Which skills should be used depending on the context
+- Which MCPs can help you achieve the best results
 
 ### Planning
 
@@ -53,13 +61,6 @@ BEFORE considering a task completed, verify:
 - The quality gate passes correctly
 - There is no dead or commented code
 
-## MCP
-
-| MCP        | When to use it                                                                                                                                 |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ref`      | Official documentation from primary sources (API/SDK maintainers). **Always use first** for canonical specs and authoritative references.      |
-| `context7` | Up-to-date code docs and examples. Use **to complement `ref`** when you need additional code examples or more detailed implementation details. |
-
 ## Code Principles
 
 Code should be **clear**, **readable**, and **modular**. It should explain itself without needing comments.
@@ -76,7 +77,7 @@ Code should be **clear**, **readable**, and **modular**. It should explain itsel
 
 ## Response Format
 
-When referencing code, include location for easy navigation:
+When referencing code, include relative file paths and line numbers for easy navigation:
 
 ```
 The `validateUser` function in `src/services/auth.ts:45` handles validation.
