@@ -26,19 +26,10 @@ opencode-config/
 └── AGENTS.md                       # This file (repo documentation)
 ```
 
-## Installation Script
-
-Run the installer:
+## Commands
 
 ```bash
-bun run setup
-```
-
-The installer automatically detects all files and directories in `opencode/` and links them to `~/.config/opencode/`.
-
-## Quality Gate
-
-```bash
+bun run setup # Install OpenCode configuration
 bun run check
 bun run typecheck
 bun test
@@ -53,6 +44,17 @@ The installer uses **automatic asset detection**. When adding new directories or
 3. No need to modify installer code
 
 Example: If you add `opencode/example/`, the installer will automatically link it to `~/.config/opencode/example/`.
+
+## Prompt Engineering
+
+When working with agent instruction files in the `opencode/` directory, you MUST load the `prompt-engineering` skill.
+
+Files that require this skill:
+
+- `opencode/AGENTS.md` - Global rules
+- `opencode/agent/*.md` - Subagent definitions
+- `opencode/command/*.md` - Custom commands
+- `opencode/skill/*.md` - Custom skills
 
 ## Tech Stack
 
