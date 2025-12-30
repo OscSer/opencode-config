@@ -20,6 +20,10 @@ BEFORE modifying existing code:
 2. Identify dependencies and possible side effects
 3. Verify if there are similar patterns in the project
 
+### Delegation to Agents
+
+ALWAYS support yourself and delegate tasks to the agents.
+
 ### Final Verification
 
 BEFORE considering a task completed, verify:
