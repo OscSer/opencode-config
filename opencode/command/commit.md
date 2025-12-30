@@ -1,7 +1,6 @@
 ---
 description: Generate conventional commit messages
 subtask: true
-model: opencode/grok-code
 ---
 
 ## Constraints
