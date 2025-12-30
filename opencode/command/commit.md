@@ -1,6 +1,6 @@
 ---
 description: Generate conventional commit messages
-agent: build
+subtask: true
 model: opencode/grok-code
 ---
 
@@ -121,6 +121,4 @@ git commit -m "<type>: <description>"
 git commit -m "<type>: <description>" -m "<body>"
 ```
 
-## Error Handling
-
-If the commit fails, report ONLY the cause of the error. Do NOT retry or suggest fixes.
+ONLY execute the command and NOTHING ELSE. exit silently after.
