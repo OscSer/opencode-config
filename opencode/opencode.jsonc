@@ -11,7 +11,7 @@
     "build": {
       "permission": { "edit": "allow" },
       // "model": "github-copilot/gemini-3-flash-preview",
-      "model": "opencode/minimax-m2.1-free",
+      "model": "opencode/glm-4.7-free",
     },
     "explore": { "disable": true },
   },
