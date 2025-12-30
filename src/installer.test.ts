@@ -66,7 +66,10 @@ describe("installer", () => {
     await fs.mkdir(opencodeSourceDir, { recursive: true });
 
     await fs.mkdir(path.join(opencodeSourceDir, "command"), { recursive: true });
-    await fs.writeFile(path.join(opencodeSourceDir, "command", "pre-commit.md"), "command content");
+    await fs.writeFile(
+      path.join(opencodeSourceDir, "command", "example-command.md"),
+      "command content",
+    );
     await fs.mkdir(path.join(opencodeSourceDir, "tool"), { recursive: true });
     await fs.writeFile(path.join(opencodeSourceDir, "tool", "example-tool.ts"), "tool content");
 
@@ -76,7 +79,7 @@ describe("installer", () => {
     await installer.installAll();
 
     const commandContent = await fs.readFile(
-      path.join(targetDir, "command", "pre-commit.md"),
+      path.join(targetDir, "command", "example-command.md"),
       "utf-8",
     );
     expect(commandContent).toBe("command content");

@@ -1,5 +1,5 @@
 ---
-description: Run quality gate and detect AI-generated slop
+description: Validate quality gate and AI slop on changed files.
 ---
 
 ## Overview
@@ -137,7 +137,7 @@ Analyze: {FILES}
 After BOTH subagents complete:
 
 ```
-## Pre-Commit Analysis
+## Validation Analysis
 
 ### Quality Gate
 [Insert report]
