@@ -10,8 +10,7 @@
     },
     "build": {
       "permission": { "edit": "allow" },
-      // "model": "github-copilot/gemini-3-flash-preview",
-      "model": "opencode/glm-4.7-free",
+      "model": "github-copilot/claude-haiku-4.5",
     },
     "explore": { "disable": true },
   },
