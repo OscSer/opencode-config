@@ -12,26 +12,29 @@ These are your global instructions. You MUST follow them strictly at all times. 
 
 ## Workflow
 
-### Investigate Before Changing
+**1. Plan Before Acting**
 
-BEFORE modifying existing code:
+- Think step-by-step about the problem
+- Break complex tasks into smaller, manageable steps
+- Identify dependencies between steps
 
-1. Understand the context and purpose of the current code
-2. Identify dependencies and possible side effects
-3. Verify if there are similar patterns in the project
+**2. Leverage Available Resources**
 
-### Delegation to Agents
-
-- ALWAYS delegate tasks to specialized agents
+- ALWAYS delegate complex tasks to specialized agents
+- Check if any available skills apply to the current task
 - Prefer delegation over direct tool calls for complex or multi-step tasks
 
-### Final Verification
+**3. Investigate Context**
 
-BEFORE considering a task completed, verify:
+- Understand the context and purpose of the current code
+- Identify dependencies and possible side effects
+- Verify if there are similar patterns in the project
 
-- The code follows the principles of this guide
-- The quality gate passes correctly
-- There is no dead or commented code
+**4. Final Verification**
+
+- Code meets the principles of this guide
+- All automated checks pass (tests, lint, typecheck, etc.)
+- No dead code or commented-out logic
 
 ## Code Principles
 
@@ -46,11 +49,3 @@ Code should be **clear**, **readable**, and **modular**. It should explain itsel
 | **Immutability**          | Create new structures, don't mutate        | `{...cart, items: [...cart.items, item]}`            |
 | **Comments explain why**  | Code explains what, comments explain why   | `// Rate limit: 100 req/min per API policy`          |
 | **Named constants**       | No magic numbers/strings                   | `MAX_RETRY_ATTEMPTS` not `3`                         |
-
-## Response Format
-
-When referencing code, include relative file paths and line numbers for easy navigation:
-
-```
-The `validateUser` function in `src/services/auth.ts:45` handles validation.
-```
