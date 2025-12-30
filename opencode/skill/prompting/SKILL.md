@@ -1,5 +1,5 @@
 ---
-name: prompt-engineering
+name: prompting
 description: Provides prompt engineering techniques. Use when working with AGENTS.md, SKILL.md, commands, agents/subagents, or any kind of prompt.
 ---
 

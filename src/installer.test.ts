@@ -68,10 +68,7 @@ describe("installer", () => {
     await fs.mkdir(path.join(opencodeSourceDir, "command"), { recursive: true });
     await fs.writeFile(path.join(opencodeSourceDir, "command", "pre-commit.md"), "command content");
     await fs.mkdir(path.join(opencodeSourceDir, "tool"), { recursive: true });
-    await fs.writeFile(
-      path.join(opencodeSourceDir, "tool", "prompt-engineering.ts"),
-      "tool content",
-    );
+    await fs.writeFile(path.join(opencodeSourceDir, "tool", "example-tool.ts"), "tool content");
 
     const targetDir = path.join(tmpDir, "opencode");
     const installer = new ConfigInstaller(repoDir, targetDir);
@@ -84,10 +81,7 @@ describe("installer", () => {
     );
     expect(commandContent).toBe("command content");
 
-    const toolContent = await fs.readFile(
-      path.join(targetDir, "tool", "prompt-engineering.ts"),
-      "utf-8",
-    );
+    const toolContent = await fs.readFile(path.join(targetDir, "tool", "example-tool.ts"), "utf-8");
     expect(toolContent).toBe("tool content");
   });
 
