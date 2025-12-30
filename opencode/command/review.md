@@ -48,6 +48,9 @@ If no `Input` and no pending changes → respond "No changes to review" and stop
 - Use the diff to identify which files changed
 - Read the full file to understand existing patterns, control flow, and error handling
 - Check for existing style guide or conventions files (CONVENTIONS.md, AGENTS.md, .editorconfig, etc.)
+- Search the codebase for similar implementations to confirm patterns and conventions before claiming something doesn’t fit.
+- Confirm correct usage by consulting authoritative documentation or reliable references before flagging something as wrong.
+- If you’re unsure about a pattern, cross-check with well-regarded guides and sources.
 
 ---
 
@@ -88,17 +91,6 @@ If no `Input` and no pending changes → respond "No changes to review" and stop
 - Some "violations" are acceptable when they're the simplest option. A `let` statement is fine if the alternative is convoluted.
 - Excessive nesting is a legitimate concern regardless of other style choices.
 - Don't flag style preferences as issues unless they clearly violate established project conventions.
-
----
-
-## Tools
-
-Use agents, skills or MCPs to support your conclusions if needed:
-
-- **Second opinion**: Request an additional review when logic is complex, unclear, or involves architectural trade-offs.
-- **Codebase prior art**: Search the codebase for similar implementations to confirm patterns and conventions before claiming something doesn’t fit.
-- **API/library references**: Confirm correct usage by consulting authoritative documentation or reliable references before flagging something as wrong.
-- **Best-practice research**: If you’re unsure about a pattern, cross-check with well-regarded guides and sources.
 
 If you're uncertain about something and can't verify it, say "I'm not sure about X" rather than flagging it as a definite issue.
 
