@@ -35,17 +35,6 @@ The installer uses **automatic asset detection**. When adding new directories or
 
 Example: If you add `opencode/example/`, the installer will automatically link it to `~/.config/opencode/example/`.
 
-## Prompt Engineering
-
-When working with agent instruction files in the `opencode/` directory, you MUST load the `prompt-engineering` skill.
-
-Files that require this skill:
-
-- `opencode/AGENTS.md` - Global rules
-- `opencode/agent/*.md` - Subagent definitions
-- `opencode/command/*.md` - Custom commands
-- `opencode/skill/*.md` - Custom skills
-
 ## Useful Links
 
 OpenCode: https://opencode.ai/docs
