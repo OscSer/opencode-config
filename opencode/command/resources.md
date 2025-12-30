@@ -10,8 +10,10 @@ $ARGUMENTS
 
 ## Instructions
 
-1. Consider load relevant skills for the request
-2. Consider subagents for delegation when task aligns with their specialization
-3. Consider available MCPs that may provide relevant tools
+Analyze the request and load appropriate resources:
 
-Address the request applying all loaded guidance. No matches? Proceed normally.
+1. Skills: Load skills that match the task domain
+2. Agents: Delegate to subagents when specialized expertise is needed
+3. MCPs: Use MCP tools when relevant
+
+Multiple resources can be combined. No matches? Proceed normally.
