@@ -1,5 +1,5 @@
 ---
-name: systematic-debugging
+name: debugging
 description: Systematic analysis for debugging. Use when encountering errors, bugs, or unexpected behaviors.
 ---
 
