@@ -6,8 +6,8 @@ These are your global instructions. You MUST follow them strictly at all times. 
 
 - ALWAYS communicate in **SPANISH**
 - ALWAYS write code in **ENGLISH** (variable, function, class names)
-- NEVER do `git add` or `git push`. The user controls the git history
-- Only execute `git commit` when the user explicitly requests it
+- ALWAYS respect the language of the file content
+- NEVER do `git add` or `git push`. ONLY execute `git commit` when the user explicitly requests it
 - NEVER ignore these rules, no exceptions
 
 ## Workflow
