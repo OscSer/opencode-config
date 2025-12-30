@@ -1,5 +1,5 @@
 ---
-description: Review code changes (uncommitted / against a branch)
+description: Review code changes
 ---
 
 # Code Review
@@ -14,9 +14,23 @@ $ARGUMENTS
 
 Follow this priority order:
 
-### Priority 1: Target Branch Provided
+### Priority 1: Pull Request Provided
 
-If `Input` is provided, compare current branch against the target:
+If `Input` matches PR format (`123` or `PR 123`), use GitHub CLI:
+
+```bash
+gh pr diff <PR_NUMBER>
+```
+
+Examples:
+
+- `/review 123` → `gh pr diff 123`
+- `/review PR 123` → `gh pr diff 123`
+- `/review pr/123` → `gh pr diff 123`
+
+### Priority 2: Target Branch Provided
+
+If `Input` is a branch name, compare current branch against the target:
 
 ```bash
 git diff <Input>...HEAD
@@ -24,7 +38,7 @@ git diff <Input>...HEAD
 
 Example: `/review feature-a` compares `HEAD` against `feature-a`.
 
-### Priority 2: Pending Changes
+### Priority 3: Pending Changes
 
 If no `Input`, check for uncommitted changes:
 
@@ -35,9 +49,24 @@ git diff --cached # staged
 
 If either returns output → review those changes.
 
-### Priority 3: No Changes
+### Priority 4: Compare Against Main
 
-If no `Input` and no pending changes → respond "No changes to review" and stop.
+If no `Input` and no pending changes → compare against main:
+
+```bash
+git diff main...HEAD
+```
+
+---
+
+## Scope Restriction
+
+**CRITICAL: Stay within the changed lines.**
+
+- Only review files and lines that appear in the diff
+- Do NOT critique or comment on code that was not modified
+- Do NOT suggest changes to unrelated files or functions
+- Reading full files is for context only—to understand the changed code's purpose and impact
 
 ---
 
@@ -48,9 +77,9 @@ If no `Input` and no pending changes → respond "No changes to review" and stop
 - Use the diff to identify which files changed
 - Read the full file to understand existing patterns, control flow, and error handling
 - Check for existing style guide or conventions files (CONVENTIONS.md, AGENTS.md, .editorconfig, etc.)
-- Search the codebase for similar implementations to confirm patterns and conventions before claiming something doesn’t fit.
+- Search the codebase for similar implementations to confirm patterns and conventions before claiming something doesn't fit.
 - Confirm correct usage by consulting authoritative documentation or reliable references before flagging something as wrong.
-- If you’re unsure about a pattern, cross-check with well-regarded guides and sources.
+- If you're unsure about a pattern, cross-check with well-regarded guides and sources.
 
 ---
 
