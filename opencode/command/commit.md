@@ -1,6 +1,6 @@
 ---
 description: Generate conventional commit messages
-agent: general
+agent: build
 model: opencode/grok-code
 ---
 
@@ -70,7 +70,7 @@ The commit message must reflect PURPOSE/INTENTION, not just describe what change
 **Format:**
 
 ```
-<type>: <description>
+<type>[scope]: <description>
 
 <body>  ← optional, only when needed
 ```
@@ -78,7 +78,6 @@ The commit message must reflect PURPOSE/INTENTION, not just describe what change
 **Rules:**
 
 - Lowercase type
-- Do NOT add the `[scope]` section
 - Description: concise, imperative ("add" not "added")
 - Description MUST include the purpose/intention (the "why")
 - English only
