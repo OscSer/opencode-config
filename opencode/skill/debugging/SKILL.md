@@ -1,6 +1,6 @@
 ---
 name: debugging
-description: Systematic analysis for debugging. Use when encountering errors, bugs, or unexpected behaviors.
+description: Find root causes systematically, not by guessing. Use when something doesn't work and quick fixes have failed.
 ---
 
 # Systematic Debugging

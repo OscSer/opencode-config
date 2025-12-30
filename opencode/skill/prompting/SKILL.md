@@ -1,6 +1,6 @@
 ---
 name: prompting
-description: Provides prompt engineering techniques. Use when working with AGENTS.md, SKILL.md, commands, agents/subagents, or any kind of prompt.
+description: Design effective prompts using proven LLM patterns. Use when crafting system prompts, commands, agents, or any prompt requiring predictable outputs.
 ---
 
 # Prompt Engineering Patterns

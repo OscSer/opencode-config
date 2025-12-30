@@ -1,6 +1,6 @@
 ---
 name: testing
-description: Framework for writing and reviewing tests. Use when creating new tests, reviewing test quality, or debugging flaky tests.
+description: Write reliable tests that catch bugs without slowing you down. Use when creating, reviewing, or fixing tests.
 ---
 
 # Testing
