@@ -4,11 +4,11 @@ description: Review code changes (uncommitted / against a branch)
 
 # Code Review
 
----
+User input:
 
-Input: $ARGUMENTS
-
----
+```text
+$ARGUMENTS
+```
 
 ## Determining What to Review
 
