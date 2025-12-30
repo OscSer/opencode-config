@@ -22,7 +22,8 @@ BEFORE modifying existing code:
 
 ### Delegation to Agents
 
-ALWAYS support yourself and delegate tasks to the agents.
+- ALWAYS delegate tasks to specialized agents
+- Prefer delegation over direct tool calls for complex or multi-step tasks
 
 ### Final Verification
 
