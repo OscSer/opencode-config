@@ -1,5 +1,5 @@
 ---
-description: Expert architect for design decisions, trade-off analysis, and system-level code review. Use for architectural questions and solution evaluation.
+description: Expert architect for design decisions and trade-off analysis. Use for architectural questions, comparing approaches, or evaluating solutions before implementation.
 mode: subagent
 model: github-copilot/gpt-5.2
 permission:

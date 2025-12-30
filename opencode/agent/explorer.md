@@ -1,5 +1,5 @@
 ---
-description: Intent-aware codebase search that synthesizes answers with evidence (paths/lines)
+description: Find code locations and patterns in the codebase. Use when you need to locate files, understand code flow, or answer 'where is X?' questions.
 mode: subagent
 model: opencode/grok-code
 permission:
