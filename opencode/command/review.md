@@ -12,54 +12,88 @@ $ARGUMENTS
 
 ## Determining What to Review
 
+**IMPORTANT: Group files into batches to avoid output truncation**
+
+- Instead of getting diffs all at once or file by file, group files into reasonable batches.
+- Skip irrelevant files like lock files or large binary files.
+
 Follow this priority order:
 
 ### Priority 1: Pull Request Provided
 
-If `Input` matches PR format (`123` or `PR 123`), use GitHub CLI:
+If input matches PR format, use GitHub CLI to get PR info, then use git diff:
 
 ```bash
-gh pr diff <PR_NUMBER>
+# Step 1: Get PR branch information
+gh pr view <PR_NUMBER> --json baseRefName,headRefName
+
+# Step 2: Fetch the branches
+git fetch origin <base_branch> <head_branch>
+
+# Step 3: Get list of changed files
+git diff --name-only origin/<base_branch>...origin/<head_branch>
+
+# Step 4: Get diff for files in batches
+git diff origin/<base_branch>...origin/<head_branch> -- <file1> <file2> ... <fileN>
+git diff origin/<base_branch>...origin/<head_branch> -- <fileN+1> <fileN+2> ...
+...
 ```
 
-Examples:
+Input examples:
 
-- `/review 123` → `gh pr diff 123`
-- `/review PR 123` → `gh pr diff 123`
-- `/review pr/123` → `gh pr diff 123`
+- `123`
+- `PR 123`
+- `pr/123`
 
 ### Priority 2: Target Branch Provided
 
-If `Input` is a branch name, compare current branch against the target:
+If input is a branch name, compare current branch against the provided branch:
 
 ```bash
-git diff <Input>...HEAD
+# Step 1: Fetch the target branch
+git fetch origin <branch>
+
+# Step 2: Get list of files
+git diff --name-only origin/<branch>...HEAD
+
+# Step 3: Get diff for files in batches
+git diff origin/<branch>...HEAD -- <file1> <file2> ... <fileN>
+git diff origin/<branch>...HEAD -- <fileN+1> <fileN+2> ...
+...
 ```
 
-Example: `/review feature-a` compares `HEAD` against `feature-a`.
+Input examples:
+
+- `develop`
+- `release/v1.2.3`
+- `feature/new-feature`
 
 ### Priority 3: Pending Changes
 
-If no `Input`, check for uncommitted changes:
+If no input, check for uncommitted changes:
 
 ```bash
-git diff          # unstaged
-git diff --cached # staged
+# Step 1: Get list of files
+git diff --name-only          # unstaged
+git diff --name-only --cached # staged
+
+# Step 2: Get diff for files in batches
+git diff -- <file1> <file2> ... <fileN>
+git diff --cached -- <fileM> <fileM+1> ...
+...
 ```
 
-If either returns output → review those changes.
+### Priority 4: No Changes
 
-### Priority 4: Compare Against Main
+If no input and no pending changes → inform:
 
-If no `Input` and no pending changes → compare against main:
-
-```bash
-git diff main...HEAD
+```
+No changes to review.
 ```
 
 ---
 
-## Scope Restriction
+## Scope and Verification
 
 **CRITICAL: Stay within the changed lines.**
 
@@ -68,13 +102,26 @@ git diff main...HEAD
 - Do NOT suggest changes to unrelated files or functions
 - Reading full files is for context only—to understand the changed code's purpose and impact
 
+**Verify before reporting.**
+
+- Don't flag something as a bug if you're unsure—investigate first
+- Don't invent hypothetical problems—if an edge case matters, explain the realistic scenario where it breaks
+- If you need more context to be sure, use the tools to get it
+- If you're uncertain about something and can't verify it, say "I'm not sure about X" rather than flagging it as a definite issue
+
+**Don't be a zealot about style.**
+
+- Verify the code is _actually_ in violation. Don't complain about else statements if early returns are already being used correctly.
+- Some "violations" are acceptable when they're the simplest option. A `let` statement is fine if the alternative is convoluted.
+- Excessive nesting is a legitimate concern regardless of other style choices.
+- Don't flag style preferences as issues unless they clearly violate established project conventions.
+
 ---
 
 ## Gathering Context
 
 **Diffs alone are not enough.** After getting the diff, read the entire file(s) being modified to understand the full context. Code that looks wrong in isolation may be correct given surrounding logic—and vice versa.
 
-- Use the diff to identify which files changed
 - Read the full file to understand existing patterns, control flow, and error handling
 - Check for existing style guide or conventions files (CONVENTIONS.md, AGENTS.md, .editorconfig, etc.)
 - Search the codebase for similar implementations to confirm patterns and conventions before claiming something doesn't fit.
@@ -103,25 +150,35 @@ git diff main...HEAD
 
 - O(n²) on unbounded data, N+1 queries, blocking I/O on hot paths
 
----
+**Slop** - AI-generated noise that dilutes code quality.
 
-## Before You Flag Something
+| Category                 | Flag                                         | Preserve                                  |
+| ------------------------ | -------------------------------------------- | ----------------------------------------- |
+| **Comments**             | Describes "what" code does, paraphrases name | JSDoc/docstrings, TODO with reason, "why" |
+| **Emojis**               | In variable/function names, decorative       | UI strings, CLI output, user messages     |
+| **Excessive validation** | Type already guarantees safety               | External input, API boundaries            |
+| **Type escapes**         | Cast to silence compiler                     | Library workaround with documented TODO   |
 
-**Verify before reporting.** If you're going to call something a bug, be confident it actually is one.
+Examples:
 
-- Only review the changes—do not review pre-existing code that wasn't modified
-- Don't flag something as a bug if you're unsure—investigate first
-- Don't invent hypothetical problems—if an edge case matters, explain the realistic scenario where it breaks
-- If you need more context to be sure, use the tools to get it
+```typescript
+// SLOP: Comment describes what
+// Function to get user by ID
+function getUserById(id: string) { ... }
 
-**Don't be a zealot about style.**
+// SLOP: Redundant validation (type guarantees non-null)
+function process(user: User) {
+  if (!user) throw new Error("User required");  // User type is not nullable
+}
 
-- Verify the code is _actually_ in violation. Don't complain about else statements if early returns are already being used correctly.
-- Some "violations" are acceptable when they're the simplest option. A `let` statement is fine if the alternative is convoluted.
-- Excessive nesting is a legitimate concern regardless of other style choices.
-- Don't flag style preferences as issues unless they clearly violate established project conventions.
+// VALID: Explains why
+// Using Map for O(1) deletion during batch cleanup
+const pending = new Map<string, Task>();
 
-If you're uncertain about something and can't verify it, say "I'm not sure about X" rather than flagging it as a definite issue.
+// VALID: External input boundary
+const data = parseInput(raw);
+if (!data.event) throw new Error("Missing event");
+```
 
 ---
 
@@ -134,19 +191,34 @@ If you're uncertain about something and can't verify it, say "I'm not sure about
 - **BUG**: Breaks functionality, causes errors, security vulnerability
 - **CONCERN**: Potential issue depending on context or edge cases
 - **STYLE**: Convention violation, readability issue
+- **SLOP**: AI-generated cruft that adds noise without value
 
-**Format each issue as**:
+**Format**:
 
 ```
-### [file]:[line] - [SEVERITY]
+## Summary
 
-**Issue**
-[what's wrong]
-**Suggestion**
-[how to fix]
+[BUG_COUNT] bug | [CONCERN_COUNT] concern | [SLOP_COUNT] slop | [STYLE_COUNT] style
+
+[Brief summary of the purpose of the changes]
+
+## Findings
+
+SEVERITY `[relative-path:line]`
+[issue description]
+[suggestion]
+
+SEVERITY `[relative-path:line]`
+[issue description]
+[suggestion]
+
+SEVERITY `[relative-path:line]`
+[issue description]
+[suggestion]
 ```
 
-If no issues found, say so briefly. Do not pad with praise.
+- Order findings by file.
+- If no issues found: "No issues found." Do not pad with praise.
 
 ---
 
@@ -163,9 +235,44 @@ Input diff:
 
 Output:
 
-### src/users.ts:3 - BUG
+## Summary
 
-**Issue**
+1 bug | 0 concern | 0 slop | 0 style
+
+Adds a function to retrieve user by ID from a users array.
+
+## Findings
+
+BUG `src/users.ts:3`
 Accessing `user.name` without null check. `find()` returns `undefined` if no match.
-**Suggestion**
 Add guard clause: `if (!user) return null;` or throw an error.
+
+---
+
+Input diff:
+
+```diff
++ // Function to process user data
++ function processUserData(user: User) {
++   if (!user) throw new Error("User is required");
++   return transform(user);
++ }
+```
+
+Output:
+
+## Summary
+
+0 bug | 0 concern | 2 slop | 0 style
+
+Adds a function to process and transform user data.
+
+## Findings
+
+SLOP `src/users.ts:1`
+Comment paraphrases function name. The name `processUserData` already conveys this.
+Remove the comment or explain _why_ this transformation is needed.
+
+SLOP `src/users.ts:3`
+Redundant null check. `User` type is not nullable—TypeScript already guarantees `user` exists.
+Remove the guard clause. If `User | null` is possible, fix the type instead.
