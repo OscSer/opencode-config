@@ -1,5 +1,5 @@
 ---
-description: Generate commit message
+description: Generate commit based on staged changes
 subtask: true
 ---
 
@@ -7,7 +7,8 @@ subtask: true
 
 - If user provided arguments, prioritize that context in the message.
 - If there are no staged changes, inform the user. Do NOT attempt to stage files.
-- The ONLY command you can execute is `git commit -m "<message>"`. No other commands. No `&& <other command>`. No exceptions.
+- You MUST execute the commit command using the Bash tool. Printing the message alone is NOT sufficient.
+- The ONLY command you can execute is `git commit`. No other commands are allowed. No exceptions.
 
 ## Context
 
@@ -108,6 +109,15 @@ Multiple concurrent requests could cause duplicate charges.
 
 ## Step 4: Execute Commit
 
+**CRITICAL: You MUST execute the git commit command using the Bash tool. DO NOT just print the message.**
+
+**Execution rules:**
+
+- Use the Bash tool to run the git commit command
+- NEVER use placeholder values or skip execution
+- Wait for the command to complete
+- After execution, verify success with a brief confirmation message
+
 **Without body:**
 
 ```bash
@@ -120,4 +130,7 @@ git commit -m "<type>: <description>"
 git commit -m "<type>: <description>" -m "<body>"
 ```
 
-ONLY execute the command and NOTHING ELSE. exit silently after.
+**Post-execution:**
+
+- If successful: Output "✓ Commit created successfully"
+- If failed: Report the error to the user
