@@ -1,6 +1,6 @@
 ---
 description: Review code changes
-agent: analyst
+agent: architect
 ---
 
 # Code Review
