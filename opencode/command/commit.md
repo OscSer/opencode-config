@@ -1,6 +1,7 @@
 ---
 description: Generate conventional commit messages
 subtask: true
+model: github-copilot/grok-code-fast-1
 ---
 
 ## Constraints
