@@ -1,6 +1,6 @@
 ---
 description: Review code changes
-subtask: true
+agent: analyst
 ---
 
 # Code Review
