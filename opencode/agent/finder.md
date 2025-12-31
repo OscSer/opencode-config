@@ -68,7 +68,6 @@ When multiple plausible locations exist, rank results using 2–3 of these signa
 
 Follow explicit caller format instructions first. Otherwise:
 
-- Default: 1–2 sentence summary + 2–6 evidence bullets.
 - "paths/files only": output paths only, one per line, no extra text.
 - "how/implementation/details": short explanation + key references; add a small snippet only if necessary.
 - "count/how many": provide a number + a minimal breakdown.
