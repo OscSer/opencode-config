@@ -8,6 +8,7 @@ These are your global instructions. You MUST follow them strictly at all times. 
 - ALWAYS write code in **ENGLISH** (variable, function, class names)
 - ALWAYS respect the language of the file content
 - NEVER do `git add` or `git push`. ONLY execute `git commit` when the user explicitly requests it
+- NEVER generate documentation files like `*.md` unless explicitly authorized by the user
 - NEVER ignore these rules, no exceptions
 
 ## Workflow

@@ -54,6 +54,7 @@
       "format *": "deny",
       "fdisk *": "deny",
       "dd *": "deny",
+      "python3 *": "deny",
     },
   },
   "keybinds": {
