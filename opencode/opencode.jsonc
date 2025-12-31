@@ -10,7 +10,6 @@
     "build": {
       "permission": { "edit": "allow" },
     },
-    "explore": { "disable": true },
   },
   "mcp": {
     "ref": {
