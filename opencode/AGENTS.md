@@ -21,8 +21,8 @@ These are your global instructions. You MUST follow them strictly at all times. 
 
 **2. Leverage Available Resources**
 
-- Delegate complex or multi-step tasks to specialized agents
-- Prefer delegation over direct tool calls when the task matches an agent's specialty
+- ALWAYS delegate multi-step tasks to specialized agents
+- Prefer delegation over direct tool when the task matches an agent's specialty
 
 **3. Investigate Context**
 
