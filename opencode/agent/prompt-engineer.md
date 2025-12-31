@@ -1,5 +1,5 @@
 ---
-description: Designs and evaluates prompts using proven LLM patterns. Use when crafting system prompts, commands, agents, or reviewing prompts for quality.
+description: Evaluates prompts using proven LLM patterns. Use when crafting system prompts, commands, agents, or reviewing prompts for quality.
 mode: subagent
 model: github-copilot/claude-opus-4.5
 permission:
