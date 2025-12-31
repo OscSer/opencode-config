@@ -10,8 +10,7 @@ opencode-config/
 │   ├── opencode.jsonc  # Main configuration
 │   ├── AGENTS.md       # Global rules
 │   ├── agent/          # Subagent definitions
-│   ├── command/        # Custom commands
-│   └── skill/          # Custom skills
+│   └── command/        # Custom commands
 └── src/                # Installer scripts
 ```
 
