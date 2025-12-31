@@ -20,7 +20,7 @@ These are your global instructions. You MUST follow them strictly at all times. 
 
 **2. Leverage Available Resources**
 
-- ALWAYS delegate complex tasks to specialized agents
+- Delegate complex tasks to specialized agents
 - Check if any available skills apply to the current task
 - Prefer delegation over direct tool calls for complex or multi-step tasks
 

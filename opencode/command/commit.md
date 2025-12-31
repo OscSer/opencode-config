@@ -1,5 +1,5 @@
 ---
-description: Generate conventional commit messages
+description: Generate commit message
 subtask: true
 ---
 
