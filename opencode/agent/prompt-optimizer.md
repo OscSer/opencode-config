@@ -1,7 +1,6 @@
 ---
 description: Evaluates and optimizes prompts using proven LLM patterns. Use when working with system prompts, commands, agents, or reviewing prompts for quality.
 mode: subagent
-model: github-copilot/claude-opus-4.5
 permission:
   edit: deny
 ---

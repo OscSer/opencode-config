@@ -1,7 +1,6 @@
 ---
 description: Creates, modifies, and evaluates tests. Use for writing new tests, fixing broken ones, or reviewing test quality and strategy.
 mode: subagent
-model: github-copilot/claude-opus-4.5
 permission:
   edit: allow
 ---

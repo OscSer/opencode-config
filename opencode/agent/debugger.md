@@ -1,7 +1,6 @@
 ---
 description: Systematic debugger that finds root causes through a 4-phase methodology. Use when something doesn't work.
 mode: subagent
-model: github-copilot/claude-opus-4.5
 permission:
   edit: deny
 ---
