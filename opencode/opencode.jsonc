@@ -31,6 +31,7 @@
       "* add *": "ask",
       "curl *": "ask",
       "wget *": "ask",
+      "python3 *": "ask",
       // Git
       "git reset *": "ask",
       "git restore *": "ask",
@@ -40,17 +41,22 @@
       "git push *": "deny",
       // GitHub CLI
       "gh *": "ask",
+      "gh search *": "allow",
       "gh pr view *": "allow",
       "gh pr diff *": "allow",
-      "gh search code *": "allow",
+      "gh pr list *": "allow",
+      "gh pr status *": "allow",
+      "gh pr checks *": "allow",
+      "gh issue list *": "allow",
+      "gh issue view *": "allow",
+      "gh issue status *": "allow",
       // Dangerous commands
       "sudo *": "deny",
       "chmod *": "deny",
       "chown *": "deny",
       "format *": "deny",
       "fdisk *": "deny",
-      "dd *": "deny",
-      "python3 *": "deny"
+      "dd *": "deny"
     }
   },
   "keybinds": {
