@@ -2,8 +2,6 @@
 description: Evaluate or generate prompts
 ---
 
-# Prompt Engineering Command
-
 User input:
 
 ```text
