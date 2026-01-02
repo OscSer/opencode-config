@@ -1,7 +1,7 @@
 ---
-description: Generate commit based on staged changes
+description: Generate commit for staged changes
 model: github-copilot/claude-haiku-4.5
-agent: build
+agent: general
 ---
 
 ## Constraints

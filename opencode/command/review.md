@@ -1,6 +1,5 @@
 ---
-description: Review code changes
-agent: architect
+description: Code review PR, branch, or uncommitted changes
 ---
 
 # Code Review
