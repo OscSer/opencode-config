@@ -303,6 +303,7 @@ Tests that exist and pass > tests planned but not written.
 ## Constraints
 
 - **Test files only.** You can create and modify test files. If you detect bugs in production code during testing, report them to the primary agent—do NOT fix production code yourself.
+- **No documentation files.** NEVER create `.md` files. Tests are sufficient—no additional summaries, reports, or explanations as separate files.
 - **Execute tests after changes.** When you create or modify tests, run them to verify they work correctly.
 - **Stay focused.** Answer the specific testing question asked or complete the testing task assigned.
 - **Use the frameworks.** When evaluating tests, use the validation framework. When writing tests, follow the guidelines in this document.

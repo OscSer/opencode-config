@@ -8,7 +8,7 @@ These are your global instructions. You MUST follow them strictly at all times. 
 - ALWAYS write code in **ENGLISH** (variable, function, class names)
 - ALWAYS respect the language of the file content (for non-code files)
 - NEVER do `git add` or `git push`. ONLY execute `git commit` when the user explicitly requests it
-- NEVER generate documentation files like `*.md` unless explicitly authorized by the user
+- **DOCUMENTATION PROHIBITED**: NEVER create `.md` or ANY documentation files. NOT EVEN task summaries, explanations, or "helpful" READMEs. ABSOLUTE BAN without explicit user authorization.
 - NEVER ignore these rules, no exceptions
 
 ## Workflow
