@@ -13,17 +13,25 @@ export class ConfigInstaller {
 
   constructor(repoDir?: string, opencodeDir?: string) {
     this.repoDir = repoDir || process.cwd();
-    this.opencodeDir = opencodeDir || path.join(os.homedir(), ".config", "opencode");
+    this.opencodeDir =
+      opencodeDir || path.join(os.homedir(), ".config", "opencode");
   }
 
-  async resolveSource(relative: string, isFile?: boolean): Promise<string | null> {
+  async resolveSource(
+    relative: string,
+    isFile?: boolean,
+  ): Promise<string | null> {
     return validateSourcePath(this.repoDir, relative, isFile);
   }
 
-  async getOpencodeAssets(): Promise<Array<{ source: string; target: string }>> {
+  async getOpencodeAssets(): Promise<
+    Array<{ source: string; target: string }>
+  > {
     const sourcePath = await this.resolveSource(OPENCODE_SOURCE_DIR, false);
     if (!sourcePath) {
-      throw new InstallError(`OpenCode source directory not found: ${OPENCODE_SOURCE_DIR}`);
+      throw new InstallError(
+        `OpenCode source directory not found: ${OPENCODE_SOURCE_DIR}`,
+      );
     }
 
     const assets: Array<{ source: string; target: string }> = [];
@@ -44,7 +52,9 @@ export class ConfigInstaller {
     let removedCount = 0;
 
     try {
-      const entries = await fs.readdir(this.opencodeDir, { withFileTypes: true });
+      const entries = await fs.readdir(this.opencodeDir, {
+        withFileTypes: true,
+      });
 
       for (const entry of entries) {
         const targetPath = path.join(this.opencodeDir, entry.name);
@@ -105,7 +115,9 @@ export class ConfigInstaller {
 
     if (!success) {
       console.log("");
-      console.log("⚠️ Installation failed. Check the output above for details.");
+      console.log(
+        "⚠️ Installation failed. Check the output above for details.",
+      );
       return false;
     }
 

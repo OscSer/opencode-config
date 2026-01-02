@@ -21,7 +21,10 @@ describe("installer", () => {
     const opencodeSourceDir = path.join(repoDir, "opencode");
     await fs.mkdir(opencodeSourceDir, { recursive: true });
 
-    await fs.writeFile(path.join(opencodeSourceDir, "opencode.jsonc"), "config");
+    await fs.writeFile(
+      path.join(opencodeSourceDir, "opencode.jsonc"),
+      "config",
+    );
     await fs.writeFile(path.join(opencodeSourceDir, "AGENTS.md"), "rules");
 
     const targetDir = path.join(tmpDir, "opencode");
@@ -43,7 +46,9 @@ describe("installer", () => {
     const opencodeSourceDir = path.join(repoDir, "opencode");
     await fs.mkdir(opencodeSourceDir, { recursive: true });
 
-    await fs.mkdir(path.join(opencodeSourceDir, "command"), { recursive: true });
+    await fs.mkdir(path.join(opencodeSourceDir, "command"), {
+      recursive: true,
+    });
     await fs.mkdir(path.join(opencodeSourceDir, "tool"), { recursive: true });
 
     const targetDir = path.join(tmpDir, "opencode");
@@ -65,13 +70,18 @@ describe("installer", () => {
     const opencodeSourceDir = path.join(repoDir, "opencode");
     await fs.mkdir(opencodeSourceDir, { recursive: true });
 
-    await fs.mkdir(path.join(opencodeSourceDir, "command"), { recursive: true });
+    await fs.mkdir(path.join(opencodeSourceDir, "command"), {
+      recursive: true,
+    });
     await fs.writeFile(
       path.join(opencodeSourceDir, "command", "example-command.md"),
       "command content",
     );
     await fs.mkdir(path.join(opencodeSourceDir, "tool"), { recursive: true });
-    await fs.writeFile(path.join(opencodeSourceDir, "tool", "example-tool.ts"), "tool content");
+    await fs.writeFile(
+      path.join(opencodeSourceDir, "tool", "example-tool.ts"),
+      "tool content",
+    );
 
     const targetDir = path.join(tmpDir, "opencode");
     const installer = new ConfigInstaller(repoDir, targetDir);
@@ -84,7 +94,10 @@ describe("installer", () => {
     );
     expect(commandContent).toBe("command content");
 
-    const toolContent = await fs.readFile(path.join(targetDir, "tool", "example-tool.ts"), "utf-8");
+    const toolContent = await fs.readFile(
+      path.join(targetDir, "tool", "example-tool.ts"),
+      "utf-8",
+    );
     expect(toolContent).toBe("tool content");
   });
 
@@ -107,7 +120,10 @@ describe("installer", () => {
     await fs.mkdir(opencodeSourceDir, { recursive: true });
 
     for (let i = 1; i <= 5; i++) {
-      await fs.writeFile(path.join(opencodeSourceDir, `file${i}.txt`), `content${i}`);
+      await fs.writeFile(
+        path.join(opencodeSourceDir, `file${i}.txt`),
+        `content${i}`,
+      );
     }
 
     const targetDir = path.join(tmpDir, "opencode");
@@ -174,11 +190,19 @@ describe("installer", () => {
       const opencodeSourceDir = path.join(repoDir, "opencode");
       await fs.mkdir(opencodeSourceDir, { recursive: true });
 
-      await fs.writeFile(path.join(opencodeSourceDir, "config.jsonc"), "config");
+      await fs.writeFile(
+        path.join(opencodeSourceDir, "config.jsonc"),
+        "config",
+      );
       await fs.writeFile(path.join(opencodeSourceDir, "AGENTS.md"), "agents");
-      await fs.mkdir(path.join(opencodeSourceDir, "commands"), { recursive: true });
+      await fs.mkdir(path.join(opencodeSourceDir, "commands"), {
+        recursive: true,
+      });
 
-      const installer = new ConfigInstaller(repoDir, path.join(tmpDir, "target"));
+      const installer = new ConfigInstaller(
+        repoDir,
+        path.join(tmpDir, "target"),
+      );
       const assets = await installer.getOpencodeAssets();
 
       expect(assets.length).toBe(3);
@@ -193,7 +217,10 @@ describe("installer", () => {
       const opencodeSourceDir = path.join(repoDir, "opencode");
       await fs.mkdir(opencodeSourceDir, { recursive: true });
 
-      const installer = new ConfigInstaller(repoDir, path.join(tmpDir, "target"));
+      const installer = new ConfigInstaller(
+        repoDir,
+        path.join(tmpDir, "target"),
+      );
       const assets = await installer.getOpencodeAssets();
 
       expect(assets).toEqual([]);
@@ -203,7 +230,10 @@ describe("installer", () => {
       const repoDir = path.join(tmpDir, "repo");
       await fs.mkdir(repoDir, { recursive: true });
 
-      const installer = new ConfigInstaller(repoDir, path.join(tmpDir, "target"));
+      const installer = new ConfigInstaller(
+        repoDir,
+        path.join(tmpDir, "target"),
+      );
 
       await expect(installer.getOpencodeAssets()).rejects.toThrow(
         "OpenCode source directory not found: opencode",
@@ -216,11 +246,19 @@ describe("installer", () => {
       await fs.mkdir(opencodeSourceDir, { recursive: true });
 
       // Create nested structure
-      await fs.mkdir(path.join(opencodeSourceDir, "skill", "testing"), { recursive: true });
-      await fs.writeFile(path.join(opencodeSourceDir, "skill", "testing", "SKILL.md"), "skill");
+      await fs.mkdir(path.join(opencodeSourceDir, "skill", "testing"), {
+        recursive: true,
+      });
+      await fs.writeFile(
+        path.join(opencodeSourceDir, "skill", "testing", "SKILL.md"),
+        "skill",
+      );
       await fs.writeFile(path.join(opencodeSourceDir, "AGENTS.md"), "agents");
 
-      const installer = new ConfigInstaller(repoDir, path.join(tmpDir, "target"));
+      const installer = new ConfigInstaller(
+        repoDir,
+        path.join(tmpDir, "target"),
+      );
       const assets = await installer.getOpencodeAssets();
 
       expect(assets.length).toBe(2);
@@ -235,13 +273,19 @@ describe("installer", () => {
     const opencodeSourceDir = path.join(repoDir, "opencode");
     await fs.mkdir(opencodeSourceDir, { recursive: true });
 
-    await fs.writeFile(path.join(opencodeSourceDir, "opencode.jsonc"), "config");
+    await fs.writeFile(
+      path.join(opencodeSourceDir, "opencode.jsonc"),
+      "config",
+    );
     await fs.writeFile(path.join(opencodeSourceDir, "AGENTS.md"), "rules");
 
     const targetDir = path.join(tmpDir, "opencode");
     await fs.mkdir(targetDir, { recursive: true });
 
-    await fs.symlink("/nonexistent/path", path.join(targetDir, "broken-link.txt"));
+    await fs.symlink(
+      "/nonexistent/path",
+      path.join(targetDir, "broken-link.txt"),
+    );
 
     const installer = new ConfigInstaller(repoDir, targetDir);
 
@@ -256,7 +300,9 @@ describe("installer", () => {
 
     expect(brokenLinkExists).toBe(false);
 
-    const validLinkExists = await fs.lstat(path.join(targetDir, "opencode.jsonc"));
+    const validLinkExists = await fs.lstat(
+      path.join(targetDir, "opencode.jsonc"),
+    );
     expect(validLinkExists.isSymbolicLink()).toBe(true);
   });
 
@@ -265,7 +311,10 @@ describe("installer", () => {
     const opencodeSourceDir = path.join(repoDir, "opencode");
     await fs.mkdir(opencodeSourceDir, { recursive: true });
 
-    await fs.writeFile(path.join(opencodeSourceDir, "opencode.jsonc"), "config");
+    await fs.writeFile(
+      path.join(opencodeSourceDir, "opencode.jsonc"),
+      "config",
+    );
 
     const targetDir = path.join(tmpDir, "opencode");
     await fs.mkdir(targetDir, { recursive: true });
@@ -281,7 +330,9 @@ describe("installer", () => {
 
     expect(success).toBe(true);
 
-    const validLinkExists = await fs.lstat(path.join(targetDir, "valid-link.jsonc"));
+    const validLinkExists = await fs.lstat(
+      path.join(targetDir, "valid-link.jsonc"),
+    );
     expect(validLinkExists.isSymbolicLink()).toBe(true);
   });
 
@@ -308,7 +359,10 @@ describe("installer", () => {
     const opencodeSourceDir = path.join(repoDir, "opencode");
     await fs.mkdir(opencodeSourceDir, { recursive: true });
 
-    await fs.writeFile(path.join(opencodeSourceDir, "opencode.jsonc"), "config");
+    await fs.writeFile(
+      path.join(opencodeSourceDir, "opencode.jsonc"),
+      "config",
+    );
 
     const targetDir = path.join(tmpDir, "opencode");
     await fs.mkdir(targetDir, { recursive: true });
@@ -326,11 +380,15 @@ describe("installer", () => {
     expect(success).toBe(true);
 
     // Valid symlink should still exist
-    const validLinkExists = await fs.lstat(path.join(targetDir, "existing-valid.jsonc"));
+    const validLinkExists = await fs.lstat(
+      path.join(targetDir, "existing-valid.jsonc"),
+    );
     expect(validLinkExists.isSymbolicLink()).toBe(true);
 
     // New symlink should be created
-    const newLinkExists = await fs.lstat(path.join(targetDir, "opencode.jsonc"));
+    const newLinkExists = await fs.lstat(
+      path.join(targetDir, "opencode.jsonc"),
+    );
     expect(newLinkExists.isSymbolicLink()).toBe(true);
   });
 
@@ -339,7 +397,10 @@ describe("installer", () => {
     const opencodeSourceDir = path.join(repoDir, "opencode");
     await fs.mkdir(opencodeSourceDir, { recursive: true });
 
-    await fs.writeFile(path.join(opencodeSourceDir, "opencode.jsonc"), "config");
+    await fs.writeFile(
+      path.join(opencodeSourceDir, "opencode.jsonc"),
+      "config",
+    );
 
     const targetDir = path.join(tmpDir, "opencode");
     await fs.mkdir(targetDir, { recursive: true });
@@ -369,8 +430,14 @@ describe("installer", () => {
     const opencodeSourceDir = path.join(repoDir, "opencode");
     await fs.mkdir(opencodeSourceDir, { recursive: true });
 
-    await fs.writeFile(path.join(opencodeSourceDir, "opencode.jsonc"), "config content");
-    await fs.writeFile(path.join(opencodeSourceDir, "AGENTS.md"), "agents content");
+    await fs.writeFile(
+      path.join(opencodeSourceDir, "opencode.jsonc"),
+      "config content",
+    );
+    await fs.writeFile(
+      path.join(opencodeSourceDir, "AGENTS.md"),
+      "agents content",
+    );
 
     const targetDir = path.join(tmpDir, "opencode");
     const installer = new ConfigInstaller(repoDir, targetDir);
@@ -390,7 +457,10 @@ describe("installer", () => {
     expect(stats.agents.isSymbolicLink()).toBe(true);
 
     // Verify content is still accessible after second run
-    const jsoncContent = await fs.readFile(path.join(targetDir, "opencode.jsonc"), "utf-8");
+    const jsoncContent = await fs.readFile(
+      path.join(targetDir, "opencode.jsonc"),
+      "utf-8",
+    );
     expect(jsoncContent).toBe("config content");
   });
 });

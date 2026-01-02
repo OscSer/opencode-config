@@ -25,7 +25,9 @@ export async function validateSourcePath(
 
     return fullPath;
   } catch {
-    console.warn(`Warning: ${relativePath} not found in repository, skipping...`);
+    console.warn(
+      `Warning: ${relativePath} not found in repository, skipping...`,
+    );
     return null;
   }
 }
@@ -43,7 +45,10 @@ export async function isBrokenSymlink(targetPath: string): Promise<boolean> {
   }
 }
 
-export async function createSymlink(source: string, target: string): Promise<boolean> {
+export async function createSymlink(
+  source: string,
+  target: string,
+): Promise<boolean> {
   try {
     const sourceStat = await fs.stat(source);
 

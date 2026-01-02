@@ -5,22 +5,25 @@
   "default_agent": "plan",
   "agent": {
     "plan": {
-      "permission": { "edit": "deny" }
+      "permission": { "edit": "deny" },
     },
     "build": {
-      "permission": { "edit": "allow" }
+      "permission": { "edit": "allow" },
     },
     "explore": {
-      "model": "github-copilot/claude-haiku-4.5"
-    }
+      "model": "github-copilot/claude-haiku-4.5",
+    },
   },
   "mcp": {
     "context7": {
       "type": "remote",
-      "url": "https://mcp.context7.com/mcp"
-    }
+      "url": "https://mcp.context7.com/mcp",
+    },
   },
-  "plugin": ["@franlol/opencode-md-table-formatter", "opencode-supermemory@latest"],
+  "plugin": [
+    "@franlol/opencode-md-table-formatter",
+    "opencode-supermemory@latest",
+  ],
   "permission": {
     "webfetch": "allow",
     "bash": {
@@ -57,8 +60,8 @@
       "chown *": "deny",
       "format *": "deny",
       "fdisk *": "deny",
-      "dd *": "deny"
-    }
+      "dd *": "deny",
+    },
   },
   "keybinds": {
     "input_clear": "ctrl+d",
@@ -67,6 +70,6 @@
     "model_list": "shift+tab",
     "command_list": "f2",
     "terminal_suspend": "none",
-    "model_cycle_recent": "none"
-  }
+    "model_cycle_recent": "none",
+  },
 }

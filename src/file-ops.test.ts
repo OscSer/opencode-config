@@ -194,7 +194,10 @@ describe("file-ops", () => {
       expect(path.resolve(linkTarget)).toBe(path.resolve(sourceDir));
 
       // Verify directory content is accessible through symlink
-      const content = await fs.readFile(path.join(targetPath, "file.txt"), "utf-8");
+      const content = await fs.readFile(
+        path.join(targetPath, "file.txt"),
+        "utf-8",
+      );
       expect(content).toBe("content");
     });
 
@@ -202,14 +205,18 @@ describe("file-ops", () => {
       const sourcePath = path.join(tmpDir, "missing.txt");
       const targetPath = path.join(tmpDir, "link.txt");
 
-      await expect(createSymlink(sourcePath, targetPath)).rejects.toBeInstanceOf(SymlinkError);
+      await expect(
+        createSymlink(sourcePath, targetPath),
+      ).rejects.toBeInstanceOf(SymlinkError);
     });
 
     it("should include source and target paths in error message", async () => {
       const sourcePath = path.join(tmpDir, "missing.txt");
       const targetPath = path.join(tmpDir, "link.txt");
 
-      await expect(createSymlink(sourcePath, targetPath)).rejects.toThrow(/missing\.txt/);
+      await expect(createSymlink(sourcePath, targetPath)).rejects.toThrow(
+        /missing\.txt/,
+      );
     });
 
     it("should replace broken symlink with valid one", async () => {
