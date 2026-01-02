@@ -22,12 +22,8 @@
     "typescript": "^5"
   },
   "lint-staged": {
-    "*.{ts,js,json,jsonc,md}": [
-      "prettier --write"
-    ],
-    "*.{ts,js}": [
-      "biome lint --write --no-errors-on-unmatched"
-    ]
+    "*.{ts,js,json,jsonc,md}": ["prettier --write"],
+    "*.{ts,js}": ["biome lint --write --no-errors-on-unmatched"]
   },
   "dependencies": {
     "@opencode-ai/plugin": "^1.0.184"

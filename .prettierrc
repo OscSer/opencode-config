@@ -8,9 +8,10 @@
   "proseWrap": "preserve",
   "overrides": [
     {
-      "files": ["*.jsonc"],
+      "files": ["*.json", "*.jsonc"],
       "options": {
-        "parser": "jsonc"
+        "parser": "jsonc",
+        "trailingComma": "none"
       }
     }
   ]
