@@ -5,26 +5,19 @@
   "default_agent": "plan",
   "agent": {
     "plan": {
-      "permission": { "edit": "deny" },
+      "permission": { "edit": "deny" }
     },
     "build": {
-      "permission": { "edit": "allow" },
-    },
+      "permission": { "edit": "allow" }
+    }
   },
   "mcp": {
-    "ref": {
-      "type": "remote",
-      "url": "https://api.ref.tools/mcp",
-      "headers": {
-        "x-ref-api-key": "{env:REF_API_KEY}",
-      },
-    },
     "context7": {
       "type": "remote",
-      "url": "https://mcp.context7.com/mcp",
-    },
+      "url": "https://mcp.context7.com/mcp"
+    }
   },
-  "plugin": ["@franlol/opencode-md-table-formatter"],
+  "plugin": ["@franlol/opencode-md-table-formatter", "opencode-supermemory@latest"],
   "permission": {
     "webfetch": "allow",
     "bash": {
@@ -54,8 +47,8 @@
       "format *": "deny",
       "fdisk *": "deny",
       "dd *": "deny",
-      "python3 *": "deny",
-    },
+      "python3 *": "deny"
+    }
   },
   "keybinds": {
     "input_clear": "ctrl+d",
@@ -64,6 +57,6 @@
     "model_list": "shift+tab",
     "command_list": "f2",
     "terminal_suspend": "none",
-    "model_cycle_recent": "none",
-  },
+    "model_cycle_recent": "none"
+  }
 }
