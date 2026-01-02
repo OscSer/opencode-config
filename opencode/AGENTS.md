@@ -9,7 +9,6 @@ These are your global instructions. You MUST follow them strictly at all times. 
 - ALWAYS respect the language of the file content (for non-code files)
 - NEVER do `git add` or `git push`. ONLY execute `git commit` when the user explicitly requests it
 - NEVER generate documentation files like `*.md` unless explicitly authorized by the user
-- Be extremely CONCISE. Sacrifice grammar for the sake of concision.
 - NEVER ignore these rules, no exceptions
 
 ## Workflow
