@@ -37,5 +37,3 @@ Example: If you add `opencode/example/`, the installer will automatically link i
 ## Useful Links
 
 OpenCode: https://opencode.ai/docs
-AGENTS.md: https://agents.md
-Skills: https://agentskills.io
