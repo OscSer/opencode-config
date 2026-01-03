@@ -4,7 +4,7 @@ Centralized configuration for [OpenCode](https://opencode.ai/docs).
 
 ## Usage
 
-```bash
+```
 bun run setup       # Install configuration
 bun run check       # Lint and format check
 bun run format      # Format code
