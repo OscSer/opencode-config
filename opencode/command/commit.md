@@ -56,15 +56,23 @@ $ARGUMENTS
 | `chore`    | Is this maintenance/tooling?                       |
 | `perf`     | Does this improve performance?                     |
 
-## Step 2: Understand the WHY
+## Step 2: Analyze Observable Changes
 
-Before selecting a type, answer:
+**CRITICAL: Only state what you can DIRECTLY observe in the diff. Never speculate.**
 
-1. **What problem does this solve?**
-2. **What benefit does it provide?**
-3. **What was the intention?** (the "why", not the "what")
+Before selecting a type, identify:
 
-The commit message must reflect PURPOSE/INTENTION, not just describe what changed.
+1. **What exactly changed?** (files, functions, values)
+2. **What is the observable effect?** (only if evident from code)
+3. **Is there context from user arguments?** (use it if provided)
+
+**Anti-speculation rule:**
+
+- If the diff shows `model: "gpt-4" → "claude-3"`, you know the model changed. You do NOT know why.
+- If the diff shows a bug fix with clear before/after behavior, describe the fix.
+- If the purpose is unclear, describe the change factually. Do NOT invent benefits.
+
+The commit message must reflect OBSERVABLE FACTS, not assumed intentions.
 
 ## Step 3: Generate Message
 
@@ -80,32 +88,38 @@ The commit message must reflect PURPOSE/INTENTION, not just describe what change
 
 - Lowercase type
 - Description: concise, imperative ("add" not "added")
-- Description MUST include the purpose/intention (the "why")
+- Description MUST be factual — only what the diff shows
+- NEVER assume benefits, reasons, or intentions not evident in the code
 - English only
 
 **Body rules (conditional):**
 
 - Add body ONLY when the "why" cannot fit in the description
-- Maximum 3 lines
 - Explain context, motivation, or consequences — not repeat the description
 - Separate from description with a blank line
 
 ### Message Quality
 
-**Bad vs Good:**
+**Bad (vague) vs Good (specific but factual):**
 
-- `chore: change model provider` → `chore: switch model for efficient task handling`
-- `fix: update handler` → `fix: correct user validation in auth handler`
-- `feat: add service` → `feat: implement background job processing`
-- `refactor: cleanup code` → `refactor: simplify authentication flow`
-- `test: add tests` → `test: cover error cases in payment module`
+- `chore: change model` → `chore: switch default model to claude-3`
+- `fix: update handler` → `fix: add null check in auth handler`
+- `feat: add service` → `feat: add job queue processor`
+- `refactor: cleanup code` → `refactor: extract validation logic to utils`
+- `test: add tests` → `test: add error cases for payment service`
 
-**With body (only when "why" cannot fit in description):**
+**Bad (speculation) — NEVER do this:**
+
+- `chore: switch model for better performance` ← you don't know this
+- `refactor: simplify code for maintainability` ← you're guessing
+- `fix: prevent security vulnerability` ← unless explicitly a security fix
+
+**With body (only when context is observable in code/comments):**
 
 ```
-fix: prevent race condition in payment processing
+fix: add mutex lock to payment handler
 
-Multiple concurrent requests could cause duplicate charges.
+Concurrent requests were causing duplicate charge entries.
 ```
 
 ## Step 4: Execute Commit
