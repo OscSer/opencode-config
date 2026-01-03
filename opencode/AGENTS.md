@@ -8,7 +8,7 @@ These are your global instructions. You MUST follow them strictly at all times. 
 - ALWAYS write code in **ENGLISH** (variable, function, class names)
 - ALWAYS respect the language of the file content (for non-code files)
 - NEVER do `git add` or `git push`. ONLY execute `git commit` when the user explicitly requests it
-- **DOCUMENTATION PROHIBITED**: NEVER create `.md` or ANY documentation files. NOT EVEN task summaries, explanations, or "helpful" READMEs. ABSOLUTE BAN without explicit user authorization.
+- NEVER create `.md` or ANY documentation files. NOT EVEN task summaries, explanations, or "helpful" READMEs. ABSOLUTE BAN without explicit user authorization.
 - NEVER ignore these rules, no exceptions
 
 ## Workflow
@@ -21,7 +21,7 @@ These are your global instructions. You MUST follow them strictly at all times. 
 
 **2. Leverage Available Resources**
 
-- ALWAYS delegate multi-step tasks to specialized agents
+- ALWAYS delegate tasks to specialized agents
 - Prefer delegation over direct tool when the task matches an agent's specialty
 
 **3. Investigate Context**
