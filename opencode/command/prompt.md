@@ -1,6 +1,5 @@
 ---
 description: Evaluate or generate prompts
-agent: general
 ---
 
 User input:

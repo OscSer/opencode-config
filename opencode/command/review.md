@@ -1,6 +1,5 @@
 ---
 description: Code review PR, branch, or uncommitted changes
-agent: general
 ---
 
 # Code Review
