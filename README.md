@@ -1,6 +1,6 @@
 # OpenCode Config
 
-Centralized configuration for [OpenCode](https://opencode.ai/docs).
+Centralized configuration for [OpenCode](https://opencode.ai/docs). Automatically syncs `opencode/` assets to `~/.config/opencode/`
 
 ## Usage
 
@@ -23,5 +23,3 @@ opencode/
 src/
 └── installer.ts    # Setup script
 ```
-
-Auto-detects and links new assets in `opencode/` → `~/.config/opencode/`
