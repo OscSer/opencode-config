@@ -198,23 +198,23 @@ if (!data.event) throw new Error("Missing event");
 ```
 ## Summary
 
-[BUG_COUNT] bug | [CONCERN_COUNT] concern | [SLOP_COUNT] slop | [STYLE_COUNT] style
+<BUG_COUNT> bug | <CONCERN_COUNT> concern | <SLOP_COUNT> slop | <STYLE_COUNT> style
 
-[Brief summary of the purpose of the changes]
+<Brief summary of the changes>
 
 ## Findings
 
-SEVERITY `[relative-path:line]`
-[issue description]
-[suggestion]
+<SEVERITY>
+File: `<relative-path:line>`
+Issue: <issue description>
+Suggestion: <suggestion detail>
 
-SEVERITY `[relative-path:line]`
-[issue description]
-[suggestion]
+<SEVERITY>
+File: `<relative-path:line>`
+Issue: <issue description>
+Suggestion: <suggestion detail>
 
-SEVERITY `[relative-path:line]`
-[issue description]
-[suggestion]
+...
 ```
 
 - Order findings by file.
@@ -243,9 +243,10 @@ Adds a function to retrieve user by ID from a users array.
 
 ## Findings
 
-BUG `src/users.ts:3`
-Accessing `user.name` without null check. `find()` returns `undefined` if no match.
-Add guard clause: `if (!user) return null;` or throw an error.
+BUG
+File: `src/users.ts:3`
+Issue: Accessing `user.name` without null check. `find()` returns `undefined` if no match.
+Suggestion: Add guard clause: `if (!user) return null;` or throw an error.
 
 ---
 
@@ -269,10 +270,12 @@ Adds a function to process and transform user data.
 
 ## Findings
 
-SLOP `src/users.ts:1`
-Comment paraphrases function name. The name `processUserData` already conveys this.
-Remove the comment or explain _why_ this transformation is needed.
+SLOP
+File: `src/users.ts:1`
+Issue: Comment paraphrases function name. The name `processUserData` already conveys this.
+Suggestion: Remove the comment or explain _why_ this transformation is needed.
 
-SLOP `src/users.ts:3`
-Redundant null check. `User` type is not nullable—TypeScript already guarantees `user` exists.
-Remove the guard clause. If `User | null` is possible, fix the type instead.
+SLOP
+File: `src/users.ts:3`
+Issue: Redundant null check. `User` type is not nullable—TypeScript already guarantees `user` exists.
+Suggestion: Remove the guard clause. If `User | null` is possible, fix the type instead.
