@@ -1,7 +1,7 @@
 ---
 description: Generate commit for staged changes
-model: github-copilot/claude-haiku-4.5
 agent: general
+model: github-copilot/claude-haiku-4.5
 ---
 
 ## Constraints
