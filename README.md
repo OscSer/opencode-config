@@ -1,6 +1,6 @@
 # OpenCode Config
 
-Centralized configuration for OpenCode with global rules, subagents and custom commands.
+Centralized configuration for [OpenCode](https://opencode.ai/docs).
 
 ## Usage
 
@@ -20,8 +20,8 @@ opencode/
 ├── AGENTS.md       # Global rules
 ├── agent/          # Custom agents
 └── command/        # Custom commands
+src/
+└── installer.ts    # Setup script
 ```
 
 Auto-detects and links new assets in `opencode/` → `~/.config/opencode/`
-
-[Docs](https://opencode.ai/docs)
