@@ -7,7 +7,7 @@ import { ConfigInstaller } from "./installer";
 
 let tmpDir: string;
 
-describe("installer", () => {
+describe("ConfigInstaller", () => {
   beforeEach(async () => {
     tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "test-"));
   });
@@ -16,451 +16,310 @@ describe("installer", () => {
     await fs.rm(tmpDir, { recursive: true, force: true });
   });
 
-  it("should create symlinks for files during installation", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    const opencodeSourceDir = path.join(repoDir, "opencode");
-    await fs.mkdir(opencodeSourceDir, { recursive: true });
-
-    await fs.writeFile(
-      path.join(opencodeSourceDir, "opencode.jsonc"),
-      "config",
-    );
-    await fs.writeFile(path.join(opencodeSourceDir, "AGENTS.md"), "rules");
-
-    const targetDir = path.join(tmpDir, "opencode");
-    const installer = new ConfigInstaller(repoDir, targetDir);
-
-    const success = await installer.installAll();
-
-    expect(success).toBe(true);
-
-    const jsoncStat = await fs.lstat(path.join(targetDir, "opencode.jsonc"));
-    const agentsStat = await fs.lstat(path.join(targetDir, "AGENTS.md"));
-
-    expect(jsoncStat.isSymbolicLink()).toBe(true);
-    expect(agentsStat.isSymbolicLink()).toBe(true);
-  });
-
-  it("should create symlinks for directories during installation", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    const opencodeSourceDir = path.join(repoDir, "opencode");
-    await fs.mkdir(opencodeSourceDir, { recursive: true });
-
-    await fs.mkdir(path.join(opencodeSourceDir, "command"), {
-      recursive: true,
-    });
-    await fs.mkdir(path.join(opencodeSourceDir, "tool"), { recursive: true });
-
-    const targetDir = path.join(tmpDir, "opencode");
-    const installer = new ConfigInstaller(repoDir, targetDir);
-
-    const success = await installer.installAll();
-
-    expect(success).toBe(true);
-
-    const commandStat = await fs.lstat(path.join(targetDir, "command"));
-    const toolStat = await fs.lstat(path.join(targetDir, "tool"));
-
-    expect(commandStat.isSymbolicLink()).toBe(true);
-    expect(toolStat.isSymbolicLink()).toBe(true);
-  });
-
-  it("should make nested content accessible through symlinked directories", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    const opencodeSourceDir = path.join(repoDir, "opencode");
-    await fs.mkdir(opencodeSourceDir, { recursive: true });
-
-    await fs.mkdir(path.join(opencodeSourceDir, "command"), {
-      recursive: true,
-    });
-    await fs.writeFile(
-      path.join(opencodeSourceDir, "command", "example-command.md"),
-      "command content",
-    );
-    await fs.mkdir(path.join(opencodeSourceDir, "tool"), { recursive: true });
-    await fs.writeFile(
-      path.join(opencodeSourceDir, "tool", "example-tool.ts"),
-      "tool content",
-    );
-
-    const targetDir = path.join(tmpDir, "opencode");
-    const installer = new ConfigInstaller(repoDir, targetDir);
-
-    await installer.installAll();
-
-    const commandContent = await fs.readFile(
-      path.join(targetDir, "command", "example-command.md"),
-      "utf-8",
-    );
-    expect(commandContent).toBe("command content");
-
-    const toolContent = await fs.readFile(
-      path.join(targetDir, "tool", "example-tool.ts"),
-      "utf-8",
-    );
-    expect(toolContent).toBe("tool content");
-  });
-
-  it("should skip missing opencode directory gracefully", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    await fs.mkdir(repoDir, { recursive: true });
-    // Don't create opencode directory
-
-    const targetDir = path.join(tmpDir, "opencode");
-    const installer = new ConfigInstaller(repoDir, targetDir);
-
-    const success = await installer.installAll();
-
-    expect(success).toBe(false);
-  });
-
-  it("should handle symlink creation for multiple assets", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    const opencodeSourceDir = path.join(repoDir, "opencode");
-    await fs.mkdir(opencodeSourceDir, { recursive: true });
-
-    for (let i = 1; i <= 5; i++) {
-      await fs.writeFile(
-        path.join(opencodeSourceDir, `file${i}.txt`),
-        `content${i}`,
-      );
-    }
-
-    const targetDir = path.join(tmpDir, "opencode");
-    const installer = new ConfigInstaller(repoDir, targetDir);
-
-    const success = await installer.installAll();
-
-    expect(success).toBe(true);
-
-    for (let i = 1; i <= 5; i++) {
-      const stat = await fs.lstat(path.join(targetDir, `file${i}.txt`));
-      expect(stat.isSymbolicLink()).toBe(true);
-    }
-  });
-
-  it("should resolve source paths correctly", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    await fs.mkdir(repoDir, { recursive: true });
-    const filePath = path.join(repoDir, "test.txt");
-    await fs.writeFile(filePath, "test");
-
-    const installer = new ConfigInstaller(repoDir);
-    const resolvedPath = await installer.resolveSource("test.txt");
-
-    expect(resolvedPath).toBe(filePath);
-  });
-
-  it("should return null for non-existent source", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    await fs.mkdir(repoDir, { recursive: true });
-
-    const installer = new ConfigInstaller(repoDir);
-    const resolvedPath = await installer.resolveSource("missing.txt", true);
-
-    expect(resolvedPath).toBeNull();
-  });
-
-  it("should resolve directory path correctly", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    const dirPath = path.join(repoDir, "commands");
-    await fs.mkdir(dirPath, { recursive: true });
-
-    const installer = new ConfigInstaller(repoDir);
-    const resolvedPath = await installer.resolveSource("commands", false);
-
-    expect(resolvedPath).toBe(dirPath);
-  });
-
-  it("should return null when resolving file as directory", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    await fs.mkdir(repoDir, { recursive: true });
-    const filePath = path.join(repoDir, "config.txt");
-    await fs.writeFile(filePath, "content");
-
-    const installer = new ConfigInstaller(repoDir);
-    const resolvedPath = await installer.resolveSource("config.txt", false);
-
-    expect(resolvedPath).toBeNull();
-  });
-
-  describe("getOpencodeAssets", () => {
-    it("should return all files and directories from opencode folder", async () => {
+  describe("install", () => {
+    it("should create symlinks for files", async () => {
       const repoDir = path.join(tmpDir, "repo");
-      const opencodeSourceDir = path.join(repoDir, "opencode");
-      await fs.mkdir(opencodeSourceDir, { recursive: true });
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
 
-      await fs.writeFile(
-        path.join(opencodeSourceDir, "config.jsonc"),
-        "config",
-      );
-      await fs.writeFile(path.join(opencodeSourceDir, "AGENTS.md"), "agents");
-      await fs.mkdir(path.join(opencodeSourceDir, "commands"), {
-        recursive: true,
-      });
+      await fs.writeFile(path.join(opencodeDir, "opencode.jsonc"), "config");
+      await fs.writeFile(path.join(opencodeDir, "AGENTS.md"), "rules");
 
-      const installer = new ConfigInstaller(
-        repoDir,
-        path.join(tmpDir, "target"),
-      );
-      const assets = await installer.getOpencodeAssets();
+      const targetDir = path.join(tmpDir, "target");
+      const installer = new ConfigInstaller(repoDir, targetDir);
 
-      expect(assets.length).toBe(3);
-      const targets = assets.map((a) => a.target).sort();
-      expect(targets).toContain("config.jsonc");
-      expect(targets).toContain("AGENTS.md");
-      expect(targets).toContain("commands");
+      const success = await installer.install();
+
+      expect(success).toBe(true);
+      expect(
+        (
+          await fs.lstat(path.join(targetDir, "opencode.jsonc"))
+        ).isSymbolicLink(),
+      ).toBe(true);
+      expect(
+        (await fs.lstat(path.join(targetDir, "AGENTS.md"))).isSymbolicLink(),
+      ).toBe(true);
     });
 
-    it("should return empty array for empty opencode directory", async () => {
+    it("should create symlinks for directories", async () => {
       const repoDir = path.join(tmpDir, "repo");
-      const opencodeSourceDir = path.join(repoDir, "opencode");
-      await fs.mkdir(opencodeSourceDir, { recursive: true });
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
 
-      const installer = new ConfigInstaller(
-        repoDir,
-        path.join(tmpDir, "target"),
-      );
-      const assets = await installer.getOpencodeAssets();
+      await fs.mkdir(path.join(opencodeDir, "command"), { recursive: true });
+      await fs.mkdir(path.join(opencodeDir, "tool"), { recursive: true });
 
-      expect(assets).toEqual([]);
+      const targetDir = path.join(tmpDir, "target");
+      const installer = new ConfigInstaller(repoDir, targetDir);
+
+      const success = await installer.install();
+
+      expect(success).toBe(true);
+      expect(
+        (await fs.lstat(path.join(targetDir, "command"))).isSymbolicLink(),
+      ).toBe(true);
+      expect(
+        (await fs.lstat(path.join(targetDir, "tool"))).isSymbolicLink(),
+      ).toBe(true);
     });
 
-    it("should throw InstallError when opencode directory is missing", async () => {
+    it("should make nested content accessible through symlinked directories", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(path.join(opencodeDir, "command"), { recursive: true });
+      await fs.writeFile(
+        path.join(opencodeDir, "command", "example.md"),
+        "content",
+      );
+
+      const targetDir = path.join(tmpDir, "target");
+      const installer = new ConfigInstaller(repoDir, targetDir);
+
+      await installer.install();
+
+      const content = await fs.readFile(
+        path.join(targetDir, "command", "example.md"),
+        "utf-8",
+      );
+      expect(content).toBe("content");
+    });
+
+    it("should return false when opencode directory is missing", async () => {
       const repoDir = path.join(tmpDir, "repo");
       await fs.mkdir(repoDir, { recursive: true });
 
-      const installer = new ConfigInstaller(
-        repoDir,
-        path.join(tmpDir, "target"),
-      );
+      const targetDir = path.join(tmpDir, "target");
+      const installer = new ConfigInstaller(repoDir, targetDir);
 
-      await expect(installer.getOpencodeAssets()).rejects.toThrow(
-        "OpenCode source directory not found: opencode",
-      );
+      const success = await installer.install();
+
+      expect(success).toBe(false);
     });
 
-    it("should detect nested subdirectories as assets", async () => {
+    it("should handle multiple assets", async () => {
       const repoDir = path.join(tmpDir, "repo");
-      const opencodeSourceDir = path.join(repoDir, "opencode");
-      await fs.mkdir(opencodeSourceDir, { recursive: true });
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
 
-      // Create nested structure
-      await fs.mkdir(path.join(opencodeSourceDir, "skill", "testing"), {
-        recursive: true,
-      });
-      await fs.writeFile(
-        path.join(opencodeSourceDir, "skill", "testing", "SKILL.md"),
-        "skill",
+      for (let i = 1; i <= 5; i++) {
+        await fs.writeFile(
+          path.join(opencodeDir, `file${i}.txt`),
+          `content${i}`,
+        );
+      }
+
+      const targetDir = path.join(tmpDir, "target");
+      const installer = new ConfigInstaller(repoDir, targetDir);
+
+      const success = await installer.install();
+
+      expect(success).toBe(true);
+      for (let i = 1; i <= 5; i++) {
+        expect(
+          (
+            await fs.lstat(path.join(targetDir, `file${i}.txt`))
+          ).isSymbolicLink(),
+        ).toBe(true);
+      }
+    });
+
+    it("should replace existing symlink", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
+      await fs.writeFile(path.join(opencodeDir, "config.txt"), "new");
+
+      const targetDir = path.join(tmpDir, "target");
+      await fs.mkdir(targetDir, { recursive: true });
+      await fs.writeFile(path.join(tmpDir, "old.txt"), "old");
+      await fs.symlink(
+        path.join(tmpDir, "old.txt"),
+        path.join(targetDir, "config.txt"),
       );
-      await fs.writeFile(path.join(opencodeSourceDir, "AGENTS.md"), "agents");
 
-      const installer = new ConfigInstaller(
-        repoDir,
-        path.join(tmpDir, "target"),
+      const installer = new ConfigInstaller(repoDir, targetDir);
+      await installer.install();
+
+      const content = await fs.readFile(
+        path.join(targetDir, "config.txt"),
+        "utf-8",
       );
-      const assets = await installer.getOpencodeAssets();
+      expect(content).toBe("new");
+    });
 
-      expect(assets.length).toBe(2);
-      const targets = assets.map((a) => a.target).sort();
-      expect(targets).toContain("AGENTS.md");
-      expect(targets).toContain("skill");
+    it("should replace existing directory", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
+      await fs.writeFile(path.join(opencodeDir, "data"), "file-content");
+
+      const targetDir = path.join(tmpDir, "target");
+      await fs.mkdir(path.join(targetDir, "data"), { recursive: true });
+      await fs.writeFile(path.join(targetDir, "data", "old.txt"), "old");
+
+      const installer = new ConfigInstaller(repoDir, targetDir);
+      await installer.install();
+
+      expect(
+        (await fs.lstat(path.join(targetDir, "data"))).isSymbolicLink(),
+      ).toBe(true);
+      const content = await fs.readFile(path.join(targetDir, "data"), "utf-8");
+      expect(content).toBe("file-content");
+    });
+
+    it("should replace existing regular file", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
+      await fs.writeFile(path.join(opencodeDir, "config.txt"), "new");
+
+      const targetDir = path.join(tmpDir, "target");
+      await fs.mkdir(targetDir, { recursive: true });
+      await fs.writeFile(path.join(targetDir, "config.txt"), "old");
+
+      const installer = new ConfigInstaller(repoDir, targetDir);
+      await installer.install();
+
+      expect(
+        (await fs.lstat(path.join(targetDir, "config.txt"))).isSymbolicLink(),
+      ).toBe(true);
+      const content = await fs.readFile(
+        path.join(targetDir, "config.txt"),
+        "utf-8",
+      );
+      expect(content).toBe("new");
+    });
+
+    it("should handle empty opencode directory", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
+
+      const targetDir = path.join(tmpDir, "target");
+      const installer = new ConfigInstaller(repoDir, targetDir);
+
+      const success = await installer.install();
+
+      expect(success).toBe(true);
+      const entries = await fs.readdir(targetDir);
+      expect(entries.length).toBe(0);
+    });
+
+    it("should be idempotent", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
+      await fs.writeFile(path.join(opencodeDir, "config.jsonc"), "content");
+
+      const targetDir = path.join(tmpDir, "target");
+      const installer = new ConfigInstaller(repoDir, targetDir);
+
+      const first = await installer.install();
+      const second = await installer.install();
+
+      expect(first).toBe(true);
+      expect(second).toBe(true);
+      expect(
+        (await fs.lstat(path.join(targetDir, "config.jsonc"))).isSymbolicLink(),
+      ).toBe(true);
+      expect(
+        await fs.readFile(path.join(targetDir, "config.jsonc"), "utf-8"),
+      ).toBe("content");
     });
   });
 
-  it("should clean up broken symlinks after installation", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    const opencodeSourceDir = path.join(repoDir, "opencode");
-    await fs.mkdir(opencodeSourceDir, { recursive: true });
+  describe("cleanup broken symlinks", () => {
+    it("should remove broken symlinks after installation", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
+      await fs.writeFile(path.join(opencodeDir, "config.jsonc"), "config");
 
-    await fs.writeFile(
-      path.join(opencodeSourceDir, "opencode.jsonc"),
-      "config",
-    );
-    await fs.writeFile(path.join(opencodeSourceDir, "AGENTS.md"), "rules");
+      const targetDir = path.join(tmpDir, "target");
+      await fs.mkdir(targetDir, { recursive: true });
+      await fs.symlink("/nonexistent/path", path.join(targetDir, "broken.txt"));
 
-    const targetDir = path.join(tmpDir, "opencode");
-    await fs.mkdir(targetDir, { recursive: true });
+      const installer = new ConfigInstaller(repoDir, targetDir);
+      await installer.install();
 
-    await fs.symlink(
-      "/nonexistent/path",
-      path.join(targetDir, "broken-link.txt"),
-    );
+      const brokenExists = await fs
+        .lstat(path.join(targetDir, "broken.txt"))
+        .catch(() => null);
+      expect(brokenExists).toBeNull();
+    });
 
-    const installer = new ConfigInstaller(repoDir, targetDir);
+    it("should not remove valid symlinks", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
+      await fs.writeFile(path.join(opencodeDir, "config.jsonc"), "config");
 
-    const success = await installer.installAll();
+      const targetDir = path.join(tmpDir, "target");
+      await fs.mkdir(targetDir, { recursive: true });
+      await fs.symlink(
+        path.join(opencodeDir, "config.jsonc"),
+        path.join(targetDir, "valid.jsonc"),
+      );
 
-    expect(success).toBe(true);
+      const installer = new ConfigInstaller(repoDir, targetDir);
+      await installer.install();
 
-    const brokenLinkExists = await fs
-      .lstat(path.join(targetDir, "broken-link.txt"))
-      .then(() => true)
-      .catch(() => false);
+      expect(
+        (await fs.lstat(path.join(targetDir, "valid.jsonc"))).isSymbolicLink(),
+      ).toBe(true);
+    });
 
-    expect(brokenLinkExists).toBe(false);
+    it("should remove multiple broken symlinks", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
+      await fs.writeFile(path.join(opencodeDir, "config.jsonc"), "config");
 
-    const validLinkExists = await fs.lstat(
-      path.join(targetDir, "opencode.jsonc"),
-    );
-    expect(validLinkExists.isSymbolicLink()).toBe(true);
-  });
+      const targetDir = path.join(tmpDir, "target");
+      await fs.mkdir(targetDir, { recursive: true });
 
-  it("should not remove valid symlinks during cleanup", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    const opencodeSourceDir = path.join(repoDir, "opencode");
-    await fs.mkdir(opencodeSourceDir, { recursive: true });
+      const brokenLinks = ["broken1.txt", "broken2.txt", "broken3.txt"];
+      for (const link of brokenLinks) {
+        await fs.symlink(`/nonexistent/${link}`, path.join(targetDir, link));
+      }
 
-    await fs.writeFile(
-      path.join(opencodeSourceDir, "opencode.jsonc"),
-      "config",
-    );
+      const installer = new ConfigInstaller(repoDir, targetDir);
+      await installer.install();
 
-    const targetDir = path.join(tmpDir, "opencode");
-    await fs.mkdir(targetDir, { recursive: true });
+      for (const link of brokenLinks) {
+        const exists = await fs
+          .lstat(path.join(targetDir, link))
+          .catch(() => null);
+        expect(exists).toBeNull();
+      }
+    });
 
-    await fs.symlink(
-      path.join(opencodeSourceDir, "opencode.jsonc"),
-      path.join(targetDir, "valid-link.jsonc"),
-    );
+    it("should handle mixed valid and broken symlinks", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
+      await fs.writeFile(path.join(opencodeDir, "config.jsonc"), "config");
 
-    const installer = new ConfigInstaller(repoDir, targetDir);
+      const targetDir = path.join(tmpDir, "target");
+      await fs.mkdir(targetDir, { recursive: true });
 
-    const success = await installer.installAll();
+      // Valid symlink
+      await fs.symlink(
+        path.join(opencodeDir, "config.jsonc"),
+        path.join(targetDir, "valid.jsonc"),
+      );
+      // Broken symlink
+      await fs.symlink("/nonexistent", path.join(targetDir, "broken.txt"));
 
-    expect(success).toBe(true);
+      const installer = new ConfigInstaller(repoDir, targetDir);
+      await installer.install();
 
-    const validLinkExists = await fs.lstat(
-      path.join(targetDir, "valid-link.jsonc"),
-    );
-    expect(validLinkExists.isSymbolicLink()).toBe(true);
-  });
-
-  it("should handle empty opencode directory", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    const opencodeSourceDir = path.join(repoDir, "opencode");
-    await fs.mkdir(opencodeSourceDir, { recursive: true });
-    // Empty opencode directory - no files inside
-
-    const targetDir = path.join(tmpDir, "opencode");
-    const installer = new ConfigInstaller(repoDir, targetDir);
-
-    const success = await installer.installAll();
-
-    expect(success).toBe(true);
-
-    // Target directory should exist but be empty
-    const entries = await fs.readdir(targetDir);
-    expect(entries.length).toBe(0);
-  });
-
-  it("should not fail cleanup when no broken symlinks exist", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    const opencodeSourceDir = path.join(repoDir, "opencode");
-    await fs.mkdir(opencodeSourceDir, { recursive: true });
-
-    await fs.writeFile(
-      path.join(opencodeSourceDir, "opencode.jsonc"),
-      "config",
-    );
-
-    const targetDir = path.join(tmpDir, "opencode");
-    await fs.mkdir(targetDir, { recursive: true });
-
-    // Create a valid symlink that should NOT be removed
-    await fs.symlink(
-      path.join(opencodeSourceDir, "opencode.jsonc"),
-      path.join(targetDir, "existing-valid.jsonc"),
-    );
-
-    const installer = new ConfigInstaller(repoDir, targetDir);
-
-    const success = await installer.installAll();
-
-    expect(success).toBe(true);
-
-    // Valid symlink should still exist
-    const validLinkExists = await fs.lstat(
-      path.join(targetDir, "existing-valid.jsonc"),
-    );
-    expect(validLinkExists.isSymbolicLink()).toBe(true);
-
-    // New symlink should be created
-    const newLinkExists = await fs.lstat(
-      path.join(targetDir, "opencode.jsonc"),
-    );
-    expect(newLinkExists.isSymbolicLink()).toBe(true);
-  });
-
-  it("should remove multiple broken symlinks", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    const opencodeSourceDir = path.join(repoDir, "opencode");
-    await fs.mkdir(opencodeSourceDir, { recursive: true });
-
-    await fs.writeFile(
-      path.join(opencodeSourceDir, "opencode.jsonc"),
-      "config",
-    );
-
-    const targetDir = path.join(tmpDir, "opencode");
-    await fs.mkdir(targetDir, { recursive: true });
-
-    const brokenLinks = ["broken1.txt", "broken2.txt", "broken3.txt"];
-    for (const link of brokenLinks) {
-      await fs.symlink(`/nonexistent/${link}`, path.join(targetDir, link));
-    }
-
-    const installer = new ConfigInstaller(repoDir, targetDir);
-
-    const success = await installer.installAll();
-
-    expect(success).toBe(true);
-
-    for (const link of brokenLinks) {
-      const exists = await fs
-        .lstat(path.join(targetDir, link))
-        .then(() => true)
-        .catch(() => false);
-      expect(exists).toBe(false);
-    }
-  });
-
-  it("should be idempotent when running installAll twice", async () => {
-    const repoDir = path.join(tmpDir, "repo");
-    const opencodeSourceDir = path.join(repoDir, "opencode");
-    await fs.mkdir(opencodeSourceDir, { recursive: true });
-
-    await fs.writeFile(
-      path.join(opencodeSourceDir, "opencode.jsonc"),
-      "config content",
-    );
-    await fs.writeFile(
-      path.join(opencodeSourceDir, "AGENTS.md"),
-      "agents content",
-    );
-
-    const targetDir = path.join(tmpDir, "opencode");
-    const installer = new ConfigInstaller(repoDir, targetDir);
-
-    const firstRun = await installer.installAll();
-    const secondRun = await installer.installAll();
-
-    expect(firstRun).toBe(true);
-    expect(secondRun).toBe(true);
-
-    const stats = {
-      jsonc: await fs.lstat(path.join(targetDir, "opencode.jsonc")),
-      agents: await fs.lstat(path.join(targetDir, "AGENTS.md")),
-    };
-
-    expect(stats.jsonc.isSymbolicLink()).toBe(true);
-    expect(stats.agents.isSymbolicLink()).toBe(true);
-
-    // Verify content is still accessible after second run
-    const jsoncContent = await fs.readFile(
-      path.join(targetDir, "opencode.jsonc"),
-      "utf-8",
-    );
-    expect(jsoncContent).toBe("config content");
+      expect(
+        (await fs.lstat(path.join(targetDir, "valid.jsonc"))).isSymbolicLink(),
+      ).toBe(true);
+      expect(
+        await fs.lstat(path.join(targetDir, "broken.txt")).catch(() => null),
+      ).toBeNull();
+    });
   });
 });
