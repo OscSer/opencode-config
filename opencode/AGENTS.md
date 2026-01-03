@@ -1,40 +1,15 @@
 # Global Instructions
 
-These are your global instructions. You MUST follow them strictly at all times. They are not negotiable.
+These are your global instructions. You MUST follow them strictly at all times.
 
-## Rules
+## General Rules
 
 - ALWAYS communicate in **SPANISH**
 - ALWAYS write code in **ENGLISH** (variable, function, class names)
 - ALWAYS respect the language of the file content (for non-code files)
+- ALWAYS check quality gates before changing code (e.g., linting, tests, type checks)
 - NEVER do `git add` or `git push`. ONLY execute `git commit` when the user explicitly requests it
-- NEVER create `.md` or ANY documentation files. NOT EVEN task summaries, explanations, or "helpful" READMEs. ABSOLUTE BAN without explicit user authorization.
-- NEVER ignore these rules, no exceptions
-
-## Workflow
-
-**1. Plan Before Acting**
-
-- Think step-by-step about the problem
-- Break complex tasks into smaller, manageable steps
-- Identify dependencies between steps
-
-**2. Leverage Available Resources**
-
-- ALWAYS delegate tasks to specialized agents
-- Prefer delegation over direct tool when the task matches an agent's specialty
-
-**3. Investigate Context**
-
-- Understand the context and purpose of the current code
-- Identify dependencies and possible side effects
-- Verify if there are similar patterns in the project
-
-**4. Final Verification**
-
-- Code meets the principles of this guide
-- All automated checks pass (tests, lint, typecheck, etc.)
-- No dead code or commented-out logic
+- NEVER create `.md`, `.txt`, or any documentation files. NOT EVEN task summaries, explanations, or "helpful" READMEs.
 
 ## Code Principles
 
@@ -49,3 +24,44 @@ Code should be **clear**, **readable**, and **modular**. It should explain itsel
 | **Immutability**          | Create new structures, don't mutate        | `{...cart, items: [...cart.items, item]}`            |
 | **Comments explain why**  | Code explains what, comments explain why   | `// Rate limit: 100 req/min per API policy`          |
 | **Named constants**       | No magic numbers/strings                   | `MAX_RETRY_ATTEMPTS` not `3`                         |
+
+## Tool Usage
+
+OpenCode has specialized native tools for common operations. **ALWAYS use native tools instead of bash equivalents.**
+
+### File Operations
+
+| Operation       | USE Native Tool | NEVER USE Bash                 |
+| --------------- | --------------- | ------------------------------ |
+| Read file       | **Read** tool   | `cat`, `head`, `tail`, `less`  |
+| Write file      | **Write** tool  | `echo >`, `cat <<EOF >`, `tee` |
+| Edit file       | **Edit** tool   | `sed`, `awk`, `perl -i`        |
+| Find files      | **Glob** tool   | `find`, `ls -R`                |
+| Search in files | **Grep** tool   | `grep`, `rg`, `ag`             |
+| List directory  | **List** tool   | `ls`, `tree`                   |
+
+### Research & External Data
+
+| Operation        | USE Native Tool                        | NEVER USE Bash   |
+| ---------------- | -------------------------------------- | ---------------- |
+| Web search       | **WebSearch** tool                     | `curl` + parsers |
+| Fetch URL        | **WebFetch** tool                      | `curl`, `wget`   |
+| Search code/docs | **CodeSearch** tool / **context7** MCP | Manual API calls |
+
+### Task Management
+
+| Operation   | USE Native Tool        | NEVER USE Bash            |
+| ----------- | ---------------------- | ------------------------- |
+| Track tasks | **TodoWrite/TodoRead** | `echo` to files, comments |
+
+### When to Use Bash
+
+Use **Bash** tool ONLY when are NO native tools available for the task.
+
+### Why Native Tools?
+
+1. **Optimized**: Built for AI workflows with automatic limits and formatting
+2. **Safe**: Built-in validation, security checks, prevents common errors
+3. **Intelligent**: Context-aware (LSP diagnostics, multi-strategy matching)
+4. **Consistent**: Standardized output format, predictable behavior
+5. **Integrated**: Triggers system events, updates IDE, runs diagnostics
