@@ -5,13 +5,12 @@
   "default_agent": "plan",
   "agent": {
     "plan": {
+      "color": "#808080",
       "permission": { "edit": "deny" },
     },
     "build": {
+      "color": "#9370DB",
       "permission": { "edit": "allow" },
-    },
-    "explore": {
-      "model": "opencode/big-pickle",
     },
   },
   "mcp": {
