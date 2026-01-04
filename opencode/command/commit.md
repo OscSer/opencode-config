@@ -38,29 +38,29 @@ Commit message = OBSERVABLE FACTS, not assumed intentions
 
 ## Step 2: Determine Commit Type
 
-| Type       | When to use                                         |
-| ---------- | --------------------------------------------------- |
-| `feat`     | ADD new capability (includes prompts)               |
-| `fix`      | FIX broken behavior (includes prompts)              |
-| `refactor` | IMPROVE code, no behavior change (includes prompts) |
-| `docs`     | ONLY human-readable docs (READMEs, guides, wikis)   |
-| `style`    | Formatting                                          |
-| `test`     | Add/modify tests                                    |
-| `ci`       | Change CI/CD pipelines                              |
-| `build`    | Change build system/dependencies                    |
-| `chore`    | Maintenance/tooling, config files                   |
-| `perf`     | Improve performance                                 |
+| Type       | When to use                                                      |
+| ---------- | ---------------------------------------------------------------- |
+| `feat`     | ADD new capability                                               |
+| `fix`      | FIX broken behavior                                              |
+| `refactor` | IMPROVE code, no behavior change                                 |
+| `docs`     | ONLY human-readable docs (READMEs, guides, wikis)                |
+| `style`    | Formatting (whitespace, quotes, semicolons)                      |
+| `test`     | Add/modify tests                                                 |
+| `ci`       | Change CI/CD pipelines                                           |
+| `build`    | Build system, dependencies                                       |
+| `chore`    | Changes that do not affect the source code (.gitignore, scripts) |
+| `perf`     | Improve performance                                              |
 
-**LLM prompt files are treated as code (not docs):** AGENTS.md, SKILL.md, commands/, agents/, etc. → use `feat`/`fix`/`refactor`
+**LLM prompt/instructions files are not treated as docs:** `AGENTS.md`, `SKILL.md`, `command/*.md`, `agent/*.md`, or similar → use `feat`/`fix`/`refactor`
 
 ## Step 3: Generate Message
 
 **Format:**
 
 ```
-<type>[scope]: <description>
+<type>[optional scope]: <description>
 
-<body>  ← optional, only when needed
+[optional body]
 ```
 
 **Rules:**
