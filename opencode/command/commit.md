@@ -1,7 +1,7 @@
 ---
 description: Generate commit for staged changes
 agent: general
-model: opencode/big-pickle
+model: github-copilot/gpt-5-mini
 ---
 
 ## Constraints
