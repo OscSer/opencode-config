@@ -1,5 +1,5 @@
 ---
-description: Testing best practices context
+description: Apply testing best practices
 ---
 
 # Testing
