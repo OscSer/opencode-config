@@ -5,11 +5,11 @@
   "default_agent": "plan",
   "agent": {
     "plan": {
-      "color": "#808080",
+      "color": "#ffb74d",
       "permission": { "edit": "deny" },
     },
     "build": {
-      "color": "#9370DB",
+      "color": "#4dd0e1",
       "permission": { "edit": "allow" },
     },
   },
@@ -19,7 +19,7 @@
       "url": "https://mcp.context7.com/mcp",
     },
   },
-  "plugin": ["@franlol/opencode-md-table-formatter", "opencode-supermemory"],
+  "plugin": ["@franlol/opencode-md-table-formatter"],
   "permission": {
     "edit": "deny",
     "doom_loop": "ask",
