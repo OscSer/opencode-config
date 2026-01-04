@@ -4,10 +4,10 @@ These are your global instructions. You MUST follow them strictly at all times.
 
 ## General Rules
 
-- ALWAYS communicate in **SPANISH**
-- ALWAYS write code in **ENGLISH** (variable, function, class names)
+- ALWAYS communicate with the user in **SPANISH**
+- ALWAYS write code in **ENGLISH**
 - ALWAYS respect the language of the file content (for non-code files)
-- ALWAYS check quality gates before changing code (e.g., linting, tests, type checks)
+- ALWAYS check quality gates after changing code (e.g., linting, tests, type checks)
 - NEVER do `git add` or `git push`. ONLY execute `git commit` when the user explicitly requests it
 - NEVER create `.md`, `.txt`, or any documentation files. NOT EVEN task summaries, explanations, or "helpful" READMEs.
 
@@ -27,7 +27,7 @@ Code should be **clear**, **readable**, and **modular**. It should explain itsel
 
 ## Tool Usage
 
-OpenCode has specialized native tools for common operations. **ALWAYS use native tools instead of bash equivalents.**
+ALWAYS use native tools instead of bash equivalents.
 
 ### File Operations
 
@@ -42,17 +42,11 @@ OpenCode has specialized native tools for common operations. **ALWAYS use native
 
 ### Research & External Data
 
-| Operation        | USE Native Tool                        | NEVER USE Bash   |
-| ---------------- | -------------------------------------- | ---------------- |
-| Web search       | **WebSearch** tool                     | `curl` + parsers |
-| Fetch URL        | **WebFetch** tool                      | `curl`, `wget`   |
-| Search code/docs | **CodeSearch** tool / **context7** MCP | Manual API calls |
-
-### Task Management
-
-| Operation   | USE Native Tool        | NEVER USE Bash            |
-| ----------- | ---------------------- | ------------------------- |
-| Track tasks | **TodoWrite/TodoRead** | `echo` to files, comments |
+| Operation        | USE Native Tool    | NEVER USE Bash |
+| ---------------- | ------------------ | -------------- |
+| Web search       | **WebSearch** tool | `curl`, `wget` |
+| Fetch URL        | **WebFetch** tool  | `curl`, `wget` |
+| Search code/docs | **Context7** MCP   | `curl`, `wget` |
 
 ### When to Use Bash
 
