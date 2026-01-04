@@ -1,5 +1,5 @@
 ---
-description: Evaluate or generate prompts
+description: Prompt engineering reference
 ---
 
 User input:
@@ -8,23 +8,7 @@ User input:
 $ARGUMENTS
 ```
 
-## Determining the Task
-
-Analyze the user input to determine the action:
-
-**Evaluation Mode**: Input contains an existing prompt to analyze
-
-- User provides prompt text directly
-- User references a file path containing a prompt
-- User asks to "review", "evaluate", "check", "improve" an existing prompt
-
-**Generation Mode**: Input describes a new prompt to create
-
-- User describes desired behavior or task
-- User asks to "create", "generate", "design", "write" a new prompt
-- User provides requirements without existing prompt text
-
-**If ambiguous**: Ask the user to clarify.
+Analyze the user input and adapt your response to the context: creating prompts, agents, commands, skills, or analyzing existing prompts.
 
 ---
 
@@ -274,42 +258,11 @@ Reference universal patterns.
 
 ---
 
-## Validation Checklist
+## Enhancement Patterns
 
-Use this checklist when evaluating prompts:
+Apply these patterns only when addressing specific observed problems:
 
-| #   | Criterion             | Description                                       |
-| --- | --------------------- | ------------------------------------------------- |
-| 1   | **Clear task**        | ONE unambiguous primary objective                 |
-| 2   | **Actionable**        | Executable without clarifying questions           |
-| 3   | **Output format**     | Expected response structure specified or obvious  |
-| 4   | **No ambiguity**      | Key terms defined, no room for interpretation     |
-| 5   | **Appropriate scope** | Not too broad, not unnecessarily narrow           |
-| 6   | **Token efficient**   | No redundant content, each section earns its cost |
-| 7   | **Type-specific**     | Meets requirements for its prompt type            |
-
-**Scoring:** 0 = Fails, 1 = Weak, 2 = Pass
-
-### Type-Specific Requirements
-
-| Prompt Type       | Requirement                                                           |
-| ----------------- | --------------------------------------------------------------------- |
-| **System Prompt** | Defines persistent role, expertise, and constraints                   |
-| **Command**       | Specifies trigger, parameters, and behavior                           |
-| **Agent**         | Defines autonomy scope, decision boundaries, and ReAct loop if needed |
-
-### Verdict
-
-| Score | Verdict    |
-| ----- | ---------- |
-| 0-5   | INCOMPLETE |
-| 6-9   | IMPROVE    |
-| 10-12 | COMPLETE   |
-| 13-14 | EXEMPLARY  |
-
-### Enhancements (Only if Observed)
-
-| Enhancement       | Only if you observed...                         |
+| Enhancement       | Apply when...                                   |
 | ----------------- | ----------------------------------------------- |
 | Few-shot examples | Inconsistent outputs                            |
 | Chain-of-thought  | Wrong multi-step reasoning                      |
@@ -319,87 +272,3 @@ Use this checklist when evaluating prompts:
 | Constraints       | Edge case failures                              |
 | Role/persona      | Quality degraded without context                |
 | Persuasion        | Non-compliance with critical instructions       |
-
----
-
-## Execution Instructions
-
-### For Evaluation Mode
-
-1. **Analyze the prompt** against the validation checklist
-2. **Score each criterion** (0-2) with specific notes
-3. **Calculate total** and assign verdict
-4. **Identify specific issues** with concrete examples from the prompt
-5. **Recommend enhancements** using the "Enhancements" table - only suggest patterns that address observed problems
-6. **Provide revised version** if score < 12
-
-**Output format:**
-
-```
-## Prompt Evaluation
-
-| Criterion         | Score | Notes |
-| ----------------- | ----- | ----- |
-| Clear task        | X/2   | ...   |
-| Actionable        | X/2   | ...   |
-| Output format     | X/2   | ...   |
-| No ambiguity      | X/2   | ...   |
-| Appropriate scope | X/2   | ...   |
-| Token efficient   | X/2   | ...   |
-| Type-specific     | X/2   | ...   |
-
-**Total: X/14**
-**Verdict: [INCOMPLETE|IMPROVE|COMPLETE|EXEMPLARY]**
-
-## Issues Found
-
-[List specific problems with examples]
-
-## Recommended Enhancements
-
-[Only suggest patterns that address observed issues]
-
-## Revised Prompt
-
-[Only if score < 12, provide improved version]
-```
-
-### For Generation Mode
-
-1. **Clarify requirements** if needed (task type, output format, constraints)
-2. **Select appropriate patterns** from Core Capabilities (Few-Shot, CoT, ToT, etc.)
-3. **Apply relevant principles** (Progressive Disclosure, Persuasion, etc.)
-4. **Structure using Instruction Hierarchy**
-5. **Generate the prompt** with clear task, format, and examples
-6. **Validate against checklist** - aim for score ≥ 12
-
-**Output format:**
-
-```
-## Generated Prompt
-
-[Complete, ready-to-use prompt]
-
-## Design Rationale
-
-**Patterns applied:**
-- [Pattern 1]: [Why it was chosen]
-- [Pattern 2]: [Why it was chosen]
-
-**Expected behavior:**
-[What this prompt should accomplish]
-
-## Evaluation
-
-[Quick self-assessment against validation checklist]
-```
-
----
-
-## Operating Rules
-
-- **Be systematic**: Follow the validation checklist rigorously
-- **Be specific**: Point to exact issues, provide concrete examples
-- **Be actionable**: Every recommendation must be implementable
-- **Be efficient**: Don't add complexity unless it solves an observed problem
-- **Stay focused**: Answer the question asked, nothing more
