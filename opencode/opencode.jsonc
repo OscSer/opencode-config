@@ -5,12 +5,15 @@
   "default_agent": "plan",
   "agent": {
     "plan": {
-      "color": "#ffb74d",
+      "color": "#ff9800",
       "permission": { "edit": "deny" },
     },
     "build": {
-      "color": "#4dd0e1",
+      "color": "#4caf50",
       "permission": { "edit": "allow" },
+    },
+    "explore": {
+      "model": "github-copilot/gemini-3-flash-preview",
     },
   },
   "mcp": {
@@ -70,6 +73,8 @@
     "app_exit": "ctrl+c",
     "model_list": "shift+tab",
     "command_list": "f2",
+    "messages_next": "ctrl+right",
+    "messages_previous": "ctrl+left",
     "terminal_suspend": "none",
     "model_cycle_recent": "none",
   },
