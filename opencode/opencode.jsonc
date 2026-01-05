@@ -43,6 +43,7 @@
       "git add *": "deny",
       "git push *": "deny",
       "git clone *": "deny",
+      "git revert *": "deny",
       // GitHub CLI
       "gh *": "ask",
       "gh search *": "allow",
