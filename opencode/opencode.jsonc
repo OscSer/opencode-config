@@ -1,7 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "theme": "system",
-  "small_model": "opencode/big-pickle",
   "default_agent": "plan",
   "agent": {
     "plan": {
@@ -9,9 +8,6 @@
     },
     "build": {
       "permission": { "edit": "allow" },
-    },
-    "explore": {
-      "model": "github-copilot/gemini-3-flash-preview",
     },
   },
   "mcp": {
@@ -49,6 +45,7 @@
       // GitHub CLI
       "gh *": "ask",
       "gh search *": "allow",
+      "gh repo view *": "allow",
       "gh pr view *": "allow",
       "gh pr diff *": "allow",
       "gh pr list *": "allow",
