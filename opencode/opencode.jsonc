@@ -5,12 +5,12 @@
   "default_agent": "plan",
   "agent": {
     "plan": {
-      "color": "#ff9800",
       "permission": { "edit": "deny" },
+      "model": "github-copilot/gpt-5.2",
     },
     "build": {
-      "color": "#4caf50",
       "permission": { "edit": "allow" },
+      "model": "anthropic/claude-sonnet-4-5",
     },
     "explore": {
       "model": "github-copilot/gemini-3-flash-preview",
