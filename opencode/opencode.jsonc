@@ -6,11 +6,9 @@
   "agent": {
     "plan": {
       "permission": { "edit": "deny" },
-      "model": "github-copilot/gpt-5.2",
     },
     "build": {
       "permission": { "edit": "allow" },
-      "model": "anthropic/claude-sonnet-4-5",
     },
     "explore": {
       "model": "github-copilot/gemini-3-flash-preview",
@@ -37,6 +35,7 @@
       "* add *": "ask",
       "curl *": "ask",
       "wget *": "ask",
+      "python *": "ask",
       "python3 *": "ask",
       // Git
       "git reset *": "ask",
