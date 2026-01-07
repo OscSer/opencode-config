@@ -5,15 +5,38 @@
   "agent": {
     "plan": {
       "permission": { "edit": "deny" },
+      "color": "#9e9e9e",
     },
     "build": {
       "permission": { "edit": "allow" },
+      "color": "#00bcd4",
     },
   },
   "mcp": {
     "context7": {
       "type": "remote",
       "url": "https://mcp.context7.com/mcp",
+    },
+    "web-search": {
+      "type": "remote",
+      "url": "https://api.z.ai/api/mcp/web_search_prime/mcp",
+      "headers": {
+        "Authorization": "Bearer {env:Z_AI_API_KEY}",
+      },
+    },
+    "web-reader": {
+      "type": "remote",
+      "url": "https://api.z.ai/api/mcp/web_reader/mcp",
+      "headers": {
+        "Authorization": "Bearer {env:Z_AI_API_KEY}",
+      },
+    },
+    "zread": {
+      "type": "remote",
+      "url": "https://api.z.ai/api/mcp/zread/mcp",
+      "headers": {
+        "Authorization": "Bearer {env:Z_AI_API_KEY}",
+      },
     },
   },
   "plugin": ["@franlol/opencode-md-table-formatter"],
