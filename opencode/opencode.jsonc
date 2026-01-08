@@ -5,11 +5,13 @@
   "agent": {
     "plan": {
       "permission": { "edit": "deny" },
-      "color": "#9e9e9e",
+      "color": "#00bcd4",
+      "model": "github-copilot/gpt-5.2",
     },
     "build": {
       "permission": { "edit": "allow" },
-      "color": "#00bcd4",
+      "color": "#9c27b0",
+      "model": "zai-coding-plan/glm-4.7",
     },
   },
   "mcp": {
