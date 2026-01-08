@@ -1,7 +1,7 @@
 ---
 description: Generate commit for staged changes
 agent: general
-model: github-copilot/claude-haiku-4.5
+model: github-copilot/gemini-3-flash-preview
 ---
 
 ## Constraints
@@ -101,4 +101,4 @@ Commit message = OBSERVABLE FACTS, not assumed intentions
 
 ## Step 5: Confirm to User
 
-Inform user: `Commit executed: <commit message>`
+Output: `✓ <commit message>`
