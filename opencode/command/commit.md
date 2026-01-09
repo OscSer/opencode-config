@@ -1,7 +1,7 @@
 ---
 description: Generate commit for staged changes
 agent: general
-model: github-copilot/gemini-3-flash-preview
+model: github-copilot/claude-haiku-4.5
 ---
 
 ## Constraints
