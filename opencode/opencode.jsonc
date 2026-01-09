@@ -36,10 +36,13 @@
     "webfetch": "allow",
     "bash": {
       "*": "allow",
-      // Sensitive commands
+      // package managers & runtimes
       "* install *": "ask",
       "* update *": "ask",
       "* add *": "ask",
+      "python*": "ask",
+      // http
+      "wget *": "ask",
       "curl *": "ask",
       "curl -I *": "allow",
       "curl -i *": "allow",
@@ -61,9 +64,7 @@
       "curl --json *": "allow",
       "curl -H *": "allow",
       "curl --header *": "allow",
-      "wget *": "ask",
-      "python*": "ask",
-      // Git
+      // git
       "git reset *": "ask",
       "git restore *": "ask",
       "git checkout *": "ask",
@@ -72,7 +73,7 @@
       "git push *": "deny",
       "git clone *": "deny",
       "git revert *": "deny",
-      // GitHub CLI
+      // gh
       "gh *": "ask",
       "gh search *": "allow",
       "gh repo view *": "allow",
@@ -84,7 +85,7 @@
       "gh issue list *": "allow",
       "gh issue view *": "allow",
       "gh issue status *": "allow",
-      // Dangerous commands
+      // system
       "sudo *": "deny",
       "chmod *": "deny",
       "chown *": "deny",
