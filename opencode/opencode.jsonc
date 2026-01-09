@@ -49,9 +49,9 @@
     "bash": {
       "*": "allow",
       // Sensitive commands
-      "*install*": "ask",
-      "*update*": "ask",
-      "*add*": "ask",
+      "* install *": "ask",
+      "* update *": "ask",
+      "* add *": "ask",
       "curl*": "ask",
       "wget*": "ask",
       "python*": "ask",
