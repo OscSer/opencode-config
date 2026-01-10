@@ -205,14 +205,12 @@ if (!data.event) throw new Error("Missing event");
 ## Findings
 
 <SEVERITY>
-File: `<relative-path:line>`
-Issue: <issue description>
-Suggestion: <suggestion detail>
+`<relative-path:line>`
+<suggestion detail>
 
 <SEVERITY>
-File: `<relative-path:line>`
-Issue: <issue description>
-Suggestion: <suggestion detail>
+`<relative-path:line>`
+<suggestion detail>
 
 ...
 ```
@@ -244,9 +242,8 @@ Adds a function to retrieve user by ID from a users array.
 ## Findings
 
 BUG
-File: `src/users.ts:3`
-Issue: Accessing `user.name` without null check. `find()` returns `undefined` if no match.
-Suggestion: Add guard clause: `if (!user) return null;` or throw an error.
+`src/users.ts:3`
+Accessing `user.name` without null check. `find()` returns `undefined` if no match. Add guard clause: `if (!user) return null;` or throw an error.
 
 ---
 
@@ -271,11 +268,9 @@ Adds a function to process and transform user data.
 ## Findings
 
 SLOP
-File: `src/users.ts:1`
-Issue: Comment paraphrases function name. The name `processUserData` already conveys this.
-Suggestion: Remove the comment or explain _why_ this transformation is needed.
+`src/users.ts:1`
+Comment paraphrases function name. The name `processUserData` already conveys this. Remove the comment or explain _why_ this transformation is needed.
 
 SLOP
-File: `src/users.ts:3`
-Issue: Redundant null check. `User` type is not nullable—TypeScript already guarantees `user` exists.
-Suggestion: Remove the guard clause. If `User | null` is possible, fix the type instead.
+`src/users.ts:3`
+Redundant null check. `User` type is not nullable—TypeScript already guarantees `user` exists. Remove the guard clause. If `User | null` is possible, fix the type instead.

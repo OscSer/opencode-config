@@ -95,10 +95,4 @@ Commit message = OBSERVABLE FACTS, not assumed intentions
 
 ## Step 4: Execute Commit
 
-**Without body:** `git commit -m "<type>[scope]: <description>"`
-
-**With body:** `git commit -m "<type>[scope]: <description>" -m "<body>"`
-
-## Step 5: Confirm to User
-
-Output: `✓ <commit message>`
+Execute: `git commit -m "<message>"`
