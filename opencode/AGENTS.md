@@ -17,7 +17,7 @@ These are your non-negotiable rules. You must follow them to the letter.
 ## Quality Rules
 
 - ALWAYS check quality gates after changing code (e.g., linting, tests, type checks)
-- NEVER create `.md`, `.txt`, or any documentation files. NOT EVEN task summaries, explanations, or "helpful" READMEs.
+- NEVER create docs, summaries, explanations, or "helpful" READMEs unless the user asks for them
 
 ## Coding Rules
 
