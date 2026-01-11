@@ -6,57 +6,55 @@ model: opencode/big-pickle
 
 ## Constraints
 
-- No staged changes? Inform user, do NOT stage
-- MUST execute commit with Bash, NOT just print
-- ONLY command allowed: `git commit`
-- Complements the commit with the user's arguments (if any)
+- If there are no staged changes: inform the user and STOP.
+- MUST execute the commit via Bash (do not only print the message).
+- Only git write action allowed: `git commit` (no staging, no reset, no amend).
+- Use the user's arguments to constrain the message (if any).
 
 ## Context
 
 **User args:** `$ARGUMENTS`
 
-**Staged changes (ONLY input, do NOT run git diff):**
+**Staged diff (provided as input; DO NOT run git diff):**
 !`git diff --cached`
 
 ## Step 1: Analyze Observable Changes
 
-**CRITICAL: Only state DIRECTLY observable facts. Never speculate.**
+CRITICAL: Only state directly observable facts from the diff. Never speculate.
 
 Identify:
 
-1. **Where** changed? (file, component, module, command, agent)
-2. **What** changed? (specific property, function, value)
-3. Observable effect? (only if evident from code)
-4. User args context? (use if provided)
+1. Where changed? (files/modules)
+2. What changed? (function/behavior/config/value)
+3. Any clear effect visible in code? (only if evident)
+4. Any constraints from user args?
 
-**Anti-speculation:**
+Anti-speculation examples:
 
-- Diff: `port: 3000 → 4000` → port changed, you don't know why
-- Clear bug fix → describe the fix
-- Purpose unclear → describe change factually, don't invent benefits
-
-Commit message = OBSERVABLE FACTS, not assumed intentions
+- Diff shows `port: 3000 → 4000` → say port changed, not why
+- If purpose unclear → describe facts, do not invent benefits
 
 ## Step 2: Determine Commit Type
 
-| Type       | When to use                                                      |
-| ---------- | ---------------------------------------------------------------- |
-| `feat`     | ADD new capability                                               |
-| `fix`      | FIX broken behavior                                              |
-| `refactor` | IMPROVE code, no behavior change                                 |
-| `docs`     | ONLY human-readable docs (READMEs, guides, wikis)                |
-| `style`    | Formatting (whitespace, quotes, semicolons)                      |
-| `test`     | Add/modify tests                                                 |
-| `ci`       | Change CI/CD pipelines                                           |
-| `build`    | Build system, dependencies                                       |
-| `chore`    | Changes that do not affect the source code (.gitignore, scripts) |
-| `perf`     | Improve performance                                              |
+| Type       | When to use                                |
+| ---------- | ------------------------------------------ |
+| `feat`     | Adds new capability                        |
+| `fix`      | Fixes broken behavior                      |
+| `refactor` | Improves code without behavior change      |
+| `docs`     | Human-readable docs only (READMEs, guides) |
+| `style`    | Formatting only (whitespace, quotes)       |
+| `test`     | Adds/modifies tests                        |
+| `ci`       | CI/CD changes                              |
+| `build`    | Build system, dependencies                 |
+| `chore`    | Non-source changes (.gitignore, scripts)   |
+| `perf`     | Performance improvements                   |
 
-**LLM prompt/instructions files are not treated as docs:** `AGENTS.md`, `SKILL.md`, `command/*.md`, `agent/*.md`, or similar → use `feat`/`fix`/`refactor`
+Note: LLM instruction files are not treated as docs:
+`AGENTS.md`, `SKILL.md`, `command/*.md`, `agent/*.md` → classify as `feat`/`fix`/`refactor`.
 
 ## Step 3: Generate Message
 
-**Format:**
+Format:
 
 ```
 <type>[optional scope]: <description>
@@ -64,19 +62,17 @@ Commit message = OBSERVABLE FACTS, not assumed intentions
 [optional body]
 ```
 
-**Rules:**
+Rules:
 
 - Lowercase type
-- Description: concise, imperative ("add" not "added")
-- MUST be factual — only what diff shows
-- MUST specify WHERE the change occurred (affected entity/component/module)
-- NEVER assume benefits/reasons not evident in code
-- Add body ONLY when "why" doesn't fit in description
 - English only
+- Description is concise and imperative ("add", "fix", "remove")
+- MUST be factual (diff-backed)
+- MUST include WHERE the change is (component/module/path)
+- Scope rule: use a scope only when the diff clearly maps to a single area (folder/module); otherwise omit.
+- Body only if a necessary, observable "why" does not fit the header
 
-### Message Quality
-
-**Bad (vague) → Good (specific + contextual):**
+Message Quality (Bad → Good):
 
 - `chore: update config` → `chore(api): increase timeout from 30s to 60s`
 - `fix: update handler` → `fix(auth): add null check in login handler`
@@ -84,7 +80,7 @@ Commit message = OBSERVABLE FACTS, not assumed intentions
 - `refactor: cleanup code` → `refactor(validation): extract logic to utils`
 - `test: add tests` → `test(payment): add error cases for transaction flow`
 
-**NEVER speculate:**
+NEVER speculate:
 
 - `chore: switch model for better performance` ← you don't know this
 - `refactor: simplify code for maintainability` ← guessing
@@ -92,4 +88,5 @@ Commit message = OBSERVABLE FACTS, not assumed intentions
 
 ## Step 4: Execute Commit
 
-Execute: `git commit -m "<message>"`
+Execute:
+`git commit -m "<message>"`

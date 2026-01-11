@@ -4,26 +4,32 @@ description: Apply testing best practices
 
 # Testing
 
-Respond to the user's request applying these testing principles:
-
 User request:
 
 ```text
 $ARGUMENTS
 ```
 
+## Default Output Contract
+
+- If the user asks to WRITE tests: propose a small test plan + provide the tests (or the minimal scaffolding).
+- If the user asks to REVIEW tests: report issues using the same severity format as code review (BUG/CONCERN/STYLE/SLOP), but focused on tests.
+- If the request is ambiguous: ask 1 clarifying question before proceeding.
+
 ---
 
 ## Testing Principles
 
-| Principle                | Rule                                           | Example                                                                       |
-| ------------------------ | ---------------------------------------------- | ----------------------------------------------------------------------------- |
-| **Test behavior**        | Test what it does, not how                     | Test `calculateTotal()` returns correct value, not that it calls `multiply()` |
-| **AAA Pattern**          | Arrange → Act → Assert                         | Setup data, execute action, verify result                                     |
-| **One concept per test** | Each test verifies one behavior                | Split "creates user and sends email" into two tests                           |
-| **Descriptive names**    | Name describes scenario and expected result    | `returnsEmptyArray_whenNoItemsMatch`                                          |
-| **Isolated tests**       | No shared state, no execution order dependency | Each test sets up its own data                                                |
-| **Mock boundaries only** | Mock external systems, not internal modules    | Mock HTTP client, not your own services                                       |
+| Principle            | Rule                                           | Example                                                                       |
+| -------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------- |
+| Test behavior        | Test what it does, not how                     | Test `calculateTotal()` returns correct value, not that it calls `multiply()` |
+| AAA pattern          | Arrange → Act → Assert                         | Setup data, execute action, verify result                                     |
+| One concept per test | Each test verifies one behavior                | Split "creates user and sends email" into two tests                           |
+| Descriptive names    | Name describes scenario and expected result    | `returnsEmptyArray_whenNoItemsMatch`                                          |
+| Isolated tests       | No shared state, no execution order dependency | Each test sets up its own data                                                |
+| Mock boundaries only | Mock external systems, not internal modules    | Mock HTTP client, not your own services                                       |
+
+---
 
 ## Coverage Philosophy
 
@@ -78,3 +84,24 @@ When writing or evaluating tests, ensure:
 - ✅ **Edge cases**: Covers errors, boundaries, empty/null
 - ✅ **No anti-patterns**: Free from testing smells
 - ✅ **Maintainable**: Easy to understand and update
+
+---
+
+## Output Format (when proposing tests)
+
+```
+## Test Plan
+
+- <1-5 bullets of what to test>
+
+## Test Cases
+
+1. <case name> — <what it asserts>
+2. ...
+
+## Implementation Notes
+
+- <mocks/stubs needed>
+- <edge cases to cover>
+- <any setup required>
+```

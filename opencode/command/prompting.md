@@ -1,5 +1,5 @@
 ---
-description: Prompt engineering reference
+description: Prompt engineering helper
 ---
 
 User input:
@@ -8,251 +8,140 @@ User input:
 $ARGUMENTS
 ```
 
-Analyze the user input and adapt your response to the context: creating prompts, agents, commands, skills, or analyzing existing prompts.
+## Goal
+
+Help with prompt engineering tasks:
+
+- Create a prompt (system/user), skill, agent, or command
+- Review an existing prompt and improve it
+- Diagnose prompt failures and propose fixes
+
+If the request is unclear, ask up to 2 clarifying questions:
+
+- Target task and success criteria
+- Required output format and constraints (tools, tone, length)
 
 ---
 
-## Core Capabilities Reference
+## Output Contract (always)
 
-### 1. Few-Shot Learning
+Return:
 
-Teach the model by showing examples instead of explaining rules. Include 2-5 input-output pairs that demonstrate the desired behavior. Use when you need consistent formatting, specific reasoning patterns, or handling of edge cases. More examples improve accuracy but consume tokens—balance based on task complexity.
+1. **Rewritten Prompt** (ready to paste)
+2. **Why This Works** (max 5 bullets; practical, not theory)
+3. **Test Inputs** (2–4 representative inputs; include 1 edge case)
+4. **Expected Outputs** (for each test input, concise)
 
-**Example:**
+---
 
-```markdown
-Extract key information from support tickets:
+## Prompt Template (use unless user requests otherwise)
 
-Input: "My login doesn't work and I keep getting error 403"
-Output: {"issue": "authentication", "error_code": "403", "priority": "high"}
+```
+# Role
 
-Input: "Feature request: add dark mode to settings"
-Output: {"issue": "feature_request", "error_code": null, "priority": "low"}
+You are <role>.
 
-Now process: "Can't upload files larger than 10MB, getting timeout"
+# Task
+
+Do <task>.
+
+# Constraints
+
+- <hard rules>
+- <do not do list>
+- <tool limits, if any>
+
+# Inputs
+
+<variable placeholders or provided context>
+
+# Output Format
+
+<exact structure the model must return>
+
+# Examples (optional)
+
+Input: ...
+Output: ...
 ```
 
-### 2. Chain-of-Thought Prompting
+---
 
-Request step-by-step reasoning before the final answer. Add "Let's think step by step" (zero-shot) or include example reasoning traces (few-shot). Use for complex problems requiring multi-step logic, mathematical reasoning, or when you need to verify the model's thought process. Improves accuracy on analytical tasks by 30-50%.
+## When to Add Examples
 
-**Example:**
+Add 2–4 examples when:
 
-```markdown
-Analyze this bug report and determine root cause.
+- Output format must be consistent
+- Classification/extraction is involved
+- Common failure modes exist
 
-Think step by step:
+Avoid examples when:
 
-1. What is the expected behavior?
-2. What is the actual behavior?
-3. What changed recently that could cause this?
-4. What components are involved?
-5. What is the most likely root cause?
+- Task is trivial and format is simple
 
-Bug: "Users can't save drafts after the cache update deployed yesterday"
-```
+---
 
-### 3. Tree of Thoughts (ToT)
+## Degrees of Freedom
 
-Extends Chain-of-Thought by exploring multiple reasoning paths in parallel, like a decision tree. The model generates several candidate solutions, evaluates each branch, and can backtrack when a path leads to a dead end. Use for problems with multiple valid approaches where the optimal solution isn't immediately clear—puzzles, planning tasks, or complex architectural decisions. Outperforms CoT on tasks requiring exploration and deliberation.
+- **High**: multiple valid solutions → define success criteria, not steps
+- **Medium**: preferred pattern exists → define structure + a few constraints
+- **Low**: exact sequence required → define steps + forbid deviations
 
-**Example:**
+---
 
-```markdown
-Design a caching strategy for our API. Explore 3 different approaches:
+## Failure Mode Checklist
 
-For each approach:
+Use this checklist to diagnose and fix:
 
-1. Describe the strategy
-2. List pros and cons
-3. Identify potential failure modes
-4. Rate feasibility (1-10)
+- Missing/unclear output format
+- Conflicting rules
+- Too much context (bloated prompt)
+- No guardrails for edge cases
+- Tooling not specified (when needed)
+- No acceptance criteria / tests
 
-After exploring all paths:
+---
 
-- Compare the approaches
-- Select the best option with justification
-- If none are satisfactory, backtrack and consider hybrid solutions
-```
+## Core Techniques Reference (optional context)
 
-### 4. Self-Consistency
+### Few-Shot Learning
 
-Sample multiple reasoning paths for the same problem and select the most frequent answer through "voting". Instead of relying on a single greedy response, generate 5-10 diverse solutions and aggregate results. Significantly improves accuracy on math (+17% on GSM8K), logic, and reasoning tasks. Trade-off: higher token cost for higher reliability.
+Teach by examples (2-5 input-output pairs). Use when you need consistent formatting or handling of edge cases.
 
-**Example:**
+### Chain-of-Thought
 
-```markdown
-Solve this problem 5 times using different reasoning approaches.
-After all attempts, report the most common answer.
+Request step-by-step reasoning. Use for multi-step logic or when you need to verify the model's thought process.
 
-Problem: "A store has 50 items. 30% are on sale. Of those on sale,
-half are discounted by 20% and half by 40%. How many items have
-a 40% discount?"
+### Tree of Thoughts
 
-Attempt 1: [solve]
-Attempt 2: [solve differently]
-...
-Final answer: [most frequent result]
-```
+Explore multiple reasoning paths in parallel. Use for problems with multiple valid approaches where the optimal solution isn't immediately clear.
 
-### 5. ReAct (Reasoning + Acting)
+### ReAct (Reasoning + Acting)
 
-Combines chain-of-thought reasoning with action execution in an iterative loop. The model: (1) Reasons about the current state, (2) Decides on an action (tool use, search, API call), (3) Observes the result, (4) Repeats until task completion. Essential for agents that interact with external tools, databases, or APIs. Grounds reasoning in real-world feedback.
+Combine reasoning with action execution in a loop. Essential for agents that interact with tools, databases, or APIs.
 
-**Example:**
-
-```markdown
-Task: Find the current stock price of Apple and calculate if it's
-above its 52-week average.
-
-Format your response as:
-Thought: [reasoning about what to do next]
-Action: [tool to use and parameters]
-Observation: [result from the action]
-... (repeat as needed)
-Final Answer: [conclusion based on gathered information]
-```
-
-### 6. Prompt Optimization
+### Prompt Optimization
 
 Start simple, measure performance, iterate. Test on diverse inputs including edge cases.
 
-```markdown
-V1: "Summarize this article" → Inconsistent
-V2: "Summarize in 3 bullet points" → Better structure
-V3: "Identify 3 main findings, then summarize each" → Consistent, accurate
-```
-
-### 7. Template Systems
-
-Build reusable prompt structures with variables. Reduces duplication, ensures consistency.
-
-```python
-template = "Review this {language} code for {focus_area}. Code: {code_block}"
-prompt = template.format(language="Python", focus_area="security", code_block=user_code)
-```
-
-### 8. System Prompt Design
-
-Set global behavior and constraints that persist across the conversation. Define the model's role, expertise level, output format, and safety guidelines. Use system prompts for stable instructions that shouldn't change turn-to-turn, freeing up user message tokens for variable content.
-
-**Example:**
-
-```markdown
-System: You are a senior backend engineer specializing in API design.
-
-Rules:
-
-- Always consider scalability and performance
-- Suggest RESTful patterns by default
-- Flag security concerns immediately
-- Provide code examples in Python
-- Use early return pattern
-
-Format responses as:
-
-1. Analysis
-2. Recommendation
-3. Code example
-4. Trade-offs
-```
-
 ---
 
-## Key Patterns
+## Persuasion Principles (for critical instructions)
 
-### Progressive Disclosure
+### Authority
 
-Start simple, add complexity only when needed:
+Imperative language for non-negotiable practices.
+Example: "Write code before test? Delete it. No exceptions."
 
-1. **Level 1**: Direct instruction → "Summarize this article"
-2. **Level 2**: Add constraints → "Summarize in 3 bullet points"
-3. **Level 3**: Add reasoning → "Identify findings, then summarize each"
-4. **Level 4**: Add examples → Include 2-3 input-output pairs
-
-### Instruction Hierarchy
-
-```
-[System Context] → [Task Instruction] → [Examples] → [Input Data] → [Output Format]
-```
-
-### Error Recovery
-
-Include fallback instructions, request confidence scores, specify how to indicate missing information.
-
----
-
-## Agent Prompting
-
-### Principles
-
-#### Context Window
-
-The model's "working memory". Tokens accumulate linearly—every token has a cost.
-
-**Default assumption**: The model is already capable. Only add context it doesn't have.
-
-```markdown
-# Good (~50 tokens)
-
-Use pdfplumber: `pdf.pages[0].extract_text()`
-
-# Bad (~150 tokens)
-
-PDF files are a common format... there are many libraries... we recommend pdfplumber because...
-```
-
-#### Degrees of Freedom
-
-Match specificity to task fragility:
-
-| Freedom    | When to use               | Example                                            |
-| ---------- | ------------------------- | -------------------------------------------------- |
-| **High**   | Multiple valid approaches | "Review code for bugs"                             |
-| **Medium** | Preferred pattern exists  | `generate_report(data, format="markdown")`         |
-| **Low**    | Exact sequence required   | `python migrate.py --verify --backup` (no changes) |
-
----
-
-## Persuasion Principles
-
-LLMs respond to persuasion principles. Research shows these techniques double compliance (33% → 72%).
-
-### Primary (Most Effective)
-
-#### 1. Authority
-
-Imperative language for critical practices.
-
-```markdown
-✅ Write code before test? Delete it. No exceptions.
-❌ Consider writing tests first when feasible.
-```
-
-#### 2. Commitment
+### Commitment
 
 Require explicit declarations.
+Example: "You MUST announce: 'I'm using [Skill Name]'"
 
-```markdown
-✅ You MUST announce: "I'm using [Skill Name]"
-❌ Consider letting your partner know which skill you're using.
-```
-
-#### 3. Social Proof
+### Social Proof
 
 Reference universal patterns.
-
-```markdown
-✅ Checklists without tracking = steps get skipped. Every time.
-❌ Some people find tracking helpful for checklists.
-```
-
-### Secondary
-
-| Principle    | Example                                                   |
-| ------------ | --------------------------------------------------------- |
-| **Scarcity** | "IMMEDIATELY request review before proceeding"            |
-| **Unity**    | "We're colleagues. I need your honest technical judgment" |
+Example: "Checklists without tracking = steps get skipped. Every time."
 
 **Avoid:** Reciprocity and Liking—can create sycophancy.
 
@@ -260,7 +149,7 @@ Reference universal patterns.
 
 ## Enhancement Patterns
 
-Apply these patterns only when addressing specific observed problems:
+Apply only when addressing specific observed problems:
 
 | Enhancement       | Apply when...                                   |
 | ----------------- | ----------------------------------------------- |

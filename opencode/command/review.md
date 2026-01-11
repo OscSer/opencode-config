@@ -10,82 +10,49 @@ User input:
 $ARGUMENTS
 ```
 
-## Determining What to Review
+## Determine What to Review
 
-**IMPORTANT: Group files into batches to avoid output truncation**
+IMPORTANT: Batch diffs to avoid output truncation. Skip lockfiles and binaries.
 
-- Instead of getting diffs all at once or file by file, group files into reasonable batches.
-- Skip irrelevant files like lock files or large binary files.
+Priority order:
 
-Follow this priority order:
+### Priority 1: PR Provided
 
-### Priority 1: Pull Request Provided
-
-If input matches PR format, use GitHub CLI to get PR info, then use git diff:
+If input matches a PR number format, use GitHub CLI and compare base...head:
 
 ```bash
-# Step 1: Get PR branch information
 gh pr view <PR_NUMBER> --json baseRefName,headRefName
-
-# Step 2: Fetch the branches
 git fetch origin <base_branch> <head_branch>
-
-# Step 3: Get list of changed files
 git diff --name-only origin/<base_branch>...origin/<head_branch>
-
-# Step 4: Get diff for files in batches
 git diff origin/<base_branch>...origin/<head_branch> -- <file1> <file2> ... <fileN>
-git diff origin/<base_branch>...origin/<head_branch> -- <fileN+1> <fileN+2> ...
-...
 ```
 
-Input examples:
-
-- `123`
-- `PR 123`
-- `pr/123`
+Input examples: `123`, `PR 123`, `pr/123`
 
 ### Priority 2: Target Branch Provided
 
-If input is a branch name, compare current branch against the provided branch:
+If input looks like a branch name:
 
 ```bash
-# Step 1: Fetch the target branch
 git fetch origin <branch>
-
-# Step 2: Get list of files
 git diff --name-only origin/<branch>...HEAD
-
-# Step 3: Get diff for files in batches
 git diff origin/<branch>...HEAD -- <file1> <file2> ... <fileN>
-git diff origin/<branch>...HEAD -- <fileN+1> <fileN+2> ...
-...
 ```
 
-Input examples:
+### Priority 3: Pending Local Changes
 
-- `develop`
-- `release/v1.2.3`
-- `feature/new-feature`
-
-### Priority 3: Pending Changes
-
-If no input, check for uncommitted changes:
+If no input:
 
 ```bash
-# Step 1: Get list of files
 git diff --name-only          # unstaged
 git diff --name-only --cached # staged
-
-# Step 2: Get diff for files in batches
 git diff -- <file1> <file2> ... <fileN>
 git diff --cached -- <fileM> <fileM+1> ...
-...
 ```
 
 ### Priority 4: No Changes
 
-If no input and no pending changes → inform:
+If nothing to review, output exactly:
 
 ```
 No changes to review.
@@ -93,64 +60,45 @@ No changes to review.
 
 ---
 
-## Scope and Verification
+## Scope Rules (Non-negotiable)
 
-**CRITICAL: Stay within the changed lines.**
+**CRITICAL: You MUST ONLY report findings on lines that appear in the diff.**
 
-- Only review files and lines that appear in the diff
-- Do NOT critique or comment on code that was not modified
-- Do NOT suggest changes to unrelated files or functions
-- Reading full files is for context only—to understand the changed code's purpose and impact
+- You may read full files for context, but you MUST NOT report issues outside changed lines.
+- Do NOT suggest changes to unrelated files or functions.
+- When reporting a finding, the line reference MUST point to a changed line in the diff.
 
-**Verify before reporting.**
+Verify before reporting:
 
-- Don't flag something as a bug if you're unsure—investigate first
-- Don't invent hypothetical problems—if an edge case matters, explain the realistic scenario where it breaks
-- If you need more context to be sure, use the tools to get it
-- If you're uncertain about something and can't verify it, say "I'm not sure about X" rather than flagging it as a definite issue
+- If you are unsure, investigate (read file/search) or explicitly say "I'm not sure about X".
+- Do not invent hypothetical problems without a concrete scenario.
 
-**Don't be a zealot about style.**
+Style guidance:
 
-- Verify the code is _actually_ in violation. Don't complain about else statements if early returns are already being used correctly.
-- Some "violations" are acceptable when they're the simplest option. A `let` statement is fine if the alternative is convoluted.
-- Excessive nesting is a legitimate concern regardless of other style choices.
-- Don't flag style preferences as issues unless they clearly violate established project conventions.
-
----
-
-## Gathering Context
-
-**Diffs alone are not enough.** After getting the diff, read the entire file(s) being modified to understand the full context. Code that looks wrong in isolation may be correct given surrounding logic—and vice versa.
-
-- Read the full file to understand existing patterns, control flow, and error handling
-- Check for existing style guide or conventions files (CONVENTIONS.md, AGENTS.md, .editorconfig, etc.)
-- Search the codebase for similar implementations to confirm patterns and conventions before claiming something doesn't fit.
-- Confirm correct usage by consulting authoritative documentation or reliable references before flagging something as wrong.
-- If you're unsure about a pattern, cross-check with well-regarded guides and sources.
+- Don't be a style zealot; report style only if it clearly violates project conventions or harms readability.
+- Excessive nesting and missing guards are legitimate concerns regardless of style preferences.
 
 ---
 
 ## What to Look For
 
-**Bugs** - Your primary focus.
+### Primary: Bugs
 
-- Logic errors, off-by-one mistakes, incorrect conditionals
-- If-else guards: missing guards, incorrect branching, unreachable code paths
-- Edge cases: null/empty/undefined inputs, error conditions, race conditions
-- Security issues: injection, auth bypass, data exposure
-- Broken error handling that swallows failures, throws unexpectedly or returns error types that are not caught.
+- Logic errors, incorrect conditions, missing guards
+- Null/empty inputs, error handling, race conditions
+- Security: injection, auth bypass, data exposure
+- Swallowed failures, unexpected throws, wrong error types
 
-**Structure** - Does the code fit the codebase?
+### Secondary: Structure
 
-- Does it follow existing patterns and conventions?
-- Are there established abstractions it should use but doesn't?
-- Excessive nesting that could be flattened with early returns or extraction
+- Fits existing patterns and conventions
+- Excessive nesting that could be flattened by guards/extraction
 
-**Performance** - Only flag if obviously problematic.
+### Performance: Only if obvious
 
-- O(n²) on unbounded data, N+1 queries, blocking I/O on hot paths
+- O(n^2) on unbounded data, N+1 queries, blocking I/O on hot paths
 
-**Slop** - AI-generated noise that dilutes code quality.
+### Slop (AI noise)
 
 | Category                 | Flag                                         | Preserve                                  |
 | ------------------------ | -------------------------------------------- | ----------------------------------------- |
@@ -159,41 +107,20 @@ No changes to review.
 | **Excessive validation** | Type already guarantees safety               | External input, API boundaries            |
 | **Type escapes**         | Cast to silence compiler                     | Library workaround with documented TODO   |
 
-Examples:
-
-```typescript
-// SLOP: Comment describes what
-// Function to get user by ID
-function getUserById(id: string) { ... }
-
-// SLOP: Redundant validation (type guarantees non-null)
-function process(user: User) {
-  if (!user) throw new Error("User required");  // User type is not nullable
-}
-
-// VALID: Explains why
-// Using Map for O(1) deletion during batch cleanup
-const pending = new Map<string, Task>();
-
-// VALID: External input boundary
-const data = parseInput(raw);
-if (!data.event) throw new Error("Missing event");
-```
-
 ---
 
 ## Output
 
-**Tone**: Matter-of-fact, not accusatory or overly positive. AVOID flattery—no "Great job...", "Thanks for...".
+**Tone:** Matter-of-fact, not accusatory or overly positive. AVOID flattery—no "Great job...", "Thanks for...".
 
-**Severity levels**:
+**Severity levels:**
 
 - **BUG**: Breaks functionality, causes errors, security vulnerability
 - **CONCERN**: Potential issue depending on context or edge cases
 - **STYLE**: Convention violation, readability issue
 - **SLOP**: AI-generated cruft that adds noise without value
 
-**Format**:
+**Format:**
 
 ```
 ## Summary
@@ -206,11 +133,11 @@ if (!data.event) throw new Error("Missing event");
 
 <SEVERITY>
 `<relative-path:line>`
-<suggestion detail>
+<actionable detail; include suggested fix when clear>
 
 <SEVERITY>
 `<relative-path:line>`
-<suggestion detail>
+<actionable detail>
 
 ...
 ```
