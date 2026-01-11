@@ -1,7 +1,7 @@
 ---
 description: Generate commit for staged changes
 agent: general
-model: github-copilot/claude-haiku-4.5
+model: opencode/big-pickle
 ---
 
 ## Constraints
@@ -24,9 +24,10 @@ model: github-copilot/claude-haiku-4.5
 
 Identify:
 
-1. What changed? (files, functions, values)
-2. Observable effect? (only if evident from code)
-3. User args context? (use if provided)
+1. **Where** changed? (file, component, module, command, agent)
+2. **What** changed? (specific property, function, value)
+3. Observable effect? (only if evident from code)
+4. User args context? (use if provided)
 
 **Anti-speculation:**
 
@@ -68,24 +69,20 @@ Commit message = OBSERVABLE FACTS, not assumed intentions
 - Lowercase type
 - Description: concise, imperative ("add" not "added")
 - MUST be factual — only what diff shows
+- MUST specify WHERE the change occurred (affected entity/component/module)
 - NEVER assume benefits/reasons not evident in code
+- Add body ONLY when "why" doesn't fit in description
 - English only
-
-**Body rules:**
-
-- Add ONLY when "why" doesn't fit in description
-- Explain context/motivation — don't repeat description
-- Separate with blank line
 
 ### Message Quality
 
-**Bad (vague) → Good (specific + factual):**
+**Bad (vague) → Good (specific + contextual):**
 
-- `chore: change model` → `chore: switch default model to claude`
-- `fix: update handler` → `fix: add null check in auth handler`
-- `feat: add service` → `feat: add job queue processor`
-- `refactor: cleanup code` → `refactor: extract validation logic to utils`
-- `test: add tests` → `test: add error cases for payment service`
+- `chore: update config` → `chore(api): increase timeout from 30s to 60s`
+- `fix: update handler` → `fix(auth): add null check in login handler`
+- `feat: add service` → `feat(queue): add job queue processor`
+- `refactor: cleanup code` → `refactor(validation): extract logic to utils`
+- `test: add tests` → `test(payment): add error cases for transaction flow`
 
 **NEVER speculate:**
 
