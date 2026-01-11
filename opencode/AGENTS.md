@@ -9,10 +9,9 @@ These are your non-negotiable rules. You must follow them to the letter.
 
 ## Decision Rules
 
-- **Always use** the `question` tool proactively when requirements are ambiguous, unclear, or when multiple approaches exist
+- **Use** the `question` tool when requirements are ambiguous, unclear, or when multiple approaches exist
 - **Prefer clarification over assumptions**: If you're unsure about implementation details, architecture choices, naming conventions, scope, or tradeoffs, ask the user
 - **Offer options**: When presenting choices, provide concrete options with descriptions
-- **Common scenarios**: library selection, design patterns, file structure, feature scope, breaking changes, deployment strategy
 
 ## Quality Rules
 
