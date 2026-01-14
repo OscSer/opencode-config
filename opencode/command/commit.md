@@ -1,7 +1,6 @@
 ---
 description: Generate commit for staged changes
-agent: general
-model: opencode/big-pickle
+agent: build
 ---
 
 ## Constraints
