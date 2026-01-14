@@ -10,27 +10,47 @@ $ARGUMENTS
 
 ## Goal
 
+Analyze user input and determine the task:
+
+- If input contains an existing prompt → review and improve it
+- If input describes a problem or failure → diagnose and fix
+- If input requests creating something new → generate a prompt
+
 Help with prompt engineering tasks:
 
-- Create a prompt (system/user), skill, agent, or command
+- Create a prompt (system/user), skill, agent, command, etc.
 - Review an existing prompt and improve it
 - Diagnose prompt failures and propose fixes
 
-If the request is unclear, ask up to 2 clarifying questions:
-
-- Target task and success criteria
-- Required output format and constraints (tools, tone, length)
-
 ---
 
-## Output Contract (always)
+## Output Contract
 
-Return:
+Adapt format based on task type:
 
-1. **Rewritten Prompt** (ready to paste)
-2. **Why This Works** (max 5 bullets; practical, not theory)
-3. **Test Inputs** (2–4 representative inputs; include 1 edge case)
-4. **Expected Outputs** (for each test input, concise)
+### When creating a new prompt:
+
+1. **Proposal** (complete prompt ready to use)
+2. **Why This Works** (max 5 points; practical, not theoretical)
+
+### When reviewing/improving an existing prompt:
+
+1. **Proposed Changes** (specific section → before/after)
+2. **Justification** (what problem each change solves)
+3. **Impact** (how it affects behavior)
+
+Example:
+
+- **Before:** "Explain the code"
+- **After:** "Explain the code in 3 bullet points: purpose, key logic, edge cases"
+- **Justification:** "Explain" is too open-ended → inconsistent outputs
+- **Impact:** Responses become predictable and scannable
+
+### When diagnosing problems:
+
+1. **Problems Identified** (with examples of failure)
+2. **Proposed Solutions** (specific changes for each problem)
+3. **Verification** (how to verify the problem is resolved)
 
 ---
 
@@ -67,25 +87,30 @@ Output: ...
 
 ---
 
-## When to Add Examples
+## When to Add Examples (in the prompt itself)
 
-Add 2–4 examples when:
+Include 2–4 examples in the prompt when:
 
 - Output format must be consistent
 - Classification/extraction is involved
 - Common failure modes exist
+- User explicitly requests examples
 
 Avoid examples when:
 
 - Task is trivial and format is simple
+- The model already knows the pattern well
 
 ---
 
 ## Degrees of Freedom
 
 - **High**: multiple valid solutions → define success criteria, not steps
+  - Example: "Generate creative product names" (many valid outputs)
 - **Medium**: preferred pattern exists → define structure + a few constraints
+  - Example: "Write commit message following Conventional Commits"
 - **Low**: exact sequence required → define steps + forbid deviations
+  - Example: "Parse CSV: validate headers, check types, handle nulls, return errors"
 
 ---
 
@@ -102,27 +127,30 @@ Use this checklist to diagnose and fix:
 
 ---
 
-## Core Techniques Reference (optional context)
+## Antipatterns to Avoid
 
-### Few-Shot Learning
+- **Verbose Fluff**: "Please", "kindly", "if you could" → use imperatives
+- **Overconstraining**: Too many rules → model paralysis
+- **Underspecifying Output**: "Write a summary" → define length, format, style
+- **Conflicting Rules**: "Be concise" + "Explain in detail" → pick one
+- **Assuming Context**: Model doesn't know your codebase/project unless told
 
-Teach by examples (2-5 input-output pairs). Use when you need consistent formatting or handling of edge cases.
+---
 
-### Chain-of-Thought
+## Core Techniques & Enhancement Patterns
 
-Request step-by-step reasoning. Use for multi-step logic or when you need to verify the model's thought process.
+Apply only when addressing specific observed problems:
 
-### Tree of Thoughts
-
-Explore multiple reasoning paths in parallel. Use for problems with multiple valid approaches where the optimal solution isn't immediately clear.
-
-### ReAct (Reasoning + Acting)
-
-Combine reasoning with action execution in a loop. Essential for agents that interact with tools, databases, or APIs.
-
-### Prompt Optimization
-
-Start simple, measure performance, iterate. Test on diverse inputs including edge cases.
+| Technique/Enhancement   | Description                                                                             | Apply when...                                   |
+| ----------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| **Few-Shot Learning**   | Teach by examples (2-5 input-output pairs)                                              | Inconsistent outputs or edge case handling      |
+| **Chain-of-Thought**    | Request step-by-step reasoning                                                          | Wrong multi-step reasoning, need verification   |
+| **Tree of Thoughts**    | Explore multiple reasoning paths in parallel                                            | CoT fails, need exploration of alternatives     |
+| **ReAct**               | Combine reasoning with action execution in a loop                                       | Task requires external tools or real-world data |
+| **Self-Consistency**    | Generate multiple responses and select the most consistent answer                       | High variance in answers, need reliability      |
+| **Constraints**         | Add explicit rules for edge cases and boundaries                                        | Edge case failures                              |
+| **Role/Persona**        | Define explicit role and context for the model                                          | Quality degraded without proper context         |
+| **Prompt Optimization** | Start simple, measure performance, iterate. Test on diverse inputs including edge cases | Continuous improvement process                  |
 
 ---
 
@@ -144,20 +172,3 @@ Reference universal patterns.
 Example: "Checklists without tracking = steps get skipped. Every time."
 
 **Avoid:** Reciprocity and Liking—can create sycophancy.
-
----
-
-## Enhancement Patterns
-
-Apply only when addressing specific observed problems:
-
-| Enhancement       | Apply when...                                   |
-| ----------------- | ----------------------------------------------- |
-| Few-shot examples | Inconsistent outputs                            |
-| Chain-of-thought  | Wrong multi-step reasoning                      |
-| Tree of Thoughts  | CoT fails on problems requiring exploration     |
-| Self-Consistency  | High variance in answers, need reliability      |
-| ReAct             | Task requires external tools or real-world data |
-| Constraints       | Edge case failures                              |
-| Role/persona      | Quality degraded without context                |
-| Persuasion        | Non-compliance with critical instructions       |
