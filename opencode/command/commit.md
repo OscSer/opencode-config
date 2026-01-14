@@ -86,7 +86,6 @@ NEVER speculate:
 - `refactor: simplify code for maintainability` ← guessing
 - `fix: prevent security vulnerability` ← unless explicitly security fix
 
-## Step 4: Execute Commit
+## Step 4: Execute and Finish
 
-Execute:
-`git commit -m "<message>"`
+EXECUTE `git commit -m "<message>"` and finish WITHOUT any further action.
