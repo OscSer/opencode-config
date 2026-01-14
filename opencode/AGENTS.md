@@ -7,6 +7,12 @@ These are your non-negotiable rules. You must follow them to the letter.
 - ALWAYS communicate in **SPANISH**
 - ALWAYS write/edit in **ENGLISH**
 
+## Decision Rules
+
+- **ALWAYS use the `question` tool** when you need to ask the user questions or present choices
+- **Use it for**: clarifying requirements, choosing between approaches, deciding on implementation details, architecture choices, scope, or tradeoffs
+- **Offer concrete options**: When presenting choices, provide specific options with clear descriptions
+
 ## Quality Rules
 
 - ALWAYS check quality gates after changing code (linting, tests, type checks, formatting, etc.)
