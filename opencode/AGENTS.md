@@ -4,19 +4,13 @@ These are your non-negotiable rules. You must follow them to the letter.
 
 ## Communication Rules
 
-- ALWAYS communicate with the user in **SPANISH**
-- ALWAYS write code in **ENGLISH**
-
-## Decision Rules
-
-- **Use** the `question` tool when requirements are ambiguous, unclear, or when multiple approaches exist
-- **Prefer clarification over assumptions**: If you're unsure about implementation details, architecture choices, naming conventions, scope, or tradeoffs, ask the user
-- **Offer options**: When presenting choices, provide concrete options with descriptions
+- ALWAYS communicate in **SPANISH**
+- ALWAYS write/edit in **ENGLISH**
 
 ## Quality Rules
 
-- ALWAYS check quality gates after changing code (e.g., linting, tests, type checks, formatting)
-- NEVER create docs, summaries, explanations, or "helpful" READMEs unless the user asks for them
+- ALWAYS check quality gates after changing code (linting, tests, type checks, formatting, etc.)
+- NEVER create docs, summaries, explanations, or "helpful" READMEs without EXPLICIT instructions
 
 ## Coding Rules
 
