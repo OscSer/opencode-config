@@ -1,5 +1,6 @@
 ---
 description: Code review PR, branch, or uncommitted changes
+agent: plan
 ---
 
 # Code Review
@@ -180,7 +181,7 @@ Apply same levels, but through testing lens:
 **Format:**
 
 ```markdown
-## Summary
+# Code Review
 
 | BUG         | CONCERN         | SLOP         | STYLE         |
 | ----------- | --------------- | ------------ | ------------- |
@@ -194,12 +195,10 @@ Apply same levels, but through testing lens:
 No issues found.
 
 [If issues exist:]
-**{SEVERITY}**
-`{file-path:line}`
+**{SEVERITY}** ({file-path:line})
 {actionable detail; include suggested fix when clear}
 
-**{SEVERITY}**
-`{file-path:line}`
+**{SEVERITY}** ({file-path:line})
 {actionable detail}
 
 ...
@@ -220,7 +219,7 @@ Input diff:
 
 Output:
 
-## Summary
+# Code Review
 
 | BUG | CONCERN | SLOP | STYLE |
 | --- | ------- | ---- | ----- |
@@ -230,8 +229,7 @@ Adds a function to retrieve user by ID from a users array.
 
 ## Findings
 
-BUG
-`src/users.ts:3`
+**BUG** (src/users.ts:3)
 Accessing `user.name` without null check. `find()` returns `undefined` if no match. Add guard clause: `if (!user) return null;` or throw an error.
 
 ---
@@ -248,7 +246,7 @@ Input diff:
 
 Output:
 
-## Summary
+# Code Review
 
 | BUG | CONCERN | SLOP | STYLE |
 | --- | ------- | ---- | ----- |
@@ -258,10 +256,8 @@ Adds a function to process and transform user data.
 
 ## Findings
 
-SLOP
-`src/users.ts:1`
+**SLOP** (src/users.ts:1)
 Comment paraphrases function name. The name `processUserData` already conveys this. Remove the comment or explain _why_ this transformation is needed.
 
-SLOP
-`src/users.ts:3`
+**SLOP** (src/users.ts:3)
 Redundant null check. `User` type is not nullable—TypeScript already guarantees `user` exists. Remove the guard clause. If `User | null` is possible, fix the type instead.
