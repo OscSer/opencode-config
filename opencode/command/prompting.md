@@ -8,167 +8,137 @@ User input:
 $ARGUMENTS
 ```
 
-## Goal
+## CRITICAL Rules
 
-Analyze user input and determine the task:
-
-- If input contains an existing prompt → review and improve it
-- If input describes a problem or failure → diagnose and fix
-- If input requests creating something new → generate a prompt
-
-Help with prompt engineering tasks:
-
-- Create a prompt (system/user), skill, agent, command, etc.
-- Review an existing prompt and improve it
-- Diagnose prompt failures and propose fixes
+- **NO theoretical explanations** - Provide actionable proposals only
+- **NO fluff or filler** - Every line must add value
+- **NO suggesting techniques without justification** - Only apply when addressing observed problems
+- **ALWAYS be specific** - Concrete examples, not abstract advice
+- **ALWAYS explain WHY** - Don't list problems without explaining impact
 
 ---
 
-## Output Contract
+## Analysis Workflow
 
-Adapt format based on task type:
+### Step 1: Identify Task Type
 
-### When creating a new prompt:
+Match input to one task:
 
-1. **Proposal** (complete prompt ready to use)
-2. **Why This Works** (max 5 points; practical, not theoretical)
+1. **Create new prompt** - User wants to generate prompt from scratch
+2. **Review existing prompt** - User provides a prompt to improve
+3. **Diagnose failure** - User describes a problem with existing prompt
 
-### When reviewing/improving an existing prompt:
+### Step 2: Diagnose Issues (for review/failure)
 
-1. **Proposed Changes** (specific section → before/after)
-2. **Justification** (what problem each change solves)
-3. **Impact** (how it affects behavior)
+Use this checklist:
 
-Example:
+| Issue                 | Symptom                                         |
+| --------------------- | ----------------------------------------------- |
+| Missing output format | Model produces inconsistent/unstructured output |
+| Conflicting rules     | Model struggles with contradictory instructions |
+| No edge case guards   | Model fails on unexpected inputs                |
+| No context provided   | Model doesn't understand domain/project         |
+| Tooling unclear       | Model doesn't know when/how to use tools        |
+| Too verbose           | Prompt is bloated, hard to parse                |
+| Too constrained       | Model is paralyzed by excessive rules           |
 
-- **Before:** "Explain the code"
-- **After:** "Explain the code in 3 bullet points: purpose, key logic, edge cases"
-- **Justification:** "Explain" is too open-ended → inconsistent outputs
-- **Impact:** Responses become predictable and scannable
+### Step 3: Apply Only Necessary Techniques
 
-### When diagnosing problems:
+Only add these if you identified a matching issue in Step 2:
 
-1. **Problems Identified** (with examples of failure)
-2. **Proposed Solutions** (specific changes for each problem)
-3. **Verification** (how to verify the problem is resolved)
+| Technique            | Add ONLY if you found...                                        |
+| -------------------- | --------------------------------------------------------------- |
+| Few-shot examples    | "Missing output format" OR "No edge case guards" in diagnosis   |
+| Chain-of-Thought     | Task requires 3+ sequential steps and model skips/confuses them |
+| Role/Persona         | "No context provided" in diagnosis                              |
+| Explicit constraints | "No edge case guards" in diagnosis with specific failure cases  |
+
+**When to add examples (part of Few-shot):**
+
+Add 2-4 examples if:
+
+- Output format must be consistent (JSON, tables, specific structure)
+- Classification/extraction is involved (categorize, parse, extract fields)
+- Edge cases cause failures (empty inputs, special characters, etc.)
+
+Skip examples if:
+
+- Task is trivial (simple rewording, basic Q&A)
+- Format is obvious (plain text response)
+
+### Step 4: Output Proposal
+
+Format based on task type (see below).
 
 ---
 
-## Prompt Template (use unless user requests otherwise)
+## Output Format
+
+### For Creating New Prompts
 
 ```
-# Role
+## Proposed Prompt
 
-You are <role>.
+[Complete prompt ready to use]
 
-# Task
+## Why This Works
 
-Do <task>.
+[3-5 bullet points explaining key decisions]
+```
 
-# Constraints
+### For Reviewing Existing Prompts
 
-- <hard rules>
-- <do not do list>
-- <tool limits, if any>
+```
+## Issues Found
 
-# Inputs
+**ISSUE_TYPE**
+[Problem description with example if applicable]
 
-<variable placeholders or provided context>
+**ISSUE_TYPE**
+[Problem description with example if applicable]
 
-# Output Format
+## Proposed Changes
 
-<exact structure the model must return>
+**Before:** [exact text from original]
+**After:** [improved version]
+**Justification:** [why this change]
+**Impact:** [expected outcome]
 
-# Examples (optional)
+[Repeat for each change]
+```
 
-Input: ...
-Output: ...
+### For Diagnosing Failures
+
+```
+## Problems Identified
+
+**ISSUE_TYPE**
+[Description with example from failure]
+[How it affects behavior]
+
+**ISSUE_TYPE**
+[Description with example from failure]
+[How it affects behavior]
+
+## Proposed Solutions
+
+For each problem:
+- Specific change to make
+- Why it addresses the root cause
+
+## Verification
+
+[How to test that the fix works]
 ```
 
 ---
 
-## When to Add Examples (in the prompt itself)
+## Common Anti-patterns
 
-Include 2–4 examples in the prompt when:
-
-- Output format must be consistent
-- Classification/extraction is involved
-- Common failure modes exist
-- User explicitly requests examples
-
-Avoid examples when:
-
-- Task is trivial and format is simple
-- The model already knows the pattern well
-
----
-
-## Degrees of Freedom
-
-- **High**: multiple valid solutions → define success criteria, not steps
-  - Example: "Generate creative product names" (many valid outputs)
-- **Medium**: preferred pattern exists → define structure + a few constraints
-  - Example: "Write commit message following Conventional Commits"
-- **Low**: exact sequence required → define steps + forbid deviations
-  - Example: "Parse CSV: validate headers, check types, handle nulls, return errors"
-
----
-
-## Failure Mode Checklist
-
-Use this checklist to diagnose and fix:
-
-- Missing/unclear output format
-- Conflicting rules
-- Too much context (bloated prompt)
-- No guardrails for edge cases
-- Tooling not specified (when needed)
-- No acceptance criteria / tests
-
----
-
-## Antipatterns to Avoid
-
-- **Verbose Fluff**: "Please", "kindly", "if you could" → use imperatives
-- **Overconstraining**: Too many rules → model paralysis
-- **Underspecifying Output**: "Write a summary" → define length, format, style
-- **Conflicting Rules**: "Be concise" + "Explain in detail" → pick one
-- **Assuming Context**: Model doesn't know your codebase/project unless told
-
----
-
-## Core Techniques & Enhancement Patterns
-
-Apply only when addressing specific observed problems:
-
-| Technique/Enhancement   | Description                                                                             | Apply when...                                   |
-| ----------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| **Few-Shot Learning**   | Teach by examples (2-5 input-output pairs)                                              | Inconsistent outputs or edge case handling      |
-| **Chain-of-Thought**    | Request step-by-step reasoning                                                          | Wrong multi-step reasoning, need verification   |
-| **Tree of Thoughts**    | Explore multiple reasoning paths in parallel                                            | CoT fails, need exploration of alternatives     |
-| **ReAct**               | Combine reasoning with action execution in a loop                                       | Task requires external tools or real-world data |
-| **Self-Consistency**    | Generate multiple responses and select the most consistent answer                       | High variance in answers, need reliability      |
-| **Constraints**         | Add explicit rules for edge cases and boundaries                                        | Edge case failures                              |
-| **Role/Persona**        | Define explicit role and context for the model                                          | Quality degraded without proper context         |
-| **Prompt Optimization** | Start simple, measure performance, iterate. Test on diverse inputs including edge cases | Continuous improvement process                  |
-
----
-
-## Persuasion Principles (for critical instructions)
-
-### Authority
-
-Imperative language for non-negotiable practices.
-Example: "Write code before test? Delete it. No exceptions."
-
-### Commitment
-
-Require explicit declarations.
-Example: "You MUST announce: 'I'm using [Skill Name]'"
-
-### Social Proof
-
-Reference universal patterns.
-Example: "Checklists without tracking = steps get skipped. Every time."
-
-**Avoid:** Reciprocity and Liking—can create sycophancy.
+| Pattern                 | Fix                                       |
+| ----------------------- | ----------------------------------------- |
+| "Please", "kindly"      | Use imperatives: "Do X", "Generate Y"     |
+| "Explain in detail"     | Define exact length/format instead        |
+| "Be concise" + "Detail" | Pick one, remove conflict                 |
+| No output format        | Specify structure: "Return JSON with {X}" |
+| Missing role context    | Add "# Role: You are [expert domain]"     |
