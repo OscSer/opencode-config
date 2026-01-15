@@ -88,30 +88,46 @@ Style guidance:
 
 ## What to Look For
 
-**CRITICAL: Focus on bugs and security issues. Don't nitpick style or minor optimizations.**
+**CRITICAL: Focus on bugs and issues. Don't nitpick style or minor optimizations.**
 
 Reporting threshold:
 
-- **BUG/Security**: Always report
+- **BUG**: Always report
 - **CONCERN**: Report if likely to cause production issues
 - **STYLE**: Only if severely harms readability (not preference)
 - **SLOP**: Only if obvious and adds significant noise
 
-### Primary: Bugs
+### Bugs
 
 - Logic errors, incorrect conditions, missing guards
 - Null/empty inputs, error handling, race conditions
 - Security: injection, auth bypass, data exposure
 - Swallowed failures, unexpected throws, wrong error types
 
-### Secondary: Structure (only if severe)
+### Structure (only if severe)
 
 - Violates clear project patterns (observable in 3+ similar files)
 - Nesting >3 levels that obscures logic flow
 
-### Performance: Only if obvious
+### Performance (Only if obvious)
 
 - O(n^2) on unbounded data, N+1 queries, blocking I/O on hot paths
+
+### Code Duplication
+
+Report when code duplicates existing functionality:
+
+| Duplication Type                      | When to Report        | Severity | Suggested Fix                            |
+| ------------------------------------- | --------------------- | -------- | ---------------------------------------- |
+| **Exact function duplication**        | Same implementation   | BUG      | Extract to shared utility/function       |
+| **Utility function replacement**      | Matches existing util | CONCERN  | Use existing utility instead             |
+| **Similar logic with minor variance** | >70% similarity       | CONCERN  | Extract shared logic, parameterize diffs |
+| **Configuration duplication**         | Same config patterns  | STYLE    | Create shared config/constants           |
+
+**Do NOT report:**
+
+- Domain-specific variations that serve different purposes
+- Standard patterns (try/catch, validation loops, etc.)
 
 ### Slop (AI noise)
 
@@ -160,9 +176,9 @@ When reviewing tests, only report if:
 
 **Severity levels:**
 
-- **BUG**: Breaks functionality, causes errors, security vulnerability
-- **CONCERN**: Potential issue depending on context or edge cases
-- **STYLE**: Convention violation, readability issue
+- **BUG**: Breaks functionality, causes errors, vulnerability, exact code duplication
+- **CONCERN**: Potential issue depending on context or edge cases, utility function replacement, similar logic (>70%)
+- **STYLE**: Convention violation, readability issue, configuration duplication
 - **SLOP**: AI-generated cruft that adds noise without value
 
 **Severity levels for test files:**
