@@ -124,12 +124,18 @@ Speculation examples to avoid:
 - `refactor: simplify code for maintainability` ← guessing
 - `fix: prevent security vulnerability` ← unless explicitly security fix
 
-## Step 4: Execute and Report
+## Step 4: Execute Commit (MANDATORY)
 
-Only command allowed: `git commit` (no other git or shell commands).
+CRITICAL: You must execute the commit immediately after generating the message. This is NOT optional.
 
-1. Execute the commit via Bash
-2. Display ONLY to user:
+Execution sequence:
+
+1. Generate commit message from Steps 1-3
+2. Run command: `git commit -m "<message>"` via Bash (only command allowed)
+3. Capture result:
+   - If exit code 0 → report success
+   - If exit code ≠ 0 → report failure with error message
+4. Report result to user ONLY (no intermediate messages, no showing the generated message)
 
 **Success format:**
 
@@ -143,6 +149,4 @@ Only command allowed: `git commit` (no other git or shell commands).
 ✗ Commit failed: <error message>
 ```
 
-If commit fails: report error, do not retry.
-
-**CRITICAL:** Do not show internal reasoning to the user.
+**CRITICAL:** Do not show internal reasoning or the generated message to the user.
