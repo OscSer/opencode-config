@@ -33,43 +33,113 @@ Match input to one task:
 
 Use this checklist:
 
-| Issue                 | Symptom                                         |
-| --------------------- | ----------------------------------------------- |
-| Missing output format | Model produces inconsistent/unstructured output |
-| Conflicting rules     | Model struggles with contradictory instructions |
-| No edge case guards   | Model fails on unexpected inputs                |
-| No context provided   | Model doesn't understand domain/project         |
-| Tooling unclear       | Model doesn't know when/how to use tools        |
-| Too verbose           | Prompt is bloated, hard to parse                |
-| Too constrained       | Model is paralyzed by excessive rules           |
+| Issue                  | Symptom                                             |
+| ---------------------- | --------------------------------------------------- |
+| Missing output format  | Model produces inconsistent/unstructured output     |
+| Conflicting rules      | Model struggles with contradictory instructions     |
+| No edge case guards    | Model fails on unexpected inputs                    |
+| No context provided    | Model doesn't understand domain/project             |
+| Tooling unclear        | Model doesn't know when/how to use tools            |
+| Too verbose            | Prompt is bloated, hard to parse                    |
+| Too constrained        | Model is paralyzed by excessive rules               |
+| No token/size limits   | Prompt exceeds context or leaves no room for output |
+| User vs Agent mismatch | Conversational tone in agent prompt or vice versa   |
 
 ### Step 3: Apply Only Necessary Techniques
 
 Only add these if you identified a matching issue in Step 2:
 
-| Technique            | Add ONLY if you found...                                        |
-| -------------------- | --------------------------------------------------------------- |
-| Few-shot examples    | "Missing output format" OR "No edge case guards" in diagnosis   |
-| Chain-of-Thought     | Task requires 3+ sequential steps and model skips/confuses them |
-| Role/Persona         | "No context provided" in diagnosis                              |
-| Explicit constraints | "No edge case guards" in diagnosis with specific failure cases  |
+| Technique            | Add ONLY if you found...                                         |
+| -------------------- | ---------------------------------------------------------------- |
+| Few-shot examples    | "Missing output format" OR "No edge case guards" in diagnosis    |
+| Chain-of-Thought     | Task requires 3+ sequential steps and model skips/confuses them  |
+| Role/Persona         | "No context provided" in diagnosis                               |
+| Explicit constraints | "No edge case guards" in diagnosis with specific failure cases   |
+| Output specification | "Missing output format" - consider 4-level framework (see below) |
+| Technical limits     | "No token/size limits" - consider budget/timeout if relevant     |
 
-**When to add examples (part of Few-shot):**
+**Few-shot examples:**
 
-Add 2-4 examples if:
+Quantity guidance:
 
-- Output format must be consistent (JSON, tables, specific structure)
-- Classification/extraction is involved (categorize, parse, extract fields)
-- Edge cases cause failures (empty inputs, special characters, etc.)
+- **2-3**: Minimum (happy path + 1 edge case)
+- **5-8**: Recommended for complex tasks (+ error case)
+- **10+**: Only if highly complex
 
-Skip examples if:
+Add if: consistent format needed, classification/extraction, edge cases cause failures
+Skip if: trivial task, obvious format
 
-- Task is trivial (simple rewording, basic Q&A)
-- Format is obvious (plain text response)
+Structure (when adding):
+
+```
+<input>test case</input>
+<output>expected result</output>
+<reasoning>why - helps model learn</reasoning>
+```
+
+**Chain-of-Thought:**
+
+If adding, structure explicitly:
+
+```
+## Step 1: [Action]
+- Do X
+- Output: [result]
+
+## Step 2: [Action]
+- Input: [from Step 1]
+- Output: [result]
+```
 
 ### Step 4: Output Proposal
 
 Format based on task type (see below).
+
+---
+
+## Output Specification (4-Level Framework)
+
+When "Missing output format" diagnosed, consider these (use what's needed):
+
+**Level 1: Data Type** (usually needed)
+
+```
+Format: JSON | Markdown | YAML
+```
+
+**Level 2: Schema** (for structured outputs)
+
+```json
+{ "field": "type", "status": "enum" }
+```
+
+**Level 3: Examples** (if complex)
+
+- Valid example
+- Edge case (optional)
+
+**Level 4: Rules** (if strict requirements)
+
+```
+Required: [fields]
+If error: [format]
+```
+
+---
+
+## Technical Constraints
+
+Consider when prompt is large or task slow:
+
+**Token budget**: Note available context, suggest compression if needed
+**Timeout**: If long task, suggest partial results + progress indicators
+
+---
+
+## Context Type
+
+**Agents (Build/Plan):** Exhaustive, precise, no conversational tone, use imperatives
+**User-facing (Commands):** Can be conversational, still specific about outputs
 
 ---
 
@@ -95,17 +165,12 @@ Format based on task type (see below).
 **ISSUE_TYPE**
 [Problem description with example if applicable]
 
-**ISSUE_TYPE**
-[Problem description with example if applicable]
-
 ## Proposed Changes
 
 **Before:** [exact text from original]
 **After:** [improved version]
 **Justification:** [why this change]
 **Impact:** [expected outcome]
-
-[Repeat for each change]
 ```
 
 ### For Diagnosing Failures
@@ -117,15 +182,10 @@ Format based on task type (see below).
 [Description with example from failure]
 [How it affects behavior]
 
-**ISSUE_TYPE**
-[Description with example from failure]
-[How it affects behavior]
-
 ## Proposed Solutions
 
-For each problem:
 - Specific change to make
-- Why it addresses the root cause
+- Why it addresses root cause
 
 ## Verification
 
@@ -143,3 +203,5 @@ For each problem:
 | "Be concise" + "Detail" | Pick one, remove conflict                 |
 | No output format        | Specify structure: "Return JSON with {X}" |
 | Missing role context    | Add "# Role: You are [expert domain]"     |
+| No schema for JSON      | Add Level 2: JSON Schema                  |
+| Agent tone for users    | Make conversational but keep specificity  |
