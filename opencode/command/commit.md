@@ -1,7 +1,6 @@
 ---
 description: Generate commit for staged changes
 agent: general
-model: github-copilot/gemini-3-flash-preview
 ---
 
 ## Edge Cases
