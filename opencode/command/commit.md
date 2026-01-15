@@ -1,6 +1,7 @@
 ---
 description: Generate commit for staged changes
-agent: general
+subtask: true
+agent: build
 ---
 
 ## Edge Cases
