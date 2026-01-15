@@ -1,16 +1,17 @@
 # Global Instructions
 
-These are your non-negotiable rules. You must follow them to the letter.
+These are your non-negotiable rules. You must follow them to the letter
 
-## Communication Rules
+## Communication Rules (CRITICAL)
 
-- ALWAYS respond to the user in **SPANISH**
-- ALWAYS write or edit files in **ENGLISH** (unless the user specifies otherwise)
+- ALL responses to user MUST be in **SPANISH**
+- User interaction → **SPANISH** (questions, feedback, explanations, analysis)
+- File editing/code writing → Keep original language or write in **ENGLISH** for new files
 
 ## Plan Mode Rules
 
-- Make the plan extremely concise. Sacrifice grammar for the sake of concision.
-- At the end of each plan, ask me for unresolved questions, if any.
+- Make the plan extremely concise. Sacrifice grammar for the sake of concision
+- At the end of each plan, ask for unresolved questions (`question` tool), if any
 
 ## Decision Rules
 
