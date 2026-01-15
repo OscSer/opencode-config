@@ -1,62 +1,35 @@
 ---
 description: Generate commit for staged changes
-agent: build
+agent: general
 ---
-
-## Constraints
-
-- If there are no staged changes: inform the user and STOP.
-- MUST execute the commit via Bash (do not only print the message).
-- Only git write action allowed: `git commit` (no staging, no reset, no amend).
-- Use the user's arguments to constrain the message (if any).
-- Subject line ≤72 chars. If longer, move detail to body.
-- If commit fails: report error, do not retry.
-- Commit message MUST NOT exceed 500 chars total.
 
 ## Edge Cases
 
-| Scenario                  | Action                                                 |
-| ------------------------- | ------------------------------------------------------ |
-| Merge commit detected     | Use type `merge`, describe branches                    |
-| Binary files in diff      | Mention "binary changes" in body if relevant           |
-| >15 files OR >3 modules   | Group by module: "refactor(api,auth,db): <summary>"    |
-| User args contradict diff | Prioritize diff facts, ignore conflicting args         |
-| Pre-commit hook fails     | Report hook error, do not retry or modify              |
-| Commit message >500 chars | Invalid - rework to be more concise, focus on key info |
+| Scenario              | Action                                       |
+| --------------------- | -------------------------------------------- |
+| Merge commit detected | Use type `merge`, describe branches          |
+| Binary files in diff  | Mention "binary changes" in body if relevant |
+| Pre-commit hook fails | Report hook error, do not retry or modify    |
 
-## Context
+## Input
 
-**User args:**
+**Staged diff:** Provided between `BEGIN STAGED DIFF` and `END STAGED DIFF`.
 
-```text
-`$ARGUMENTS`
+BEGIN STAGED DIFF
+!`git --no-pager diff --cached`
+END STAGED DIFF
+
+CRITICAL: Use ONLY the provided diff block. If the block is missing or empty, output the "No staged changes format" and STOP.
+
+**No staged changes format:**
+
 ```
-
-**User args format:** Free-text string that may contain:
-
-- Commit type hint (e.g., "fix", "feat")
-- Scope hint (e.g., "auth module")
-- Description constraint (e.g., "typo correction")
-
-**Processing:**
-
-1. Extract hints if present
-2. Validate against diff (if args say "fix typo" but diff adds features, IGNORE args)
-3. If args contain git flags (--amend, --no-verify): REJECT and inform user
-
-**Staged diff:** Available via system injection (pre-executed).
-
-```diff
-!`git diff --cached`
+✗ No staged changes to commit
 ```
-
-CRITICAL: Do NOT execute `git diff` yourself. The diff content is the above.
-
-If diff is empty: STOP and inform user "No staged changes to commit".
 
 ## Step 1: Analyze Observable Changes
 
-CRITICAL: Only state directly observable facts from the diff. Never speculate.
+CRITICAL: Only state observable facts from the diff. Never infer intent, benefits, or causality.
 
 **If small diff (few lines):**
 
@@ -67,9 +40,6 @@ CRITICAL: Only state directly observable facts from the diff. Never speculate.
 1. Where changed? (files/modules)
 2. What changed? (function/behavior/config/value)
 3. Any clear effect visible in code? (only if evident)
-4. Any constraints from user args?
-
-**Never speculate on intent/benefits.**
 
 Anti-speculation examples:
 
@@ -110,6 +80,7 @@ Constraints:
 - Body: Optional, max 5 lines, each line ≤80 chars
 - Separator: ONE blank line between subject and body
 - No trailing whitespace or periods in subject
+- Commit message MUST NOT exceed 500 chars total
 
 Rules:
 
@@ -122,7 +93,7 @@ Rules:
   1. **All files in same subfolder (depth=2+)**: use folder name
      Example: `src/auth/login.ts` + `src/auth/logout.ts` → `(auth)`
 
-  2. **Single file**: use parent folder
+  2. **Single file**: use parent folder, unless parent is repo root
      Example: `src/pages/dashboard.tsx` → `(pages)`
 
   3. **Multiple top-level folders**: omit scope
@@ -136,6 +107,7 @@ Rules:
   2. Multiple logical changes in same commit (list each)
   3. Non-obvious diff context (e.g., "fixes #123", "reverts abc123")
 
+  If used: format as '-' bullets, one change per line.
   NEVER include speculative reasons. If unsure, omit body.
 
 Message Quality (Bad → Good):
@@ -146,7 +118,7 @@ Message Quality (Bad → Good):
 - `refactor: cleanup code` → `refactor(validation): extract logic to utils`
 - `test: add tests` → `test(payment): add error cases for transaction flow`
 
-NEVER speculate:
+Speculation examples to avoid:
 
 - `chore: switch model for better performance` ← you don't know this
 - `refactor: simplify code for maintainability` ← guessing
@@ -154,8 +126,10 @@ NEVER speculate:
 
 ## Step 4: Execute and Report
 
-1. Execute: `git commit -m "<message>"` via Bash
-2. Display to user:
+Only git action allowed: `git commit` (no staging, no reset, no amend).
+
+1. Execute the commit via Bash
+2. Display ONLY to user:
 
 **Success format:**
 
@@ -169,4 +143,6 @@ NEVER speculate:
 ✗ Commit failed: <error message>
 ```
 
-**Note:** Steps 1-3 are internal processing. Do NOT show analysis to user.
+If commit fails: report error, do not retry.
+
+**CRITICAL:** Do not show internal reasoning to the user.
