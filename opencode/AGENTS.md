@@ -4,14 +4,19 @@ These are your non-negotiable rules. You must follow them to the letter.
 
 ## Communication Rules
 
-- ALWAYS communicate in **SPANISH**
-- ALWAYS write/edit in **ENGLISH**
+- ALWAYS respond to the user in **SPANISH**
+- ALWAYS write or edit files in **ENGLISH** (unless the user specifies otherwise)
+
+## Plan Mode Rules
+
+- Make the plan extremely concise. Sacrifice grammar for the sake of concision.
+- At the end of each plan, give me a list of unresolved questions to answer, if any.
 
 ## Decision Rules
 
-- **ALWAYS use the `question` tool** when you need to ask the user questions or present choices
-- **Use it for**: clarifying requirements, choosing between approaches, deciding on implementation details, architecture choices, scope, or tradeoffs
-- **Offer concrete options**: When presenting choices, provide specific options with clear descriptions
+- ALWAYS use the `question` tool when you need to ask the user questions or present choices
+- Use it for: clarifying requirements, choosing between approaches, deciding on implementation details, architecture choices, etc.
+- Offer concrete options: When presenting choices, provide specific options with clear descriptions
 
 ## Quality Rules
 
