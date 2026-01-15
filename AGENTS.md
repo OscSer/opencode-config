@@ -65,6 +65,21 @@
 - Do not add or change files under `node_modules`.
 - Follow local AGENTS.md files for specific scopes.
 
+## OpenCode Command Syntax
+
+Custom commands support dynamic content injection:
+
+- **Shell output:** `!`command`` injects bash output (runs in project root).
+  - Example: `!`git --no-pager diff --cached``
+  - See: https://opencode.ai/docs/commands#shell-output
+
+- **File references:** `@path/to/file` includes file content.
+  - Example: `@src/auth/login.ts`
+  - See: https://opencode.ai/docs/commands#file-references
+
+- **Arguments:** `$ARGUMENTS`, `$1`, `$2`, etc. replaced with user input.
+  - See: https://opencode.ai/docs/commands#arguments
+
 ## Notes for Agentic Tools
 
 - Use the provided scripts instead of ad-hoc commands.
