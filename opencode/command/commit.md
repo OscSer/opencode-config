@@ -1,6 +1,7 @@
 ---
 description: Generate commit for staged changes
 agent: general
+model: github-copilot/gemini-3-flash-preview
 ---
 
 ## Edge Cases
@@ -19,7 +20,7 @@ BEGIN STAGED DIFF
 !`git --no-pager diff --cached`
 END STAGED DIFF
 
-CRITICAL: Use ONLY the provided diff block. If the block is missing or empty, output the "No staged changes format" and STOP.
+CRITICAL: Use ONLY the provided diff block. Do not run any commands or read files. If the block is missing or empty, output the "No staged changes format" and STOP.
 
 **No staged changes format:**
 
@@ -126,7 +127,7 @@ Speculation examples to avoid:
 
 ## Step 4: Execute and Report
 
-Only git action allowed: `git commit` (no staging, no reset, no amend).
+Only command allowed: `git commit` (no other git or shell commands).
 
 1. Execute the commit via Bash
 2. Display ONLY to user:
