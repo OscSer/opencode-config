@@ -3,9 +3,7 @@ description: Code review PR, branch, or uncommitted changes
 agent: plan
 ---
 
-# Code Review
-
-User input:
+## Input
 
 ```text
 $ARGUMENTS
@@ -180,14 +178,14 @@ Apply same levels, but through testing lens:
 
 **Format:**
 
-```markdown
+```
 # Code Review
 
 | BUG         | CONCERN         | SLOP         | STYLE         |
 | ----------- | --------------- | ------------ | ------------- |
-| {BUG_COUNT} | {CONCERN_COUNT} | {SLOP_COUNT} | {STYLE_COUNT} |
+| [BUG_COUNT] | [CONCERN_COUNT] | [SLOP_COUNT] | [STYLE_COUNT] |
 
-{Brief summary: 1-2 sentences describing the nature of the changes (e.g., "Adds authentication middleware" or "Refactors error handling in API layer")}
+[Brief summary: 1-2 sentences describing the nature of the changes (e.g., "Adds authentication middleware" or "Refactors error handling in API layer")]
 
 ## Findings
 
@@ -195,13 +193,10 @@ Apply same levels, but through testing lens:
 No issues found.
 
 [If issues exist:]
-**{SEVERITY}** ({file-path:line})
-{actionable detail; include suggested fix when clear}
+**[SEVERITY]** ([file-path:line])
+[Actionable detail; include suggested fix when clear]
 
-**{SEVERITY}** ({file-path:line})
-{actionable detail}
-
-...
+[Repeat per issue]
 ```
 
 ---
