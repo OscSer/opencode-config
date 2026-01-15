@@ -31,6 +31,8 @@ Match input to one task:
 
 ### Step 2: Diagnose Issues (for review/failure)
 
+Classify each issue as **major** (affects correctness, consistency, or usability) or **minor** (cosmetic wording/formatting only, no behavior impact). If only minor issues exist, output the OK response format instead of proposing changes.
+
 Use this checklist:
 
 | Issue                  | Symptom                                             |
@@ -93,7 +95,7 @@ If adding, structure explicitly:
 
 ### Step 4: Output Proposal
 
-Format based on task type (see below).
+If only minor issues were found, output the OK response format and stop. Otherwise, format based on task type (see below).
 
 ---
 
@@ -171,6 +173,23 @@ Consider when prompt is large or task slow:
 **After:** [improved version]
 **Justification:** [why this change]
 **Impact:** [expected outcome]
+```
+
+### For OK (No Relevant Changes)
+
+Use this only when all identified issues are minor.
+
+```
+## Status
+
+These instructions are solid and need no relevant changes.
+
+## Checklist
+
+- Output format is clear
+- Constraints are consistent
+- Context is sufficient
+- No high-impact gaps
 ```
 
 ### For Diagnosing Failures
