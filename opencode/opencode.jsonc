@@ -87,6 +87,7 @@
       "gh pr list *": "allow",
       "gh pr status *": "allow",
       "gh pr checks *": "allow",
+      "gh pr checkout *": "allow",
       "gh issue list *": "allow",
       "gh issue view *": "allow",
       "gh issue status *": "allow",
