@@ -12,7 +12,7 @@ BEGIN STAGED DIFF
 !`git --no-pager diff --cached`
 END STAGED DIFF
 
-CRITICAL: Use ONLY the provided diff block. Do not run any commands or read files. If the block is missing or empty, output the "No staged changes format" and STOP.
+CRITICAL: Use ONLY the provided diff block. Do not run `git diff`. If the block is missing or empty, output the "No staged changes format" and STOP.
 
 **No staged changes format:**
 
@@ -132,11 +132,11 @@ CRITICAL: You must execute the commit immediately after generating the message. 
 Execution sequence:
 
 1. Generate commit message from Steps 1-3
-2. Run command: `git commit -m "<message>"` via Bash (only command allowed)
+2. Run command: `git commit -m "<message>"` (ONLY this command)
 3. Capture result:
    - If exit code 0 → report success
    - If exit code ≠ 0 → report failure with error message
-4. Report result to user ONLY (no intermediate messages, no showing the generated message)
+4. Report result to user ONLY (no intermediate messages)
 
 **Success format:**
 

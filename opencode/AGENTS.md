@@ -16,8 +16,7 @@ These are your non-negotiable rules. You must follow them to the letter
 ## Decision Rules
 
 - ALWAYS use the `question` tool when you need to ask the user questions or present choices
-- Use it for: clarifying requirements, choosing between approaches, deciding on implementation details, architecture choices, etc.
-- Offer concrete options: When presenting choices, provide specific options with clear descriptions
+- Use it for: clarifying requirements, choosing between approaches, implementation details, architecture choices, etc.
 
 ## Quality Rules
 
