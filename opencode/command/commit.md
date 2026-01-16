@@ -4,14 +4,6 @@ subtask: true
 agent: build
 ---
 
-## Edge Cases
-
-| Scenario              | Action                                       |
-| --------------------- | -------------------------------------------- |
-| Merge commit detected | Use type `merge`, describe branches          |
-| Binary files in diff  | Mention "binary changes" in body if relevant |
-| Pre-commit hook fails | Report hook error, do not retry or modify    |
-
 ## Input
 
 **Staged diff:** Provided between `BEGIN STAGED DIFF` and `END STAGED DIFF`.
@@ -27,6 +19,14 @@ CRITICAL: Use ONLY the provided diff block. Do not run any commands or read file
 ```
 ✗ No staged changes to commit
 ```
+
+## Edge Cases
+
+| Scenario              | Action                                       |
+| --------------------- | -------------------------------------------- |
+| Merge commit detected | Use type `merge`, describe branches          |
+| Binary files in diff  | Mention "binary changes" in body if relevant |
+| Pre-commit hook fails | Report hook error, do not retry or modify    |
 
 ## Step 1: Analyze Observable Changes
 
