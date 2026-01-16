@@ -33,9 +33,9 @@
   "permission": {
     "edit": "deny",
     "doom_loop": "ask",
-    "external_directory": "ask",
     "skill": "allow",
     "webfetch": "allow",
+    "external_directory": "allow",
     "bash": {
       "*": "allow",
       // package managers & runtimes
