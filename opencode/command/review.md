@@ -1,5 +1,5 @@
 ---
-description: Code review PR, branch, or uncommitted changes
+description: Code review PR or local changes
 agent: plan
 ---
 
@@ -13,89 +13,118 @@ $ARGUMENTS
 
 CRITICAL:
 
-- Batch diffs to avoid output truncation
-- Skip lockfiles, binaries, and generated files
-- NEVER truncate diffs manually—use batching instead
+- If total files > 10: Collect diffs in batches of 10 (run separate `git diff` per batch), then analyze ALL collected diffs together
+- If git diff fails: Output `Error retrieving diff: [error message]` and stop
+- Skip lockfiles, binaries, and generated files (_.lock, _.bin, dist/, build/)
+- NEVER truncate diffs manually, use batching instead.
 
-Follow this priority order (stop at first match):
+Follow this workflow:
 
-### Priority 1: PR Provided
+### Workflow
 
-If input matches a PR number format (e.g., `123`, `PR 123`, `pr/123`), use GitHub CLI and compare base...head:
+**Step 1: Parse Input**
+
+- Input: `$ARGUMENTS`
+- Action: Determine input type (empty | PR number/URL | other)
+- Output: Input type classification
+
+**Step 2: Fetch Diffs** (based on Step 1 classification)
+
+- Action: Run appropriate git commands
+- Output: List of changed files + diff content
+- If error or no changes: Output error/no-changes message and STOP
+
+**Step 3: Review** (proceed only if Step 2 succeeded)
+
+- Input: Diff content from Step 2
+- Action: Apply review criteria below
+- Output: Formatted review
+
+### Implementation Details
+
+#### Case A: Empty Input
+
+If no input provided:
+
+1. Check for uncommitted changes: `git status --porcelain`
+2. If no changes, output: `No changes to review.`
+3. If changes exist, proceed to review them
+
+**Review Local Changes**
 
 ```bash
-gh pr view <PR_NUMBER> --json baseRefName,headRefName
+git diff -- <file1> <file2> ... <fileN>
+git diff --cached -- <file1> <file2> ... <fileN>
+```
+
+#### Case B: PR Provided
+
+If input matches a pull request:
+
+**Supported formats:**
+
+- Number: e.g., `123`, `PR 123`, `#123`
+- URL: e.g., `github.com/org/repo/pull/123`
+
+**Processing:**
+
+1. Detect the PR number
+
+2. Fetch PR metadata: Run `gh pr view <number> --json baseRefName,headRefName`
+
+3. On error (PR not found, command failed, etc.), output `Cannot review PR: [error]`. Do NOT fall back to local changes.
+
+```bash
 git fetch origin <base_branch> <head_branch>
+git checkout origin/<head_branch>
 git diff --name-only origin/<base_branch>...origin/<head_branch>
 git diff origin/<base_branch>...origin/<head_branch> -- <file1> <file2> ... <fileN>
 ```
 
-### Priority 2: Target Branch Provided
+#### Case C: None of the above
 
-If input looks like a branch name (e.g., `main`, `develop`, `feature/xyz`):
-
-```bash
-git fetch origin <branch>
-git diff --name-only origin/<branch>...HEAD
-git diff origin/<branch>...HEAD -- <file1> <file2> ... <fileN>
-```
-
-### Priority 3: Pending Local Changes
-
-If no input:
-
-```bash
-git diff --name-only          # unstaged
-git diff --name-only --cached # staged
-git diff -- <file1> <file2> ... <fileN>
-git diff --cached -- <fileM> <fileM+1> ...
-```
-
-### Priority 4: No Changes
-
-If nothing to review, output exactly:
-
-```
-No changes to review.
-```
+Output: `No local changes or PR to review.`
 
 ---
 
 ## Scope Rules (Non-negotiable)
 
-**CRITICAL: You MUST ONLY report findings on lines that appear in the diff.**
+**CRITICAL: You MUST ONLY report findings on changed lines.**
 
 Enforcement rules:
 
-1. Read full files for context → Report ONLY changed lines
-2. Line reference in finding → MUST point to a changed line in the diff
-3. Uncertain about an issue → Investigate OR explicitly state "Uncertain about X"
-4. No concrete scenario → Do NOT report
+1. Read full files containing changes for context (to understand intent)
+2. Every line reference in a finding → MUST point to a changed line in the diff
+3. When diagnosing severity, you MAY mention patterns in unchanged code for context (e.g., "This pattern exists in 5 other files"), but the finding itself MUST be about changed lines only
+4. If the issue doesn't exist in changed lines, do NOT report it
+5. Uncertain about an issue → INVESTIGATE or do not report
+6. No concrete scenario → Do NOT report
 
 **Verification before reporting:**
 
 - ✅ Issue exists in changed lines
 - ✅ Line reference points to diff
-- ✅ Real impact identified (not theoretical)
-- ❌ No hypothetical problems
+- ✅ Real impact identified (not theoretical or hypothetical)
 
 Style guidance:
 
-- Don't be a style zealot; report style only if it clearly violates project conventions or harms readability.
+- Report style only if it clearly violates project conventions OR severely harms readability.
 - Excessive nesting and missing guards are legitimate concerns regardless of style preferences.
 
 ---
 
 ## What to Look For
 
-**CRITICAL: Focus on bugs and issues. Don't nitpick style or minor optimizations.**
+**CRITICAL: Focus on bugs and issues. Report style ONLY when specified below.**
 
-Reporting threshold:
+Reporting threshold (in priority order):
 
-- **BUG**: Always report
-- **CONCERN**: Report if likely to cause production issues
-- **STYLE**: Only if severely harms readability (not preference)
-- **SLOP**: Only if obvious and adds significant noise
+1. **BUG**: Always report (logic errors, null safety, security)
+2. **CONCERN**: Report if likely to cause production issues or maintenance burden
+3. **STYLE**: Report when code violates established project pattern (observable in 3+ similar files) OR creates severe readability issues (nesting >3 levels, incomprehensible names)
+4. **SLOP**: Report ONLY if obvious AI-generated noise (e.g., comment duplicates function name) AND fixing improves clarity
+
+When uncertain, skip the finding.
 
 ### Bugs
 
@@ -115,17 +144,18 @@ Reporting threshold:
 
 ### Code Duplication
 
-Report when code duplicates existing functionality:
+Report when changed code duplicates other changed code in the same diff:
 
-| Duplication Type                      | When to Report        | Severity | Suggested Fix                            |
-| ------------------------------------- | --------------------- | -------- | ---------------------------------------- |
-| **Exact function duplication**        | Same implementation   | BUG      | Extract to shared utility/function       |
-| **Utility function replacement**      | Matches existing util | CONCERN  | Use existing utility instead             |
-| **Similar logic with minor variance** | >70% similarity       | CONCERN  | Extract shared logic, parameterize diffs |
-| **Configuration duplication**         | Same config patterns  | STYLE    | Create shared config/constants           |
+| Duplication Type                      | When to Report                                     | Severity | Suggested Fix                            |
+| ------------------------------------- | -------------------------------------------------- | -------- | ---------------------------------------- |
+| **Exact function duplication**        | Same implementation in changed lines               | BUG      | Extract to shared utility/function       |
+| **Utility function replacement**      | New code matches existing util (observable in PR)  | CONCERN  | Use existing utility instead             |
+| **Similar logic with minor variance** | Same control flow + variable names differ in diffs | CONCERN  | Extract shared logic, parameterize diffs |
+| **Configuration duplication**         | Same config patterns in changed lines              | STYLE    | Create shared config/constants           |
 
 **Do NOT report:**
 
+- Duplication between changed code and unchanged code (out of scope)
 - Domain-specific variations that serve different purposes
 - Standard patterns (try/catch, validation loops, etc.)
 
@@ -144,35 +174,42 @@ Report when code duplicates existing functionality:
 
 **Apply when reviewing:** `*.test.*`, `*.spec.*`, `__tests__/*`, `__mocks__/*`, `/test/**`, `/tests/**`
 
-When reviewing test files, apply these additional criteria:
+### Testing Review: Anti-patterns & Severity
 
-### Testing Anti-patterns (REJECT)
+| Anti-pattern                                                        | Severity | When to Report                     |
+| ------------------------------------------------------------------- | -------- | ---------------------------------- |
+| **Testing internals** (tests refactoring internals, not public API) | BUG      | Always                             |
+| **Type casting** (`as unknown as X` hides real errors)              | BUG      | Always                             |
+| **Test interdependence** (shared state, order dependency)           | BUG      | Always                             |
+| **Over-mocking** (mocks hide critical business logic)               | CONCERN  | When logic being tested is mocked  |
+| **Implementation coupling** (spies on internal calls)               | CONCERN  | On internal calls only             |
+| **Snapshot abuse** (obviously excessive or obscures intent)         | SLOP     | Makes intent unclear               |
+| **Disabling linters** (no clear reason)                             | SLOP     | Without documented reason          |
+| **Magic values** (`expect(result).toBe(42)` - why 42?)              | SLOP     | Makes test incomprehensible        |
+| **Unintelligible test names** (single letters, no context)          | STYLE    | When unambiguously obscures intent |
 
-| Anti-pattern                | Problem                                              | Severity | Fix                                      | Report When                            |
-| --------------------------- | ---------------------------------------------------- | -------- | ---------------------------------------- | -------------------------------------- |
-| **Testing internals**       | Breaks when refactoring                              | BUG      | Test public API only                     | Always                                 |
-| **Over-mocking**            | Tests pass but code fails                            | CONCERN  | Mock only external boundaries            | Mocks hide critical business logic     |
-| **Snapshot abuse**          | Large snapshots nobody reviews                       | SLOP     | Use targeted assertions                  | Obviously excessive or obscures intent |
-| **Type casting in tests**   | Hides real type errors                               | BUG      | `as unknown as X` = red flag             | Always                                 |
-| **Disabling linters**       | `@ts-ignore`, `eslint-disable` mask issues           | SLOP     | Fix the underlying problem               | Without clear reason                   |
-| **Magic values**            | `expect(result).toBe(42)` - why 42?                  | SLOP     | Use named constants or derive from input | Makes test incomprehensible            |
-| **Test interdependence**    | Test B fails because Test A didn't run               | BUG      | Isolate setup per test                   | Always                                 |
-| **Implementation coupling** | `expect(spy).toHaveBeenCalledWith(...)` on internals | CONCERN  | Verify outputs, not call sequences       | On internal calls                      |
+---
 
-### Critical Issues Only
+## Assumption Handling
 
-When reviewing tests, only report if:
+When inferring types or behavior from code (e.g., "getProfile() may return undefined"):
 
-- ❌ **Doesn't test behavior**: Tests internals instead of outputs → BUG
-- ❌ **Test interdependence**: Shared state or order dependency → BUG
-- ❌ **Type casting**: `as unknown as X` hides real errors → BUG
-- ❌ **Over-mocking critical logic**: Mocks hide the actual logic being tested → CONCERN
+1. **Use explicit type annotations** in the diff (preferred)
+2. **Use pattern evidence** in the same file (null checks, guards, return statements visible in diff)
+3. **If neither exists** → Skip the finding. Base reports only on observable facts in changed code.
+
+This ensures findings are grounded in visible evidence, not speculation.
 
 ---
 
 ## Output
 
-**Tone:** Matter-of-fact, not accusatory or overly positive. AVOID flattery—no "Great job...", "Thanks for...".
+**Tone:** Matter-of-fact.
+
+- Lead with: [severity + file:line]
+- Describe: Concrete problem only (what broke, what failed, what violates spec)
+- Fix: Actionable suggestion (how to fix, what to do)
+- Omit: Flattery, reassurance, narrative filler, explanations of why the problem matters
 
 **Severity levels:**
 
@@ -180,17 +217,6 @@ When reviewing tests, only report if:
 - **CONCERN**: Potential issue depending on context or edge cases, utility function replacement, similar logic (>70%)
 - **STYLE**: Convention violation, readability issue, configuration duplication
 - **SLOP**: AI-generated cruft that adds noise without value
-
-**Severity levels for test files:**
-
-Apply same levels, but through testing lens:
-
-| Severity    | Test-Specific Criteria                                                                                       |
-| ----------- | ------------------------------------------------------------------------------------------------------------ |
-| **BUG**     | Test doesn't test behavior, false positives/negatives, testing internals, test interdependence, type casting |
-| **CONCERN** | Over-mocking hides critical logic, implementation coupling                                                   |
-| **STYLE**   | Completely unintelligible test names (single letters, no context)                                            |
-| **SLOP**    | Snapshot abuse (obviously excessive or obscures intent), disabled linters without reason                     |
 
 **Format:**
 
@@ -201,74 +227,91 @@ Apply same levels, but through testing lens:
 | ----------- | --------------- | ------------ | ------------- |
 | [BUG_COUNT] | [CONCERN_COUNT] | [SLOP_COUNT] | [STYLE_COUNT] |
 
-[Brief summary: 1-2 sentences describing the nature of the changes (e.g., "Adds authentication middleware" or "Refactors error handling in API layer")]
+Brief summary (1-2 sentences): Describe ONLY what changed (new feature, refactor, fix). Examples: "Adds user authentication middleware", "Fixes race condition in queue".
 
 ## Findings
 
-[If no issues:]
-No issues found.
+**Rules:**
+- If ALL counts are 0: Output "No issues found."
+- If ANY count > 0: List findings ordered by severity (BUG → CONCERN → STYLE → SLOP)
 
-[If issues exist:]
+**Format per finding:**
+
 **[SEVERITY]** ([file-path:line])
-[Actionable detail; include suggested fix when clear]
+[Problem description]
+[Suggested fix]
 
 [Repeat per issue]
 ```
 
 ---
 
-## Example
+## Examples
 
-Input diff:
+### Example 1: Simple Case (BUG + SLOP)
 
+<input>
 ```diff
-+ function getUser(id) {
++ // Function to process user data
++ function getUser(id: string) {
 +   const user = users.find(u => u.id === id);
-+   return user.name;
++   if (!user) throw new Error("User is required");
++   const profile = getProfile(user.id);
++   return { ...user, profile };
 + }
 ```
+</input>
 
-Output:
-
+<output>
 # Code Review
 
 | BUG | CONCERN | SLOP | STYLE |
 | --- | ------- | ---- | ----- |
-| 1   | 0       | 0    | 0     |
+| 1   | 0       | 1    | 0     |
 
-Adds a function to retrieve user by ID from a users array.
+Adds function to retrieve user by ID with associated profile data.
 
 ## Findings
 
-**BUG** (src/users.ts:3)
-Accessing `user.name` without null check. `find()` returns `undefined` if no match. Add guard clause: `if (!user) return null;` or throw an error.
+**BUG** (src/users.ts:4)
+Missing null check on `profile`. `getProfile()` may return `undefined`, but it's directly spread into the return object. Add guard: `if (!profile) throw new Error("Profile not found");` or return a default.
+
+**SLOP** (src/users.ts:1)
+Comment paraphrases function name. The name `getUser` already conveys this. Remove the comment or explain _why_ this retrieval pattern is needed.
+</output>
+
+<reasoning>
+BUG severity: Real null safety issue with concrete impact (runtime error)
+SLOP: Comment adds no value, paraphrases obvious function intent
+</reasoning>
 
 ---
 
-Input diff:
+### Example 2: No Issues Found
 
+<input>
 ```diff
-+ // Function to process user data
-+ function processUserData(user: User) {
-+   if (!user) throw new Error("User is required");
-+   return transform(user);
++ function calculateTotal(items: Item[]): number {
++   return items.reduce((sum, item) => sum + item.price, 0);
 + }
 ```
+</input>
 
-Output:
-
+<output>
 # Code Review
 
 | BUG | CONCERN | SLOP | STYLE |
 | --- | ------- | ---- | ----- |
-| 0   | 0       | 2    | 0     |
+| 0   | 0       | 0    | 0     |
 
-Adds a function to process and transform user data.
+Adds function to calculate total price from items array.
 
 ## Findings
 
-**SLOP** (src/users.ts:1)
-Comment paraphrases function name. The name `processUserData` already conveys this. Remove the comment or explain _why_ this transformation is needed.
+No issues found.
+</output>
 
-**SLOP** (src/users.ts:3)
-Redundant null check. `User` type is not nullable—TypeScript already guarantees `user` exists. Remove the guard clause. If `User | null` is possible, fix the type instead.
+<reasoning>
+Clean implementation: null-safe reduce, clear naming, no edge cases
+No findings warranted - resist temptation to nitpick
+</reasoning>
