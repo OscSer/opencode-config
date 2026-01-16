@@ -1,87 +1,41 @@
 # Agent Instructions for opencode-config
 
-## Scope
-
-- Applies to the repository root and all subdirectories.
-- The `opencode/AGENTS.md` are global rules for opencode config.
-
-## Repository Purpose
-
-- This repo installs config files for opencode using Bun scripts.
-- It is a configuration repo, not an app with a build step.
-- Primary code lives under `src/` and is TypeScript.
+Configuration repo for opencode using Bun. Primary code in `src/` (TypeScript).
 
 ## Setup
 
-- Requires Bun and Node.js installed.
-- Install dependencies: `bun install`.
-- Install opencode config: `bun run setup`.
-
-## Build / Lint / Test Commands
-
-- Build: no build script (config repo).
-- Lint + format check: `bun run check`.
-- Type check: `bun run typecheck`.
-- Tests: `bun test`.
-- Format (writes files): `bun run format`.
-- Single test file: `bun test src/installer.test.ts`.
-- Single test by name: `bun test -t "should create symlinks"`.
-- Watch tests: `bun test --watch`.
+- Install: `bun install`
+- Config: `bun run setup`
 
 ## Quality Gates (after code changes)
 
-- Run `bun run check`, `bun run typecheck`, and `bun test`.
-- Use `bun run format` only when formatting is required.
+Run: `bun run check`, `bun run typecheck`, `bun test`
 
-## Tooling Notes
+## Code Style
 
-- Linting and import sorting use Biome (`biome.json`).
-- Formatting uses Prettier (formatter is disabled in Biome).
-- TS config is strict and enforces unused checks.
-
-## Code Style Guidelines
-
-- Use TypeScript for all source code in `src/`.
-- Keep modules small and single-purpose.
-- Prefer direct code over configuration-heavy abstractions.
-- Use guard clauses and avoid nested conditionals.
-- Avoid `else` after a `return`.
-- Avoid magic strings and numbers; use named constants.
-- Avoid premature abstraction until a pattern repeats.
-- Keep functions under ~50 lines when possible.
-- Favor immutable updates (`{ ...state }`, `array.map`).
+- TypeScript in `src/`; small single-purpose modules
+- Guard clauses, no nested conditionals
+- No `else` after `return`
+- Named constants (no magic numbers/strings)
+- Functions <50 lines
+- Immutable updates (`{...obj}`, `array.map`)
+- Descriptive names reveal intent
 
 ## Tests
 
-- Tests use Bun’s test runner (`bun:test`).
-- Favor descriptive test names that explain behavior.
-- Use `beforeEach`/`afterEach` for temp fixtures.
-- Keep tests deterministic and filesystem-safe.
+Use Bun's test runner. Descriptive test names, deterministic, filesystem-safe.
 
 ## Repository Conventions
 
-- Do not add documentation unless explicitly requested.
-- Keep edits focused on the requested change.
-- Do not add or change files under `node_modules`.
-- Follow local AGENTS.md files for specific scopes.
+- No docs unless explicitly requested
+- Focused edits only
+- No changes to `node_modules`
+- Follow local AGENTS.md for specific scopes
 
-## OpenCode Command Syntax
+## Injecting Bash Output
 
-Custom commands support dynamic content injection:
+Can be used in custom commands
 
-- **Shell output:** `!`command`` injects bash output (runs in project root).
-  - Example: `!`git --no-pager diff --cached``
-  - See: https://opencode.ai/docs/commands#shell-output
-
-- **File references:** `@path/to/file` includes file content.
-  - Example: `@src/auth/login.ts`
-  - See: https://opencode.ai/docs/commands#file-references
-
-- **Arguments:** `$ARGUMENTS`, `$1`, `$2`, etc. replaced with user input.
-  - See: https://opencode.ai/docs/commands#arguments
-
-## Notes for Agentic Tools
-
-- Use the provided scripts instead of ad-hoc commands.
-- Keep shell commands safe and reproducible.
-- Prefer editing existing files over adding new ones.
+- `$ARGUMENTS` → arguments
+- `!command` → bash output
+- `@path/to/file` → file content
