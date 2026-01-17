@@ -13,10 +13,10 @@
     },
   },
   "mcp": {
-    "context7": {
-      "type": "remote",
-      "url": "https://mcp.context7.com/mcp",
-    },
+    // "context7": {
+    //   "type": "remote",
+    //   "url": "https://mcp.context7.com/mcp",
+    // },
     "devtools": {
       "type": "local",
       "command": [
@@ -28,6 +28,7 @@
       ],
     },
   },
+  "plugin": ["@franlol/opencode-md-table-formatter"],
   "permission": {
     "edit": "deny",
     "doom_loop": "ask",
@@ -78,7 +79,12 @@
       "git revert *": "deny",
       // gh
       "gh *": "ask",
+      "gh help *": "allow",
       "gh search *": "allow",
+      "gh status *": "allow",
+      "gh config get *": "allow",
+      "gh config list *": "allow",
+      "gh repo list *": "allow",
       "gh repo view *": "allow",
       "gh pr view *": "allow",
       "gh pr diff *": "allow",
@@ -116,5 +122,4 @@
   },
   "theme": "system",
   "disabled_providers": ["openrouter"],
-  "plugin": ["@franlol/opencode-md-table-formatter"],
 }
