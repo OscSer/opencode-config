@@ -1,6 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "system",
   "small_model": "opencode/big-pickle",
   "default_agent": "plan",
   "agent": {
@@ -29,7 +28,6 @@
       ],
     },
   },
-  "plugin": ["@franlol/opencode-md-table-formatter"],
   "permission": {
     "edit": "deny",
     "doom_loop": "ask",
@@ -91,6 +89,11 @@
       "gh issue list *": "allow",
       "gh issue view *": "allow",
       "gh issue status *": "allow",
+      "gh api *": "allow",
+      "gh api * POST": "deny",
+      "gh api * PUT": "deny",
+      "gh api * PATCH": "deny",
+      "gh api * DELETE": "deny",
       // system
       "sudo *": "deny",
       "chmod *": "deny",
@@ -111,4 +114,7 @@
     "terminal_suspend": "none",
     "model_cycle_recent": "none",
   },
+  "theme": "system",
+  "disabled_providers": ["openrouter"],
+  "plugin": ["@franlol/opencode-md-table-formatter"],
 }
