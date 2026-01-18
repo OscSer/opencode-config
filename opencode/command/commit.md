@@ -1,53 +1,50 @@
 ---
 description: Generate commit for staged changes
 subtask: true
-model: github-copilot/claude-haiku-4.5
 ---
 
-## Input
+# Commit Command
 
-**Staged diff:** Provided between `BEGIN STAGED DIFF` and `END STAGED DIFF`.
+## Purpose
 
-BEGIN STAGED DIFF
+Generate a concise, factual commit message from the staged diff and execute the commit.
+
+## Assumptions
+
+- Use ONLY the provided diff section. Do not run `git status`, `git diff`, etc.
+- The ONLY command you need to run is `git commit -m "<message>"`.
+- If the diff section is empty, output the no-staged-changes format and stop.
+
+## Diff
+
 !`git --no-pager diff --cached`
-END STAGED DIFF
 
-CRITICAL: Use ONLY the provided diff block. Do not run `git diff`. If the block is missing or empty, output the "No staged changes format" and STOP.
-
-**No staged changes format:**
+## No Staged Changes
 
 ```
 ✗ No staged changes to commit
 ```
 
-## Edge Cases
+## Process
 
-| Scenario              | Action                                       |
-| --------------------- | -------------------------------------------- |
-| Merge commit detected | Use type `merge`, describe branches          |
-| Binary files in diff  | Mention "binary changes" in body if relevant |
-| Pre-commit hook fails | Report hook error, do not retry or modify    |
+1. Analyze observable changes.
+2. Determine commit type.
+3. Generate commit message.
+4. Execute commit and report result.
 
-## Step 1: Analyze Observable Changes
+## Analyze Observable Changes
 
-CRITICAL: Only state observable facts from the diff. Never infer intent, benefits, or causality.
+Only state facts visible in the diff. Never infer intent, benefits, or causality.
 
-**If small diff (few lines):**
+- Small diff: list file path and primary change.
+- Complex diff: list where changed, what changed, and any clear visible effect.
 
-- Quick scan: file path + primary change (e.g., "config value updated")
+Examples:
 
-**If complex (multiple files OR >30 lines):**
+- `port: 3000 -> 4000` means the port changed, not why.
+- If purpose is unclear, describe facts only.
 
-1. Where changed? (files/modules)
-2. What changed? (function/behavior/config/value)
-3. Any clear effect visible in code? (only if evident)
-
-Anti-speculation examples:
-
-- Diff shows `port: 3000 → 4000` → say port changed, not why
-- If purpose unclear → describe facts, do not invent benefits
-
-## Step 2: Determine Commit Type
+## Commit Types
 
 | Type       | When to use                                |
 | ---------- | ------------------------------------------ |
@@ -63,9 +60,9 @@ Anti-speculation examples:
 | `perf`     | Performance improvements                   |
 
 CRITICAL: LLM instruction files are not treated as docs:
-`AGENTS.md`, `SKILL.md`, `command/*.md`, `agent/*.md` → classify as `feat`/`fix`/`refactor`.
+`AGENTS.md`, `SKILL.md`, `command/*.md`, `agent/*.md` -> classify as `feat`/`fix`/`refactor`.
 
-## Step 3: Generate Message
+## Commit Message Rules
 
 Format:
 
@@ -77,77 +74,57 @@ Format:
 
 Constraints:
 
-- Subject line: ≤72 chars (type + scope + description combined)
-- Body: Optional, max 5 lines, each line ≤80 chars
-- Separator: ONE blank line between subject and body
+- Subject line <=72 chars (type + scope + description combined)
+- Body optional, max 5 lines, each line <=80 chars
+- ONE blank line between subject and body
 - No trailing whitespace or periods in subject
-- Commit message MUST NOT exceed 500 chars total
-
-Rules:
-
-- Lowercase type
-- English only
-- Description is concise and imperative ("add", "fix", "remove")
-- MUST be factual (diff-backed)
+- Total message <=500 chars
+- Lowercase type, English only
+- Description is concise and imperative
+- MUST be factual and diff-backed
 - MUST include WHERE the change is (component/module/path)
-- Scope Rules (priority order):
-  1. **All files in same subfolder (depth=2+)**: use folder name
-     Example: `src/auth/login.ts` + `src/auth/logout.ts` → `(auth)`
 
-  2. **Single file**: use parent folder, unless parent is repo root
-     Example: `src/pages/dashboard.tsx` → `(pages)`
+Scope rules (priority order):
 
-  3. **Multiple top-level folders**: omit scope
-     Example: `src/auth/` + `src/api/` → no scope
+1. All files in same subfolder (depth=2+) -> use folder name
+2. Single file -> use parent folder unless repo root
+3. Multiple top-level folders -> omit scope
+4. Root-level files -> omit scope
 
-  4. **Root-level files**: omit scope
-     Example: `package.json` + `tsconfig.json` → no scope
+Body rules: use ONLY if one of these is true:
 
-- Body: Use ONLY if one of these is true:
-  1. Breaking change details (BREAKING CHANGE: ...)
-  2. Multiple logical changes in same commit (list each)
-  3. Non-obvious diff context (e.g., "fixes #123", "reverts abc123")
+1. Breaking change details (BREAKING CHANGE: ...)
+2. Multiple logical changes in same commit (list each)
 
-  If used: format as '-' bullets, one change per line.
-  NEVER include speculative reasons. If unsure, omit body.
+If used: format as '-' bullets, one change per line. Never speculate.
 
-Message Quality (Bad → Good):
+## Edge Cases
 
-- `chore: update config` → `chore(api): increase timeout from 30s to 60s`
-- `fix: update handler` → `fix(auth): add null check in login handler`
-- `feat: add service` → `feat(queue): add job queue processor`
-- `refactor: cleanup code` → `refactor(validation): extract logic to utils`
-- `test: add tests` → `test(payment): add error cases for transaction flow`
+| Scenario              | Action                                       |
+| --------------------- | -------------------------------------------- |
+| Merge commit detected | Use type `merge`, describe branches          |
+| Binary files in diff  | Mention "binary changes" in body if relevant |
+| Pre-commit hook fails | Report hook error, do not retry or modify    |
 
-Speculation examples to avoid:
+## Execute Commit (Mandatory)
 
-- `chore: switch model for better performance` ← you don't know this
-- `refactor: simplify code for maintainability` ← guessing
-- `fix: prevent security vulnerability` ← unless explicitly security fix
-
-## Step 4: Execute Commit (MANDATORY)
-
-CRITICAL: You must execute the commit immediately after generating the message. This is NOT optional.
+You must execute the commit immediately after generating the message.
 
 Execution sequence:
 
-1. Generate commit message from Steps 1-3
-2. Run command: `git commit -m "<message>"` (ONLY this command)
-3. Capture result:
-   - If exit code 0 → report success
-   - If exit code ≠ 0 → report failure with error message
-4. Report result to user ONLY (no intermediate messages)
+1. Generate commit message
+2. Run `git commit -m "<message>"`
+3. Capture result and report success or failure
+4. Report result only, no intermediate messages
 
-**Success format:**
+Success format:
 
 ```
 ✓ Commit created: <hash>
 ```
 
-**Failure format:**
+Failure format:
 
 ```
 ✗ Commit failed: <error message>
 ```
-
-**CRITICAL:** Do not show internal reasoning or the generated message to the user.
