@@ -11,12 +11,13 @@ These are your non-negotiable rules. You must follow them to the letter
 ## Planning Rules
 
 - When planning, make the plan concise and focused
-- Ask for unresolved questions (if any) before starting
+- Ask for unresolved/relevant questions (if any) before implementing
 
 ## Quality Rules
 
 - ALWAYS check quality gates after changing code (linting, tests, type checks, formatting, etc.)
-- NEVER create docs, summaries, explanations, or "helpful" READMEs without EXPLICIT instructions
+- DON'T create docs, summaries, or "helpful" READMEs without EXPLICIT user approval
+- Prefer minimal changes; avoid unrequested refactors
 
 ## Coding Rules
 
