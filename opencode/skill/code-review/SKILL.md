@@ -55,23 +55,23 @@ Perform a focused, high-signal code review of the provided diff. Prioritize impa
 
 ## Output Format
 
-If no issues are found:
-
-```markdown
-No significant issues found
-```
-
-If issues are found:
-
 ```markdown
 # Code Review
 
-Findings: [N]
+{summary of the diff}
 
-1. [Severity] - [Short title]
-   File: [path:line]
-   Why: [impact in one sentence]
-   Evidence: [validated context summary]
-   Suggestion: [concise fix]
-2. [Repeat for each issue]
+## Findings
+
+[If no issues are found:]
+
+No issues found.
+
+[If issues are found:]
+
+**{severity} - {short title}**
+File: {path:line}
+Why: {description}
+Suggestion: {concise fix}
+
+{repeat for each issue}
 ```
