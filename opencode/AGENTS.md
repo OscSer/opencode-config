@@ -2,21 +2,16 @@
 
 These are your non-negotiable rules. You must follow them to the letter
 
-## Communication Rules (CRITICAL)
+## Communication Rules
 
-- ALL responses to user MUST be in **SPANISH**
-- User interaction → **SPANISH** (questions, feedback, explanations, analysis)
-- File editing/code writing → Keep original language or write in **ENGLISH** for new files
+- ALL responses to user MUST be in **SPANISH**, but edits to files must be in **ENGLISH**
+- User interaction → **SPANISH**
+- File editing/code writing → **ENGLISH**
 
 ## Plan Mode Rules
 
 - Make the plan extremely concise. Sacrifice grammar for the sake of concision
-- At the end of each plan, ask for unresolved questions (`question` tool), if any
-
-## Decision Rules
-
-- ALWAYS use the `question` tool when you need to ask the user questions or present choices
-- Use it for: clarifying requirements, choosing between approaches, implementation details, architecture choices, etc.
+- At the end of each plan, ask for unresolved questions, if any
 
 ## Quality Rules
 
