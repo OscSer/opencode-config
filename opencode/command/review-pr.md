@@ -16,4 +16,4 @@ CRITICAL: Follow these steps sequentially:
 4. Execute `gh pr diff <number> > /tmp/pr-diff-<number>.txt`
 5. Read the file, if it is large, use `Read` tool's offset/limit options to read in batches
 6. LOAD the `code-review` skill
-7. PERFORM the review following the OUTPUT FORMAT of the skill
+7. PERFORM the review following the skill's instructions

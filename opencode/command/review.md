@@ -1,5 +1,5 @@
 ---
-description: Code review local changes
+description: Code review pending changes
 ---
 
 ## Diff
@@ -12,4 +12,4 @@ CRITICAL: Follow these steps sequentially:
 
 1. If the diff is EMPTY, output `No changes to review` and STOP
 2. LOAD the `code-review` skill
-3. PERFORM the review following the OUTPUT FORMAT of the skill
+3. PERFORM the review following the skill's instructions
