@@ -6,17 +6,26 @@
     "plan": {
       "permission": { "edit": "deny" },
       "color": "#00bcd4",
+      "model": "github-copilot/gpt-5.1-codex-max",
     },
     "build": {
       "permission": { "edit": "allow" },
       "color": "#9c27b0",
+      "model": "github-copilot/claude-haiku-4.5",
+    },
+    "explore": {
+      "model": "github-copilot/claude-haiku-4.5",
     },
   },
   "mcp": {
-    // "context7": {
-    //   "type": "remote",
-    //   "url": "https://mcp.context7.com/mcp",
-    // },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+    },
+    "ref": {
+      "type": "remote",
+      "url": "https://api.ref.tools/mcp?apiKey={env:REF_API_KEY}",
+    },
     "devtools": {
       "type": "local",
       "command": [
@@ -73,6 +82,7 @@
       "git restore *": "ask",
       "git checkout *": "ask",
       "git commit *": "ask",
+      "git stash *": "ask",
       "git add *": "deny",
       "git push *": "deny",
       "git clone *": "deny",
