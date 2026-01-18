@@ -8,10 +8,10 @@ These are your non-negotiable rules. You must follow them to the letter
 - User interaction → **SPANISH**
 - File editing/code writing → **ENGLISH**
 
-## Plan Mode Rules
+## Planning Rules
 
-- Make the plan extremely concise. Sacrifice grammar for the sake of concision
-- At the end of each plan, ask for unresolved questions, if any
+- When planning, make the plan concise and focused
+- Ask for unresolved questions (if any) before starting
 
 ## Quality Rules
 

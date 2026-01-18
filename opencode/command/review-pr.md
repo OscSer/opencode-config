@@ -1,6 +1,5 @@
 ---
 description: Code review pull request
-agent: plan
 ---
 
 ## Input

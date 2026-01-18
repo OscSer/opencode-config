@@ -1,6 +1,5 @@
 ---
 description: Code review local changes
-agent: plan
 ---
 
 ## Diff
