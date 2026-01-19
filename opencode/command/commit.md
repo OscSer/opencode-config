@@ -1,6 +1,7 @@
 ---
 description: Generate commit for staged changes
 subtask: true
+agent: general
 ---
 
 # Commit Command

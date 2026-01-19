@@ -1,5 +1,6 @@
 ---
 description: Prompt engineering helper
+agent: plan
 ---
 
 ## Input

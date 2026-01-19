@@ -68,10 +68,10 @@ No issues found.
 
 [If issues are found:]
 
-**{severity} - {short title}**
-File: {path:line}
-Why: {description}
-Suggestion: {concise fix}
+**{severity}**
+{path:line}
+{description of the issue}
+{suggested fix}
 
 {repeat for each issue}
 ```

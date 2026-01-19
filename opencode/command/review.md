@@ -1,5 +1,6 @@
 ---
 description: Code review pending changes
+agent: plan
 ---
 
 ## Diff
