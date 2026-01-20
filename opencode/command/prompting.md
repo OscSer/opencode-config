@@ -33,39 +33,38 @@ Match input to one task:
 
 ### Step 2: Check for Major Issues (for review)
 
-Scan for major issues ONLY. If no major issues found, output OK format immediately.
+Scan for major issues ONLY. Track all issues found (major/minor) for Step 4 decision.
 
-| Issue                 | MAJOR only if...                                       |
-| --------------------- | ------------------------------------------------------ |
-| Missing output format | Output varies between runs on same input               |
-| Conflicting rules     | Two rules directly contradict each other               |
-| No edge case guards   | Specific, demonstrable edge case breaks the prompt     |
-| Tooling unclear       | Model uses wrong tool or skips tool use entirely       |
-| Critical context gap  | Model cannot complete task without missing domain info |
+| Issue                 | MAJOR only if...                                                           |
+| --------------------- | -------------------------------------------------------------------------- |
+| Missing output format | Output varies between runs on same input                                   |
+| Conflicting rules     | Two rules directly contradict each other                                   |
+| Tooling unclear       | Prompt lacks explicit tool selection criteria OR tool call format examples |
+| Critical context gap  | Model cannot complete task without missing domain info                     |
 
 **NOT major (skip these):** wording preferences, formatting style, "could be clearer", verbosity opinions, tone suggestions, reorganization ideas
 
 ### Step 3: Apply Only Necessary Techniques
 
-Only add these if you identified a matching issue in Step 2:
+For each major issue identified in Step 2, select the matching technique below:
 
 | Technique            | Add ONLY if you found...                                         |
 | -------------------- | ---------------------------------------------------------------- |
-| Few-shot examples    | "Missing output format" OR "No edge case guards" in diagnosis    |
+| Few-shot examples    | "Missing output format" in diagnosis                             |
 | Chain-of-Thought     | Task requires 3+ sequential steps and model skips/confuses them  |
 | Role/Persona         | "Critical context gap" in diagnosis                              |
-| Explicit constraints | "No edge case guards" in diagnosis with specific edge cases      |
+| Explicit constraints | Task requires specific edge cases                                |
 | Output specification | "Missing output format" - consider 4-level framework (see below) |
 
 **Few-shot examples:**
 
 Quantity guidance:
 
-- **2-3**: Minimum (happy path + 1 edge case)
-- **5-8**: Recommended for complex tasks (+ error case)
-- **10+**: Only if highly complex
+- **1-2**: Minimum (happy path)
+- **2-5**: Recommended for complex tasks (+ error case)
+- **5+**: Only if highly complex
 
-Add if: consistent format needed, classification/extraction, edge cases cause errors
+Add if: consistent format needed, classification/extraction
 Skip if: trivial task, obvious format
 
 Structure (when adding):
@@ -89,6 +88,8 @@ If adding, structure explicitly:
 - Input: [from Step 1]
 - Output: [result]
 ```
+
+After applying techniques, proceed to Step 4 with your proposed changes.
 
 ### Step 4: Output Proposal
 
@@ -120,7 +121,6 @@ Format: JSON | Markdown | YAML
 **Level 3: Examples** (if complex)
 
 - Valid example
-- Edge case (optional)
 
 **Level 4: Rules** (if strict requirements)
 
@@ -168,8 +168,7 @@ Use this only when all identified issues are minor.
 ```
 ## Status
 
-These instructions are solid and need no relevant changes.
-
+No major issues identified. These instructions are solid and ready to use.
 ```
 
 ---
