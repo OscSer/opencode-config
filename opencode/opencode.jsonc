@@ -2,7 +2,6 @@
   "$schema": "https://opencode.ai/config.json",
   "small_model": "opencode/big-pickle",
   "default_agent": "plan",
-  "model": "github-copilot/claude-sonnet-4.5",
   "agent": {
     "plan": {
       "permission": { "edit": "deny" },
@@ -18,18 +17,16 @@
       "type": "remote",
       "url": "https://mcp.context7.com/mcp",
     },
-    // "ref": {
-    //   "type": "remote",
-    //   "url": "https://api.ref.tools/mcp?apiKey={env:REF_API_KEY}",
-    // },
     "devtools": {
       "type": "local",
       "command": [
         "npx",
         "-y",
         "chrome-devtools-mcp@latest",
+        "--browser-url=http://127.0.0.1:9222",
         "--headless=true",
         "--isolated=true",
+        "--chrome-arg=--mute-audio",
       ],
     },
   },
