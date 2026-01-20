@@ -1,7 +1,7 @@
 ---
 description: Generate commit for staged changes
-subtask: true
 agent: general
+model: opencode/big-pickle
 ---
 
 # Commit Command
