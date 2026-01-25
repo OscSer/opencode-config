@@ -6,47 +6,12 @@
     "plan": {
       "permission": { "edit": "deny" },
       "color": "#00bcd4",
-      "model": "github-copilot/claude-sonnet-4.5",
     },
     "build": {
       "permission": { "edit": "allow" },
       "color": "#9c27b0",
-      "model": "github-copilot/claude-haiku-4.5",
     },
   },
-  "mcp": {
-    "context7": {
-      "type": "remote",
-      "url": "https://mcp.context7.com/mcp",
-    },
-    // "devtools": {
-    //   "type": "local",
-    //   "command": [
-    //     "npx",
-    //     "-y",
-    //     "chrome-devtools-mcp@latest",
-    //     "--browser-url=http://127.0.0.1:9222",
-    //     "--headless=true",
-    //     "--isolated=true",
-    //     "--chrome-arg=--mute-audio",
-    //   ],
-    // },
-    // "sentry": {
-    //   "type": "local",
-    //   "command": [
-    //     "npx",
-    //     "@sentry/mcp-server@latest",
-    //     "--access-token={env:SENTRY_ACCESS_TOKEN}",
-    //     "--host={env:SENTRY_HOST}",
-    //   ],
-    // },
-  },
-  "plugin": [
-    "@franlol/opencode-md-table-formatter@latest",
-    "@nick-vi/opencode-type-inject@latest",
-    "opencode-pty@latest",
-    "@tarquinen/opencode-dcp@latest",
-  ],
   "permission": {
     "edit": "deny",
     "doom_loop": "ask",
@@ -128,6 +93,39 @@
       "dd *": "deny",
     },
   },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+    },
+    // "devtools": {
+    //   "type": "local",
+    //   "command": [
+    //     "npx",
+    //     "-y",
+    //     "chrome-devtools-mcp@latest",
+    //     "--browser-url=http://127.0.0.1:9222",
+    //     "--headless=true",
+    //     "--isolated=true",
+    //     "--chrome-arg=--mute-audio",
+    //   ],
+    // },
+    // "sentry": {
+    //   "type": "local",
+    //   "command": [
+    //     "npx",
+    //     "@sentry/mcp-server@latest",
+    //     "--access-token={env:SENTRY_ACCESS_TOKEN}",
+    //     "--host={env:SENTRY_HOST}",
+    //   ],
+    // },
+  },
+  "plugin": [
+    "@franlol/opencode-md-table-formatter@latest",
+    "@nick-vi/opencode-type-inject@latest",
+    "opencode-pty@latest",
+    "@tarquinen/opencode-dcp@latest",
+  ],
   "keybinds": {
     "input_clear": "ctrl+d",
     "session_new": "ctrl+n",
