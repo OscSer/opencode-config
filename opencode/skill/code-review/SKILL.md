@@ -23,7 +23,6 @@ description: Review changes to find high-impact issues. Use for code review of l
 - **OUTPUT: Print the initial list of potential issues to investigate**
   - Format: Simple numbered list with brief description and location
   - Example: "1. Unclosed database connection in handler.ts:45"
-  - If no potential issues found, state: "No potential issues flagged"
 
 **Goal for Step 1: Cast a wide net. The rigorous filtering happens in Step 2.**
 
