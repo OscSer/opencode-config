@@ -6,10 +6,12 @@
     "plan": {
       "permission": { "edit": "deny" },
       "color": "#00bcd4",
+      "model": "github-copilot/claude-sonnet-4.5",
     },
     "build": {
       "permission": { "edit": "allow" },
       "color": "#9c27b0",
+      "model": "github-copilot/claude-haiku-4.5",
     },
   },
   "mcp": {
@@ -39,7 +41,12 @@
     //   ],
     // },
   },
-  "plugin": ["@franlol/opencode-md-table-formatter"],
+  "plugin": [
+    "@franlol/opencode-md-table-formatter@latest",
+    "@nick-vi/opencode-type-inject@latest",
+    "opencode-pty@latest",
+    "@tarquinen/opencode-dcp@latest",
+  ],
   "permission": {
     "edit": "deny",
     "doom_loop": "ask",

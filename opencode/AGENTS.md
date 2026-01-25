@@ -19,6 +19,14 @@ These are your non-negotiable rules. You must follow them to the letter
 - DON'T create docs, summaries, or "helpful" READMEs without EXPLICIT user approval
 - Prefer minimal changes; avoid unrequested refactors
 
+## PTY Management Rules
+
+- Use `pty_spawn` for long-running processes (dev servers, watch modes, REPLs, monorepo commands)
+- Use regular `bash` tool for quick one-shot commands
+- Use `notifyOnExit=true` for builds/tests that must complete
+- Use `pattern` parameter in `pty_read` to filter errors/warnings
+- Clean up PTYs with `cleanup=true` when done
+
 ## Coding Rules
 
 | Principle                          | Rule                                                  | Example                                              |
