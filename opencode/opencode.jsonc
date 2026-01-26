@@ -5,12 +5,12 @@
   "agent": {
     "plan": {
       "permission": { "edit": "deny" },
-      "color": "#00bcd4",
+      "color": "#00bcd4"
     },
     "build": {
       "permission": { "edit": "allow" },
-      "color": "#9c27b0",
-    },
+      "color": "#9c27b0"
+    }
   },
   "permission": {
     "edit": "deny",
@@ -90,14 +90,14 @@
       "chown *": "deny",
       "format *": "deny",
       "fdisk *": "deny",
-      "dd *": "deny",
-    },
+      "dd *": "deny"
+    }
   },
   "mcp": {
     "context7": {
       "type": "remote",
-      "url": "https://mcp.context7.com/mcp",
-    },
+      "url": "https://mcp.context7.com/mcp"
+    }
     // "devtools": {
     //   "type": "local",
     //   "command": [
@@ -124,7 +124,7 @@
     "@franlol/opencode-md-table-formatter@latest",
     "@nick-vi/opencode-type-inject@latest",
     "opencode-pty@latest",
-    "@tarquinen/opencode-dcp@latest",
+    "@tarquinen/opencode-dcp@latest"
   ],
   "keybinds": {
     "input_clear": "ctrl+d",
@@ -135,8 +135,8 @@
     "messages_next": "ctrl+right",
     "messages_previous": "ctrl+left",
     "terminal_suspend": "none",
-    "model_cycle_recent": "none",
+    "model_cycle_recent": "none"
   },
   "theme": "system",
-  "disabled_providers": ["openrouter"],
+  "disabled_providers": ["openrouter"]
 }

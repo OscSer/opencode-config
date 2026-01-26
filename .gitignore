@@ -7,7 +7,6 @@ dist/
 bun.lock
 
 # IDEs
-.vscode/
 .idea/
 *.swp
 *.swo

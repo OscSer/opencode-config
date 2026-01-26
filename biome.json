@@ -1,7 +1,14 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.3.9/schema.json",
   "formatter": {
-    "enabled": false
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "javascript": {
+    "formatter": {
+      "trailingCommas": "all"
+    }
   },
   "linter": {
     "enabled": true,
