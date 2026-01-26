@@ -10,6 +10,9 @@
     "build": {
       "permission": { "edit": "allow" },
       "color": "#9c27b0"
+    },
+    "explore": {
+      "model": "github-copilot/gemini-3-flash-preview"
     }
   },
   "mcp": {
