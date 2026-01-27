@@ -21,11 +21,10 @@ These are your non-negotiable rules. You must follow them to the letter
 
 ## PTY Management Rules
 
-- Use `pty_spawn` for long-running processes (dev servers, watch modes, REPLs, monorepo commands)
-- Use regular `bash` tool for quick one-shot commands
-- Use `notifyOnExit=true` for builds/tests that must complete
+- Use `pty_spawn` for long-running processes (dev servers, watch modes, REPLs, monorepo commands, etc.)
+- Use `notifyOnExit=true` parameter for commands that must be checked
 - Use `pattern` parameter in `pty_read` to filter errors/warnings
-- Clean up PTYs with `cleanup=true` when done
+- Clean up PTYs with `cleanup=true` parameter when done
 
 ## Coding Rules
 
