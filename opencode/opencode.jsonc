@@ -45,8 +45,7 @@
   "plugin": [
     "@franlol/opencode-md-table-formatter@latest",
     "@nick-vi/opencode-type-inject@latest",
-    "opencode-pty@latest",
-    "@tarquinen/opencode-dcp@latest"
+    "opencode-pty@latest"
   ],
   "permission": {
     "edit": "deny",
