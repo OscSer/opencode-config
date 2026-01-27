@@ -95,6 +95,8 @@ Only issues #1 and #2 are included in the final report.
 
 ## Output Format
 
+**Language:** Respond in the language preferred by the user.
+
 If no findings, return:
 
 ```markdown
