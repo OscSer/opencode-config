@@ -9,15 +9,15 @@ agent: build
 
 Generate a concise, factual commit message from the staged diff and execute the commit.
 
+## User Context
+
+$ARGUMENTS
+
 ## Assumptions
 
-- Use ONLY the provided diff section. Do not run `git status`, `git diff`, etc.
+- Check staged changes yourself using `git diff --cached`. Do not stage files.
 - The ONLY command you need to run is `git commit -m "<message>"`.
-- If the diff section is empty, output the no-staged-changes format and stop.
-
-## Diff
-
-!`git --no-pager diff --cached`
+- If there are no staged changes, output the no-staged-changes format and stop.
 
 ## No Staged Changes
 
@@ -31,6 +31,12 @@ Generate a concise, factual commit message from the staged diff and execute the 
 2. Determine commit type.
 3. Generate commit message.
 4. Execute commit and report result.
+
+## Check Staged Changes
+
+1. Run `git diff --cached` to see staged changes
+2. If no output, stop with "No staged changes to commit" message
+3. Analyze the diff to generate commit message
 
 ## Analyze Observable Changes
 
