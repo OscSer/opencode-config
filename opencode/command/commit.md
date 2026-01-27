@@ -1,6 +1,7 @@
 ---
 description: Generate commit for staged changes
 agent: build
+subtask: true
 ---
 
 # Commit Command
@@ -11,7 +12,9 @@ Generate a concise, factual commit message from the staged diff and execute the 
 
 ## User Context
 
+```text
 $ARGUMENTS
+```
 
 ## Assumptions
 
@@ -132,5 +135,5 @@ Success format:
 Failure format:
 
 ```
-✗ Commit failed: <error message>
+✗ Commit failed: <error description>
 ```
