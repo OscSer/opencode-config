@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "small_model": "github-copilot/gpt-5-mini",
+  "small_model": "opencode/big-pickle",
   "default_agent": "plan",
   "agent": {
     "plan": {
@@ -10,9 +10,6 @@
     "build": {
       "permission": { "edit": "allow" },
       "color": "#9c27b0"
-    },
-    "explore": {
-      "model": "github-copilot/gemini-3-flash-preview"
     }
   },
   "mcp": {
