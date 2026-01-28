@@ -40,9 +40,9 @@
     // },
   },
   "plugin": [
-    "@franlol/opencode-md-table-formatter@latest",
-    "@nick-vi/opencode-type-inject@latest",
-    "opencode-pty@latest"
+    "@franlol/opencode-md-table-formatter",
+    "@nick-vi/opencode-type-inject",
+    "opencode-pty"
   ],
   "permission": {
     "edit": "deny",
