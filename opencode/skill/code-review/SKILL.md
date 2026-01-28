@@ -10,6 +10,7 @@ description: Review changes to find high-impact issues. Use for code review chan
 - Perform a focused, high-signal code review. **Report only issues that would actually cause problems in production or significantly impact code quality.**
 - Prioritize impactful issues and avoid low-value nitpicks, theoretical concerns, or stylistic preferences.
 - **Core principle: Better to miss minor issues than to flood with false positives.**
+- **Language:** Respond in the language preferred by the user.
 
 ## Review Process
 
@@ -62,11 +63,8 @@ If NO to any above, **GO BACK and complete Pass 1 first.**
 
 **Objective:** Evaluate ONLY the items from Pass 1. Do NOT find new issues.
 
-**Phase A: Context Collection (MANDATORY)**
+Before evaluating ANY issue, you MUST gather context by reading files. For each issue in the Pass 1 list:
 
-Before evaluating ANY issue, you MUST gather context by reading files:
-
-For each issue in the Pass 1 list:
 1. **Read the source file** at the issue location (not just the diff)
 2. **Read related files:**
    - Files that import/export the changed code
@@ -74,32 +72,27 @@ For each issue in the Pass 1 list:
    - Configuration files
    - API contracts/interfaces
 3. **Search codebase** for usage patterns if needed
+4. **Evaluation:** apply the 4-check framework using the context gathered:
 
-**STOP: Do not proceed to Phase B until you have read the relevant files for ALL issues.**
-
-**Phase B: Evaluation**
-
-For each issue in the Pass 1 list, apply the 4-check framework using the context gathered in Phase A:
-
-**1. Impact Analysis**
+**Impact Analysis**
 
 - "This would cause [SPECIFIC PROBLEM] when [SCENARIO]"
 - If you can't fill in these blanks concretely → DISCARD
 - Examples: crash, data loss, security breach, resource leak, API contract violation
 
-**2. Evidence Check**
+**Evidence Check**
 
 - "I know this is a problem because [EVIDENCE]"
 - Evidence = observable behavior, error pattern, resource leak pattern, security risk, breaking change
 - NOT evidence = "typically," "best practice," "cleaner," "might," "could," style preferences
 
-**3. Scope Verification**
+**Scope Verification**
 
 - "This issue exists in [CHANGED CODE / PRE-EXISTING CODE]"
 - Only report if introduced in changed code
 - Ignore pre-existing issues unless made worse by changes
 
-**4. Value Test**
+**Value Test**
 
 - "Reporting this prevents [CONCRETE NEGATIVE OUTCOME]"
 - If outcome is vague, theoretical, or stylistic → DISCARD
@@ -111,56 +104,18 @@ For each issue in the Pass 1 list, apply the 4-check framework using the context
 
 ```
 PASS 2 EVALUATION:
-
-Phase A - Context Collection:
-- Issue #1: Read [file1.ts, file2.ts], Found [key context about the issue]
-- Issue #2: Read [file3.ts], Found [key context about the issue]
-...
-
-Phase B - Evaluation:
-- Issue #1: [REPORT/DISCARD] - [brief reason with evidence from Phase A]
-- Issue #2: [REPORT/DISCARD] - [brief reason with evidence from Phase A]
+- Issue #1: [REPORT/DISCARD] - [brief reason with evidence from files]
+- Issue #2: [REPORT/DISCARD] - [brief reason with evidence from files]
 ...
 ```
 
 **Remember: The goal is NOT perfection. The goal is preventing real problems.**
 
-## Example Workflow
+### Pass 3: Final Report
 
-### After Pass 1 (Discovery Mode):
+Include ONLY the issues marked as REPORT from Pass 2. Do not include DISCARDED issues.
 
-```
-PASS 1 COMPLETE - Potential Issues Found:
-1. Removed error handler in api/users.ts:23
-2. Possible resource leak in db/connection.ts:67
-3. Variable naming could be clearer in utils/format.ts:12
-4. New API endpoint without rate limiting in api/routes.ts:45
-```
-
-### After Pass 2 (Evaluation Mode):
-
-```
-PASS 2 EVALUATION:
-
-Phase A - Context Collection:
-- Issue #1: Read [api/users.ts, db/connection.ts], Found error handler removed, no fallback in callers
-- Issue #2: Read [db/connection.ts, tests/connection.test.ts], Found connection.close() missing in catch block
-- Issue #3: Read [utils/format.ts], Variable name is clear in context
-- Issue #4: Read [api/routes.ts, middleware/auth.ts], Endpoint is internal-only, auth enforced
-
-Phase B - Evaluation:
-- Issue #1: REPORT - Removes error handling for database failures (fails Impact Analysis)
-- Issue #2: REPORT - Connection not closed in error path (fails Evidence Check)
-- Issue #3: DISCARD - Stylistic preference, no actual problem (fails Value Test)
-- Issue #4: DISCARD - Internal API, not exposed publicly (fails Impact Analysis)
-```
-
-## Final Output
-
-- Include ONLY the issues marked as REPORT from Pass 2. Do not include DISCARDED issues.
-- **Language:** Respond in the language preferred by the user.
-
-If no findings, return:
+If no issues, return:
 
 ```markdown
 # Code Review
@@ -172,7 +127,7 @@ If no findings, return:
 Looks good to me!
 ```
 
-If findings, return:
+If issues, return:
 
 ```markdown
 # Code Review
@@ -185,9 +140,5 @@ If findings, return:
 {1-2 sentences explaining the problem and its impact}
 {Concrete fix - code snippet or specific action to take}
 
----
-
-{repeat for each finding}
-
----
+{repeat for each issue}
 ```
