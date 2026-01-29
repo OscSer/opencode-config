@@ -16,28 +16,17 @@
     "context7": {
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
+    },
+    "sentry": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@sentry/mcp-server@latest",
+        "--access-token={env:SENTRY_ACCESS_TOKEN}",
+        "--host={env:SENTRY_HOST}"
+      ]
     }
-    // "devtools": {
-    //   "type": "local",
-    //   "command": [
-    //     "npx",
-    //     "-y",
-    //     "chrome-devtools-mcp@latest",
-    //     "--browser-url=http://127.0.0.1:9222",
-    //     "--headless=true",
-    //     "--isolated=true",
-    //     "--chrome-arg=--mute-audio",
-    //   ],
-    // },
-    // "sentry": {
-    //   "type": "local",
-    //   "command": [
-    //     "npx",
-    //     "@sentry/mcp-server@latest",
-    //     "--access-token={env:SENTRY_ACCESS_TOKEN}",
-    //     "--host={env:SENTRY_HOST}",
-    //   ],
-    // },
   },
   "plugin": ["@franlol/opencode-md-table-formatter", "opencode-pty"],
   "permission": {
