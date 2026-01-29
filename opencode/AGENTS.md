@@ -21,10 +21,25 @@ These are your non-negotiable rules. You must follow them to the letter
 
 ## PTY Management Rules
 
-- Use `pty_spawn` for long-running processes (dev servers, watch modes, REPLs, monorepo commands, etc.)
-- Use `notifyOnExit=true` parameter for commands that must be checked
-- Use `pattern` parameter in `pty_read` to filter errors/warnings
-- Clean up PTYs with `cleanup=true` parameter when done
+**PTY is the PREFERRED tool for any process that might take more than a few seconds or requires interaction.**
+
+### When to Use PTY (Proactive Approach)
+
+- **ALWAYS use PTY for**: dev servers, watch modes, REPLs, interactive programs, build processes, tests, deployments, linting, type checks, etc.
+- **Prefer PTY over bash** when:
+  - Command might hang or take >30 seconds
+  - Need to monitor output while running
+  - Might need to send input (Ctrl+C, confirmations, etc.)
+  - Running multiple related processes simultaneously
+
+### PTY Best Practices
+
+- **Spawn with descriptive titles**: helps identify sessions in listings
+- **Use `notifyOnExit=true`** for all commands that must complete (builds, tests, deployments) - eliminates polling
+- **Monitor proactively**: check output periodically with `pty_read` instead of waiting for user complaints
+- **Filter for issues**: use `pattern` parameter to search for errors/warnings without reading full output
+- **Cleanup properly**: always use `cleanup=true` when killing PTYs to free resources
+- **Handle failures gracefully**: if process exits with error, use `pattern` to find the error message
 
 ## Coding Rules
 
