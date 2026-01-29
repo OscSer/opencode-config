@@ -39,11 +39,7 @@
     //   ],
     // },
   },
-  "plugin": [
-    "@franlol/opencode-md-table-formatter",
-    "@nick-vi/opencode-type-inject",
-    "opencode-pty"
-  ],
+  "plugin": ["@franlol/opencode-md-table-formatter", "opencode-pty"],
   "permission": {
     "edit": "deny",
     "doom_loop": "ask",
