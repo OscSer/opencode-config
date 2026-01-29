@@ -228,6 +228,135 @@ describe("ConfigInstaller", () => {
     });
   });
 
+  describe("skill directory symlinks", () => {
+    it("should create both skill and skills symlinks when directory exists", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      const skillDir = path.join(opencodeDir, "skill");
+      await fs.mkdir(opencodeDir, { recursive: true });
+      await fs.mkdir(skillDir, { recursive: true });
+      await fs.writeFile(path.join(skillDir, "test-skill.md"), "skill content");
+
+      const targetDir = path.join(tmpDir, "target");
+      const installer = new ConfigInstaller(repoDir, targetDir);
+
+      const success = await installer.install();
+
+      expect(success).toBe(true);
+      expect(
+        (await fs.lstat(path.join(targetDir, "skill"))).isSymbolicLink(),
+      ).toBe(true);
+      expect(
+        (await fs.lstat(path.join(targetDir, "skills"))).isSymbolicLink(),
+      ).toBe(true);
+    });
+
+    it("should make skill content accessible through both symlinks", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      const skillDir = path.join(opencodeDir, "skill");
+      await fs.mkdir(opencodeDir, { recursive: true });
+      await fs.mkdir(skillDir, { recursive: true });
+      await fs.writeFile(path.join(skillDir, "example.md"), "content");
+
+      const targetDir = path.join(tmpDir, "target");
+      const installer = new ConfigInstaller(repoDir, targetDir);
+
+      await installer.install();
+
+      const contentFromSkill = await fs.readFile(
+        path.join(targetDir, "skill", "example.md"),
+        "utf-8",
+      );
+      const contentFromSkills = await fs.readFile(
+        path.join(targetDir, "skills", "example.md"),
+        "utf-8",
+      );
+      expect(contentFromSkill).toBe("content");
+      expect(contentFromSkills).toBe("content");
+    });
+
+    it("should handle gracefully when skill directory is missing", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      await fs.mkdir(opencodeDir, { recursive: true });
+
+      const targetDir = path.join(tmpDir, "target");
+      const installer = new ConfigInstaller(repoDir, targetDir);
+
+      const success = await installer.install();
+
+      expect(success).toBe(true);
+      const skillExists = await fs
+        .lstat(path.join(targetDir, "skill"))
+        .catch(() => null);
+      const skillsExists = await fs
+        .lstat(path.join(targetDir, "skills"))
+        .catch(() => null);
+      expect(skillExists).toBeNull();
+      expect(skillsExists).toBeNull();
+    });
+
+    it("should replace existing skill symlinks", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      const skillDir = path.join(opencodeDir, "skill");
+      await fs.mkdir(opencodeDir, { recursive: true });
+      await fs.mkdir(skillDir, { recursive: true });
+      await fs.writeFile(path.join(skillDir, "new.md"), "new content");
+
+      const targetDir = path.join(tmpDir, "target");
+      await fs.mkdir(targetDir, { recursive: true });
+
+      const oldSkillDir = path.join(tmpDir, "old-skill");
+      await fs.mkdir(oldSkillDir, { recursive: true });
+      await fs.writeFile(path.join(oldSkillDir, "old.md"), "old content");
+      await fs.symlink(oldSkillDir, path.join(targetDir, "skill"));
+      await fs.symlink(oldSkillDir, path.join(targetDir, "skills"));
+
+      const installer = new ConfigInstaller(repoDir, targetDir);
+      await installer.install();
+
+      const skillContent = await fs.readFile(
+        path.join(targetDir, "skill", "new.md"),
+        "utf-8",
+      );
+      const skillsContent = await fs.readFile(
+        path.join(targetDir, "skills", "new.md"),
+        "utf-8",
+      );
+      expect(skillContent).toBe("new content");
+      expect(skillsContent).toBe("new content");
+    });
+
+    it("should be idempotent for skill symlinks", async () => {
+      const repoDir = path.join(tmpDir, "repo");
+      const opencodeDir = path.join(repoDir, "opencode");
+      const skillDir = path.join(opencodeDir, "skill");
+      await fs.mkdir(opencodeDir, { recursive: true });
+      await fs.mkdir(skillDir, { recursive: true });
+      await fs.writeFile(path.join(skillDir, "test.md"), "content");
+
+      const targetDir = path.join(tmpDir, "target");
+      const installer = new ConfigInstaller(repoDir, targetDir);
+
+      const first = await installer.install();
+      const second = await installer.install();
+
+      expect(first).toBe(true);
+      expect(second).toBe(true);
+      expect(
+        (await fs.lstat(path.join(targetDir, "skill"))).isSymbolicLink(),
+      ).toBe(true);
+      expect(
+        (await fs.lstat(path.join(targetDir, "skills"))).isSymbolicLink(),
+      ).toBe(true);
+      expect(
+        await fs.readFile(path.join(targetDir, "skill", "test.md"), "utf-8"),
+      ).toBe("content");
+    });
+  });
+
   describe("cleanup broken symlinks", () => {
     it("should remove broken symlinks after installation", async () => {
       const repoDir = path.join(tmpDir, "repo");

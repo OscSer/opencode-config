@@ -30,8 +30,33 @@ export class ConfigInstaller {
       console.log(`Linked: ${entry}`);
     }
 
+    await this.linkSkillDirectory();
+
     await this.cleanupBrokenSymlinks();
     return true;
+  }
+
+  private async linkSkillDirectory(): Promise<void> {
+    const skillSource = path.join(this.repoDir, "opencode", "skill");
+
+    try {
+      await fs.stat(skillSource);
+    } catch {
+      console.log("Skill directory not found, skipping skill symlinks");
+      return;
+    }
+
+    const skillTarget = path.join(this.targetDir, "skill");
+    const skillsTarget = path.join(this.targetDir, "skills");
+
+    await fs.rm(skillTarget, { recursive: true, force: true });
+    await fs.rm(skillsTarget, { recursive: true, force: true });
+
+    await fs.symlink(skillSource, skillTarget);
+    console.log("Linked: skill");
+
+    await fs.symlink(skillSource, skillsTarget);
+    console.log("Linked: skills");
   }
 
   private async cleanupBrokenSymlinks(): Promise<void> {
