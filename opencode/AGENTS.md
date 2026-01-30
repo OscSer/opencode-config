@@ -83,4 +83,8 @@ These are your non-negotiable rules. You must follow them to the letter
 
 **How to use:** Run `playwriter skill` command
 
-###
+### Mermaid Diagramming
+
+**Description:** Create professional diagrams using Mermaid's text-based syntax.
+
+**How to use:** Check `https://raw.githubusercontent.com/softaworks/agent-toolkit/refs/heads/main/skills/mermaid-diagrams/SKILL.md`
