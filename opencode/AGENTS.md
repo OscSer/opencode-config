@@ -28,8 +28,8 @@ These are your non-negotiable rules. You must follow them to the letter
 **The Workflow:**
 
 1. **Spawn with descriptive titles** - Helps identify sessions in listings
-2. **Use `notifyOnExit=true`** - For commands that must complete (builds, tests, deployments)
-3. **Monitor proactively** - Check output with `pty_read`, filter with `pattern` parameter
+2. **Use `notifyOnExit=true`** - For commands that must complete
+3. **Monitor** - Check output with `pty_read`, filter with `pattern` parameter
 4. **Send input when needed** - Use `pty_write` for Ctrl+C, confirmations, etc.
 5. **Cleanup properly** - Always use `cleanup=true` when killing PTYs to free resources
 
@@ -37,8 +37,8 @@ These are your non-negotiable rules. You must follow them to the letter
 
 **Key parameters:**
 
-- `pattern` - Filter errors/warnings without reading full output
 - `notifyOnExit` - Get notified when process completes
+- `pattern` - Filter errors/warnings without reading full output
 - `cleanup` - Free resources after use
 
 ## Parallel Agent Dispatch
@@ -68,14 +68,9 @@ These are your non-negotiable rules. You must follow them to the letter
 | **Guard clauses**                  | Handle exceptions early, avoid nesting                | `if (!order) return null;` at the start              |
 | **Descriptive names**              | Names reveal intention, no comments needed            | `elapsedMs` not `d`, `isAdmin` not `flag`            |
 | **Single responsibility**          | One function = one task                               | Split `handleRegistration` into validate/save/notify |
-| **No unnecessary else**            | If `if` ends with `return`, skip `else`               | `if (x) return a; return b;`                         |
 | **Immutability**                   | Create new structures, don't mutate                   | `{...cart, items: [...cart.items, item]}`            |
-| **Comments explain why**           | Code explains what, comments explain why              | `// Rate limit: 100 req/min per API policy`          |
 | **Named constants**                | No magic numbers/strings                              | `MAX_RETRY_ATTEMPTS` not `3`                         |
 | **KISS / No overengineering**      | Simplest solution first, no patterns without need     | Direct code over factories/layers without clear case |
 | **Avoid premature abstraction**    | Need 2-3 real uses before creating generics           | Prefer small duplication over confusing abstraction  |
-| **Size limits**                    | Functions <50 lines, modules with clear scope         | Extract by intention not "cleanup"                   |
 | **Interfaces first in boundaries** | Define contracts at I/O edges, decouple domain logic  | `interface UserRepo` not direct DB calls in service  |
 | **Testability by design**          | Separate pure logic from effects, inject dependencies | Pass deps as params not globals/singletons           |
-| **Concrete names and signatures**  | Functions say what they do, return clear types        | `parseOrderXML` not `processData`, avoid `any`       |
-| **Less config, more direct code**  | Explicit code over config-driven unless extensibility | Direct function calls over complex config objects    |
