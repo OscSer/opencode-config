@@ -49,7 +49,7 @@ These are your non-negotiable rules. You must follow them to the letter
 
 1. **Identify domains** - Group by subsystem (e.g., auth module, database layer, API endpoints)
 2. **Create focused tasks** - Each agent gets: specific scope, clear goal, constraints, expected output
-3. **Dispatch in parallel** - Use `Task()` tool with apropriate `subagent_type` for each domain
+3. **Dispatch in parallel** - Use `Task()` tool with appropriate `subagent_type` for each domain
 4. **Review & integrate** - Check summaries, verify no conflicts, run full suite
 
 **Prompt structure:**
@@ -75,7 +75,7 @@ These are your non-negotiable rules. You must follow them to the letter
 | **Interfaces first in boundaries** | Define contracts at I/O edges, decouple domain logic  | `interface UserRepo` not direct DB calls in service  |
 | **Testability by design**          | Separate pure logic from effects, inject dependencies | Pass deps as params not globals/singletons           |
 
-## Specialized Tools
+## Specialized Skills
 
 ### Playwriter
 
@@ -91,7 +91,7 @@ These are your non-negotiable rules. You must follow them to the letter
 
 ### Markdown Converter
 
-**Description:** Use when you need to analyze or convert to markdown files like PDF, Word, PowerPoint, Excel, HTML, CSV, JSON, XML, or EPubs.
+**Description:** Use when you need to analyze or convert files to markdown formats (PDF, Word, PowerPoint, Excel, HTML, CSV, JSON, XML, or EPubs).
 
 **How to use:** Check `https://raw.githubusercontent.com/intellectronica/agent-skills/refs/heads/main/skills/markdown-converter/SKILL.md`
 
