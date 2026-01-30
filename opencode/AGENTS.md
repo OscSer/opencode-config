@@ -79,13 +79,13 @@ These are your non-negotiable rules. You must follow them to the letter
 
 ### Playwriter
 
-**Description:** Control a browser, automate web interactions, take screenshots, inspect accessibility, debug applications, intercept network requests, and more.
+**Description:** Use to control a browser, automate web interactions, take screenshots, inspect accessibility, debug applications, intercept network requests, and more.
 
 **How to use:** Run `playwriter skill` command
 
 ### Mermaid Diagramming
 
-**Description:** Create professional diagrams using Mermaid's text-based syntax.
+**Description:** Use when you need to create professional diagrams using Mermaid's text-based syntax.
 
 **How to use:** Check `https://raw.githubusercontent.com/softaworks/agent-toolkit/refs/heads/main/skills/mermaid-diagrams/SKILL.md`
 
@@ -94,3 +94,9 @@ These are your non-negotiable rules. You must follow them to the letter
 **Description:** Use when you need to analyze or convert to markdown files like PDF, Word, PowerPoint, Excel, HTML, CSV, JSON, XML, or EPubs.
 
 **How to use:** Check `https://raw.githubusercontent.com/intellectronica/agent-skills/refs/heads/main/skills/markdown-converter/SKILL.md`
+
+### TypeScript Advanced Types
+
+**Description:** Use for advanced type system including generics, conditional types, mapped types, template literal types, and utility types for building robust, type-safe applications.
+
+**How to use:** Check `https://raw.githubusercontent.com/wshobson/agents/refs/heads/main/plugins/javascript-typescript/skills/typescript-advanced-types/SKILL.md`
