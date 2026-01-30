@@ -74,3 +74,13 @@ These are your non-negotiable rules. You must follow them to the letter
 | **Avoid premature abstraction**    | Need 2-3 real uses before creating generics           | Prefer small duplication over confusing abstraction  |
 | **Interfaces first in boundaries** | Define contracts at I/O edges, decouple domain logic  | `interface UserRepo` not direct DB calls in service  |
 | **Testability by design**          | Separate pure logic from effects, inject dependencies | Pass deps as params not globals/singletons           |
+
+## Specialized Tools
+
+### Playwriter
+
+**Description:** Control a browser, automate web interactions, take screenshots, inspect accessibility, debug applications, intercept network requests, and more.
+
+**How to use:** Run `playwriter skill` command
+
+###
