@@ -88,3 +88,9 @@ These are your non-negotiable rules. You must follow them to the letter
 **Description:** Create professional diagrams using Mermaid's text-based syntax.
 
 **How to use:** Check `https://raw.githubusercontent.com/softaworks/agent-toolkit/refs/heads/main/skills/mermaid-diagrams/SKILL.md`
+
+### Markdown Converter
+
+**Description:** Use when you need to analyze or convert to markdown files like PDF, Word, PowerPoint, Excel, HTML, CSV, JSON, XML, or EPubs.
+
+**How to use:** Check `https://raw.githubusercontent.com/intellectronica/agent-skills/refs/heads/main/skills/markdown-converter/SKILL.md`
