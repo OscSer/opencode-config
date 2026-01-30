@@ -2,46 +2,66 @@
 
 These are your non-negotiable rules. You must follow them to the letter
 
-## Communication Rules
+## Communication
 
 - ALL responses to user MUST be in **SPANISH**, but edits to files must be in **ENGLISH**
 - User interaction → **SPANISH**
-- File editing/code writing → **ENGLISH**
+- File editing → **ENGLISH**
 
-## Planning Rules
+## Planning
 
 - When planning, make the plan concise and focused
-- Ask for unresolved/relevant questions (if any) before implementing
+- Ask for unresolved/relevant questions before implementing (`Question()` tool)
 
-## Quality Rules
+## Quality Gates
 
-- ALWAYS check quality gates after changing code (linting, tests, type checks, formatting, etc.)
-- DON'T create docs, summaries, or "helpful" READMEs without EXPLICIT user approval
 - Prefer minimal changes; avoid unrequested refactors
+- ALWAYS check quality gates after changing code (linting, tests, type checks, etc.)
+- DON'T create docs, summaries, or "helpful" READMEs without EXPLICIT user approval
 
-## PTY Management Rules
+## PTY Management
 
-**PTY is the PREFERRED tool for any process that might take more than a few seconds or requires interaction.**
+**Use when:** Processes that might hang, take >30 seconds, or require interaction.
 
-### When to Use PTY (Proactive Approach)
+**Examples:** dev servers, watch modes, REPLs, interactive programs, build processes, tests, deployments, linting, type checks, etc.
 
-- **ALWAYS use PTY for**: dev servers, watch modes, REPLs, interactive programs, build processes, tests, deployments, linting, type checks, etc.
-- **Prefer PTY over bash** when:
-  - Command might hang or take >30 seconds
-  - Need to monitor output while running
-  - Might need to send input (Ctrl+C, confirmations, etc.)
-  - Running multiple related processes simultaneously
+**The Workflow:**
 
-### PTY Best Practices
+1. **Spawn with descriptive titles** - Helps identify sessions in listings
+2. **Use `notifyOnExit=true`** - For commands that must complete (builds, tests, deployments)
+3. **Monitor proactively** - Check output with `pty_read`, filter with `pattern` parameter
+4. **Send input when needed** - Use `pty_write` for Ctrl+C, confirmations, etc.
+5. **Cleanup properly** - Always use `cleanup=true` when killing PTYs to free resources
 
-- **Spawn with descriptive titles**: helps identify sessions in listings
-- **Use `notifyOnExit=true`** for all commands that must complete (builds, tests, deployments) - eliminates polling
-- **Monitor proactively**: check output periodically with `pty_read` instead of waiting for user complaints
-- **Filter for issues**: use `pattern` parameter to search for errors/warnings without reading full output
-- **Cleanup properly**: always use `cleanup=true` when killing PTYs to free resources
-- **Handle failures gracefully**: if process exits with error, use `pattern` to find the error message
+**Don't use when:** Quick commands (<30 seconds), one-off commands without monitoring needs, or when bash suffices.
 
-## Coding Rules
+**Key parameters:**
+
+- `pattern` - Filter errors/warnings without reading full output
+- `notifyOnExit` - Get notified when process completes
+- `cleanup` - Free resources after use
+
+## Parallel Agent Dispatch
+
+**Use when:** 2+ independent tasks without shared state or sequential dependencies.
+
+**The Workflow:**
+
+1. **Identify domains** - Group by subsystem (e.g., auth module, database layer, API endpoints)
+2. **Create focused tasks** - Each agent gets: specific scope, clear goal, constraints, expected output
+3. **Dispatch in parallel** - Use `Task()` tool with apropriate `subagent_type` for each domain
+4. **Review & integrate** - Check summaries, verify no conflicts, run full suite
+
+**Prompt structure:**
+
+- Focused scope (one module/subsystem/feature)
+- Self-contained context (error messages, relevant code)
+- Specific constraints ("don't change production code")
+- Clear output expectation ("return summary of root cause and fixes")
+
+**Don't use when:** Tasks are related, need full system context, exploratory debugging, or agents would interfere (editing same files).
+
+## Coding Principles
 
 | Principle                          | Rule                                                  | Example                                              |
 | ---------------------------------- | ----------------------------------------------------- | ---------------------------------------------------- |
