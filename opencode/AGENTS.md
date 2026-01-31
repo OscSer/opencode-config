@@ -1,7 +1,5 @@
 # Global Instructions
 
-These are your non-negotiable rules. You must follow them to the letter
-
 ## Communication
 
 - ALL responses to user MUST be in **SPANISH**, but edits to files must be in **ENGLISH**
@@ -21,25 +19,13 @@ These are your non-negotiable rules. You must follow them to the letter
 
 ## PTY Management
 
-**Use when:** Processes that might hang, take >30 seconds, or require interaction.
-
-**Examples:** dev servers, watch modes, REPLs, interactive programs, build processes, tests, deployments, linting, type checks, etc.
+**Use when:** Processes that require background execution or that may take more than 30 seconds (dev servers, watch modes, build processes, tests, etc.)
 
 **The Workflow:**
 
 1. **Spawn with descriptive titles** - Helps identify sessions in listings
-2. **Use `notifyOnExit=true`** - For commands that must complete
-3. **Monitor** - Check output with `pty_read`, filter with `pattern` parameter
-4. **Send input when needed** - Use `pty_write` for Ctrl+C, confirmations, etc.
-5. **Cleanup properly** - Always use `cleanup=true` when killing PTYs to free resources
-
-**Don't use when:** Quick commands (<30 seconds), one-off commands without monitoring needs, or when bash suffices.
-
-**Key parameters:**
-
-- `notifyOnExit` - Get notified when process completes
-- `pattern` - Filter errors/warnings without reading full output
-- `cleanup` - Free resources after use
+2. **Use `notifyOnExit=true`** - To know when a command ends
+3. **Use `cleanup=true`** - When done with PTYs to free resources
 
 ## Parallel Agent Dispatch
 
@@ -58,22 +44,6 @@ These are your non-negotiable rules. You must follow them to the letter
 - Self-contained context (error messages, relevant code)
 - Specific constraints ("don't change production code")
 - Clear output expectation ("return summary of root cause and fixes")
-
-**Don't use when:** Tasks are related, need full system context, exploratory debugging, or agents would interfere (editing same files).
-
-## Coding Principles
-
-| Principle                          | Rule                                                  | Example                                              |
-| ---------------------------------- | ----------------------------------------------------- | ---------------------------------------------------- |
-| **Guard clauses**                  | Handle exceptions early, avoid nesting                | `if (!order) return null;` at the start              |
-| **Descriptive names**              | Names reveal intention, no comments needed            | `elapsedMs` not `d`, `isAdmin` not `flag`            |
-| **Single responsibility**          | One function = one task                               | Split `handleRegistration` into validate/save/notify |
-| **Immutability**                   | Create new structures, don't mutate                   | `{...cart, items: [...cart.items, item]}`            |
-| **Named constants**                | No magic numbers/strings                              | `MAX_RETRY_ATTEMPTS` not `3`                         |
-| **KISS / No overengineering**      | Simplest solution first, no patterns without need     | Direct code over factories/layers without clear case |
-| **Avoid premature abstraction**    | Need 2-3 real uses before creating generics           | Prefer small duplication over confusing abstraction  |
-| **Interfaces first in boundaries** | Define contracts at I/O edges, decouple domain logic  | `interface UserRepo` not direct DB calls in service  |
-| **Testability by design**          | Separate pure logic from effects, inject dependencies | Pass deps as params not globals/singletons           |
 
 ## Specialized Skills
 
