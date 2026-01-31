@@ -21,7 +21,7 @@
 
 **Use when:** Processes that require background execution or that may take more than 30 seconds (dev servers, watch modes, build processes, tests, etc.)
 
-**The Workflow:**
+**Workflow:**
 
 1. **Spawn with descriptive titles** - Helps identify sessions in listings
 2. **Use `notifyOnExit=true`** - To know when a command ends
@@ -31,12 +31,12 @@
 
 **Use when:** 2+ independent tasks without shared state or sequential dependencies.
 
-**The Workflow:**
+**Workflow:**
 
 1. **Identify domains** - Group by subsystem (e.g., auth module, database layer, API endpoints)
 2. **Create focused tasks** - Each agent gets: specific scope, clear goal, constraints, expected output
 3. **Dispatch in parallel** - Use `Task()` tool with appropriate `subagent_type` for each domain
-4. **Review & integrate** - Check summaries, verify no conflicts, run full suite
+4. **Review & integrate** - Check outputs, verify no conflicts, run full suite
 
 **Prompt structure:**
 
