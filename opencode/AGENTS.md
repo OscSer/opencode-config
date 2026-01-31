@@ -23,9 +23,8 @@
 
 **Workflow:**
 
-1. **Spawn with descriptive titles** - Helps identify sessions in listings
-2. **Use `notifyOnExit=true`** - To know when a command ends
-3. **Use `cleanup=true`** - When done with PTYs to free resources
+2. **ALWAYS use `notifyOnExit=true`** - To know when a command ends
+3. **ALWAYS use `cleanup=true`** - When done with PTYs to free resources
 
 ## Parallel Agent Dispatch
 
