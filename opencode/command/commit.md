@@ -4,56 +4,31 @@ agent: build
 subtask: true
 ---
 
-# Commit Command
-
-## Purpose
-
-Generate a concise, factual commit message from the staged diff and execute the commit.
-
-## User Context
+## User Input
 
 ```text
 $ARGUMENTS
 ```
 
-## Assumptions
+## Your Task
 
-- Check staged changes yourself using `git diff --cached`. Do not stage files.
-- The ONLY command you need to run is `git commit -m "<message>"`.
-- If there are no staged changes, output the no-staged-changes format and stop.
+- Generate a concise, factual commit message from the staged diff and execute the commit.
+- If there are no staged changes, output `No staged changes to commit` and stop.
+- The user input is optional. If it is provided, use it to complement the commit message.
 
-## No Staged Changes
+## Commit Process
 
-```
-✗ No staged changes to commit
-```
+### Pass 1: Check Staged Changes
 
-## Process
+1. Run `git --no-pager diff --cached` to see staged changes
+2. If no diff, stop with `No staged changes to commit` message. DO NOT stage files.
 
-1. Analyze observable changes.
-2. Determine commit type.
-3. Generate commit message.
-4. Execute commit and report result.
+### Pass 2: Analyze Observable Changes
 
-## Check Staged Changes
-
-1. Run `git diff --cached` to see staged changes
-2. If no output, stop with "No staged changes to commit" message
-3. Analyze the diff to generate commit message
-
-## Analyze Observable Changes
-
-Only state facts visible in the diff. Never infer intent, benefits, or causality.
-
-- Small diff: list file path and primary change.
-- Complex diff: list where changed, what changed, and any clear visible effect.
-
-Examples:
-
-- `port: 3000 -> 4000` means the port changed, not why.
+- Only state facts visible in the diff. Never infer intent, benefits, or causality.
 - If purpose is unclear, describe facts only.
 
-## Commit Types
+**Commit Types:**
 
 | Type       | When to use                                |
 | ---------- | ------------------------------------------ |
@@ -68,12 +43,11 @@ Examples:
 | `chore`    | Non-source changes (.gitignore, scripts)   |
 | `perf`     | Performance improvements                   |
 
-CRITICAL: LLM instruction files are not treated as docs:
-`AGENTS.md`, `SKILL.md`, `command/*.md`, `agent/*.md` -> classify as `feat`/`fix`/`refactor`.
+Special Case:
 
-## Commit Message Rules
+- Markdown files for LLM instruction are not treated as docs: `AGENTS.md`, `SKILL.md`, `command/*.md`, etc. -> classify as `feat`/`fix`/`refactor`
 
-Format:
+**Commit Format:**
 
 ```
 <type>[optional scope]: <description>
@@ -81,59 +55,28 @@ Format:
 [optional body]
 ```
 
-Constraints:
+**Commit Constraints:**
 
-- Subject line <=72 chars (type + scope + description combined)
-- Body optional, max 5 lines, each line <=80 chars
-- ONE blank line between subject and body
-- No trailing whitespace or periods in subject
-- Total message <=500 chars
 - Lowercase type, English only
+- Subject line <=70 chars (type + scope + description combined)
+- Scope optional, only if applicable
+- Body optional, only if applicable, max 5 lines
+- One blank line between subject and body
+- No trailing whitespace or periods in subject
 - Description is concise and imperative
-- MUST be factual and diff-backed
-- MUST include WHERE the change is (component/module/path)
 
-Scope rules (priority order):
+### Pass 3: Execute Commit
 
-1. All files in same subfolder (depth=2+) -> use folder name
-2. Single file -> use parent folder unless repo root
-3. Multiple top-level folders -> omit scope
-4. Root-level files -> omit scope
+Execute the commit `git commit -m "<message>"` and report the result.
 
-Body rules: use ONLY if one of these is true:
+**Success format:**
 
-1. Breaking change details (BREAKING CHANGE: ...)
-2. Multiple logical changes in same commit (list each)
-
-If used: format as '-' bullets, one change per line. Never speculate.
-
-## Edge Cases
-
-| Scenario              | Action                                       |
-| --------------------- | -------------------------------------------- |
-| Merge commit detected | Use type `merge`, describe branches          |
-| Binary files in diff  | Mention "binary changes" in body if relevant |
-| Pre-commit hook fails | Report hook error, do not retry or modify    |
-
-## Execute Commit (Mandatory)
-
-You must execute the commit immediately after generating the message.
-
-Execution sequence:
-
-1. Generate commit message
-2. Run `git commit -m "<message>"`
-3. Capture result and report success or failure
-4. Report result only, no intermediate messages
-
-Success format:
-
-```
+```text
 ✓ Commit created: <hash>
 ```
 
-Failure format:
+**Failure format:**
 
-```
+```text
 ✗ Commit failed: <error description>
 ```
