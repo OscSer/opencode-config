@@ -18,7 +18,7 @@
       "url": "https://mcp.context7.com/mcp"
     }
   },
-  "plugin": ["@franlol/opencode-md-table-formatter", "opencode-pty"],
+  "plugin": ["opencode-pty", "@nick-vi/opencode-type-inject"],
   "permission": {
     "edit": "deny",
     "doom_loop": "ask",
@@ -91,5 +91,6 @@
     "terminal_suspend": "none",
     "model_cycle_recent": "none"
   },
+  "lsp": false,
   "theme": "system"
 }
