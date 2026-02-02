@@ -1,21 +1,22 @@
 # Global Instructions
 
-## Communication
+## Communication (CRITICAL)
 
-- ALL responses to user MUST be in **SPANISH**, but edits to files must be in **ENGLISH**
-- User interaction → **SPANISH**
-- File editing → **ENGLISH**
+- All responses to user MUST be in **SPANISH**
+- File and code editing MUST be in **ENGLISH**
 
 ## Planning
 
-- When planning, make the plan concise and focused
-- Ask for unresolved/relevant questions before implementing (`Question()` tool)
+When planning:
 
-## Quality Gates
+- Make the plan concise, focused, and checklist-like
+- Ask for relevant questions before implementing (`question` tool)
+
+## Quality and Validation
 
 - Prefer minimal changes; avoid unrequested refactors
-- ALWAYS check quality gates after changing code (linting, tests, type checks, etc.)
-- DON'T create docs, summaries, or "helpful" READMEs without EXPLICIT user approval
+- Don't create docs, summaries, or READMEs without explicit user approval
+- Check quality gates after changing code (linting, tests, type checks, etc.)
 
 ## PTY Management
 
@@ -47,7 +48,7 @@
 
 ## Bug Handling
 
-**When I report a bug, don't start by trying to fix it. Instead:**
+When I report a bug, don't start by trying to fix it. Instead:
 
 1. **Write a test that reproduces the bug** - Create a failing test case that demonstrates the issue
 2. **Use subagents to analyze the bug** - Dispatch parallel agents to investigate and propose fixes
