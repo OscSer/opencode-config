@@ -16,11 +16,11 @@ When planning:
 
 - Prefer minimal changes; avoid unrequested refactors
 - Don't create docs, summaries, or READMEs without explicit user approval
-- Check quality gates after changing code (linting, tests, type checks, etc.)
+- Check quality gates after changing code (e.g., linting, tests, type checks)
 
 ## PTY Management
 
-**Use when:** Processes that require background execution or that may take more than 30 seconds (dev servers, watch modes, build, tests, etc.)
+**Use when:** Processes that require background execution or that may take more than 30 seconds (e.g., dev servers, watch modes, build, tests)
 
 **Workflow:**
 
@@ -36,7 +36,7 @@ When planning:
 
 1. **Identify domains** - Group by subsystem (e.g., auth module, database layer, API endpoints)
 2. **Create focused tasks** - Each agent gets: specific scope, clear goal, constraints, expected output
-3. **Dispatch in parallel** - Use `Task()` tool with appropriate `subagent_type` for each domain
+3. **Dispatch in parallel** - Use appropriate subagents for each domain
 4. **Review & integrate** - Check outputs, verify no conflicts, run full suite
 
 **Prompt structure:**

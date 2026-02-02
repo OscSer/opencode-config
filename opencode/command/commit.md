@@ -46,7 +46,7 @@ $ARGUMENTS
 
 Special Case:
 
-- Markdown files for LLM instruction are not treated as docs: `AGENTS.md`, `SKILL.md`, `command/*.md`, etc. -> classify as `feat`/`fix`/`refactor`
+- Markdown files for LLM instruction are not treated as docs (e.g.,`AGENTS.md`, `skill/*.md`, `command/*.md`) -> classify as `feat`/`fix`/`refactor`
 
 **Commit Format:**
 
