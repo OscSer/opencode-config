@@ -43,3 +43,13 @@
 - Self-contained context (error messages, relevant code)
 - Specific constraints ("don't change production code")
 - Clear output expectation ("return summary of root cause and fixes")
+
+## Bug Handling
+
+**When I report a bug, don't start by trying to fix it. Instead:**
+
+1. **Write a test that reproduces the bug** - Create a failing test case that demonstrates the issue
+2. **Use subagents to analyze the bug** - Dispatch parallel agents to investigate and propose fixes
+3. **Prove the fix with a passing test** - Verify the solution by ensuring the test now passes
+
+This approach ensures bugs are properly understood, reproducible, and verified as fixed.
