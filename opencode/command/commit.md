@@ -2,7 +2,7 @@
 description: Generate commit for staged changes
 subtask: true
 agent: build
-model: github-copilot/gemini-3-flash-preview
+model: github-copilot/claude-haiku-4.5
 ---
 
 ## User Input
