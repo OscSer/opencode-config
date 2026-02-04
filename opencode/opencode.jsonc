@@ -2,6 +2,7 @@
   "$schema": "https://opencode.ai/config.json",
   "small_model": "opencode/gpt-5-nano",
   "default_agent": "plan",
+  "model": "kimi-for-coding/k2p5",
   "agent": {
     "plan": {
       "permission": { "edit": "deny" },

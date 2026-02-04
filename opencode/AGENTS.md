@@ -20,13 +20,19 @@ When planning:
 
 ## PTY Management
 
-**Use when:** Processes that require background execution or that may take more than 30 seconds (e.g., dev servers, watch modes, build, tests)
+**Use when:** Processes that require background execution or that may take more than 30 seconds
 
-**Workflow:**
+**Workflow for finite processes (e.g., builds, tests):**
 
-1. **Use `pty_spawn` with `notifyOnExit=true`** - To know when a process ends
-2. **Use `pty_read` with `pattern`** - To read output efficiently
-3. **Use `pty_kill` with `cleanup=true`** - To free resources
+1. **Use `pty_spawn` with `notifyOnExit=true`** - Wait for the process to complete
+2. **When notified of exit**, use `pty_read` to get all output or serach by `pattern`
+3. **Use `pty_kill` with `cleanup=true`** - Free resources when done
+
+**Workflow for indefinite processes (e.g., dev servers, watch modes):**
+
+1. **Use `pty_spawn`** - Start the process
+2. **Use `pty_read` with `pattern`** - Read output as needed
+3. **Use `pty_kill` with `cleanup=true`** - Free resources when done
 
 ## Parallel Agents
 
