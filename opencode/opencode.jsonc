@@ -10,9 +10,6 @@
     "build": {
       "permission": { "edit": "allow" },
       "color": "#9c27b0"
-    },
-    "explore": {
-      "model": "github-copilot/claude-haiku-4.5"
     }
   },
   "mcp": {
