@@ -16,6 +16,12 @@
       "recommended": true
     }
   },
+  "json": {
+    "parser": {
+      "allowComments": true,
+      "allowTrailingCommas": true
+    }
+  },
   "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "files": {
     "includes": ["**", "!**/node_modules", "!**/dist", "!**/.git"]
