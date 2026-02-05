@@ -23,7 +23,7 @@
   "permission": {
     "skill": "allow",
     "webfetch": "allow",
-    "external_directory": "ask",
+    "external_directory": "allow",
     "edit": {
       "*": "allow",
       "*.md": "ask",
