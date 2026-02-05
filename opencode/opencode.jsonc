@@ -1,18 +1,18 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "small_model": "opencode/gpt-5-nano",
-  "default_agent": "plan",
+  "small_model": "opencode/big-pickle",
   "model": "kimi-for-coding/k2p5",
-  "agent": {
-    "plan": {
-      "permission": { "edit": "deny" },
-      "color": "#00bcd4"
-    },
-    "build": {
-      "permission": { "edit": "allow" },
-      "color": "#9c27b0"
-    }
-  },
+  "default_agent": "plan",
+  // "agent": {
+  //   "plan": {
+  //     "permission": { "edit": "deny" },
+  //     "color": "#00bcd4"
+  //   },
+  //   "build": {
+  //     "permission": { "edit": "allow" },
+  //     "color": "#9c27b0"
+  //   }
+  // },
   "mcp": {
     "context7": {
       "type": "remote",
@@ -21,11 +21,14 @@
   },
   "plugin": ["opencode-pty@latest", "@nick-vi/opencode-type-inject@latest"],
   "permission": {
-    "edit": "deny",
-    "doom_loop": "ask",
     "skill": "allow",
     "webfetch": "allow",
-    "external_directory": "allow",
+    "external_directory": "ask",
+    "edit": {
+      "*": "allow",
+      "*.md": "ask",
+      "*.txt": "ask"
+    },
     "bash": {
       "*": "allow",
       // package managers & runtimes

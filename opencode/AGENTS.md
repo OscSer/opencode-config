@@ -15,7 +15,7 @@ When planning:
 ## Quality and Validation
 
 - Prefer minimal changes; avoid unrequested refactors
-- Don't create docs, summaries, or READMEs without explicit user approval
+- DON'T create docs, summaries, or READMEs without explicit user approval
 - Check quality gates after changing code (e.g., linting, tests, type checks)
 
 ## PTY Management
