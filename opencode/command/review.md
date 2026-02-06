@@ -1,5 +1,6 @@
 ---
 description: Code review local changes or pull requests
+agent: plan
 ---
 
 ## User Input
