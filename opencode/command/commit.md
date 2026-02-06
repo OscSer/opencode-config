@@ -1,7 +1,5 @@
 ---
 description: Generate commit for staged changes
-subtask: true
-agent: build
 ---
 
 ## User Input
