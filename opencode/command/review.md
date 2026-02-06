@@ -24,7 +24,7 @@ If the user provides a PR number or URL:
 
 If the user provides no input, then this involves local changes:
 
-- Execute `DIFF_FILE=$(mktemp) && git --no-pager diff HEAD > "$DIFF_FILE"`
+- Execute `DIFF_FILE=$(mktemp) && git diff HEAD > "$DIFF_FILE"`
 
 In both cases, you must:
 

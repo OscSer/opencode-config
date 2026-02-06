@@ -16,7 +16,7 @@ $ARGUMENTS
 ## Identify Scope
 
 - If the user provides a file or some input, use it to narrow down the scope.
-- If the user provides no input, analyze the local changes `git --no-pager diff HEAD`
+- If the user provides no input, analyze the local changes `git diff HEAD`
 
 ## Refinement Principles
 

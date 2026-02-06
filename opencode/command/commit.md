@@ -19,7 +19,7 @@ $ARGUMENTS
 
 ### Pass 1: Check Staged Changes
 
-1. Run `git --no-pager diff --cached` to see staged changes
+1. Run `git diff --cached` to see staged changes
 2. If no diff, stop with `No staged changes to commit` message. DO NOT stage files.
 
 ### Pass 2: Analyze Observable Changes
