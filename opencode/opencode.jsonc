@@ -1,9 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "small_model": "opencode/big-pickle",
-  "default_agent": "build",
+  "default_agent": "plan",
   "agent": {
     "explore": {
+      "model": "kimi-for-coding/k2p5"
+    },
+    "general": {
       "model": "kimi-for-coding/k2p5"
     }
   },
@@ -22,11 +25,11 @@
     "skill": "allow",
     "webfetch": "allow",
     "external_directory": "allow",
-    "edit": {
-      "*": "allow",
-      "*.md": "ask",
-      "*.txt": "ask"
-    },
+    // "edit": {
+    //   "*": "allow",
+    //   "*.md": "ask",
+    //   "*.txt": "ask"
+    // },
     "bash": {
       "*": "allow",
       // package managers & runtimes
@@ -41,15 +44,14 @@
       "wget *": "ask",
       "curl *": "ask",
       // git
-      "git clone *": "ask",
-      "git reset *": "ask",
-      "git restore *": "ask",
-      "git checkout *": "ask",
-      "git commit *": "ask",
-      "git stash *": "ask",
-      "git revert *": "ask",
-      "git add *": "deny",
-      "git push *": "deny",
+      "git *": "ask",
+      "git help *": "allow",
+      "git status *": "allow",
+      "git diff *": "allow",
+      "git log *": "allow",
+      "git show *": "allow",
+      "git rev-parse *": "allow",
+      "git remote -v": "allow",
       // gh
       "gh *": "ask",
       "gh help *": "allow",
@@ -68,18 +70,13 @@
       "gh issue list *": "allow",
       "gh issue view *": "allow",
       "gh issue status *": "allow",
-      "gh api *": "allow",
-      "gh api * POST": "deny",
-      "gh api * PUT": "deny",
-      "gh api * PATCH": "deny",
-      "gh api * DELETE": "deny",
+      "gh api *": "ask",
+      "gh api --method GET *": "allow",
+      "gh api -X GET *": "allow",
       // system
-      "sudo *": "deny",
-      "chmod *": "deny",
-      "chown *": "deny",
-      "format *": "deny",
-      "fdisk *": "deny",
-      "dd *": "deny"
+      "sudo *": "ask",
+      "chmod *": "ask",
+      "chown *": "ask"
     }
   },
   "keybinds": {
