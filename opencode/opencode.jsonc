@@ -43,6 +43,19 @@
       // http
       "wget *": "ask",
       "curl *": "ask",
+      // prefer native tools for file search/read
+      "ls": "deny",
+      "ls *": "deny",
+      "find *": "deny",
+      "grep *": "deny",
+      "rg *": "deny",
+      "cat *": "deny",
+      "head *": "deny",
+      "tail *": "deny",
+      // shell text transforms stay gated
+      "sed *": "ask",
+      "awk *": "ask",
+      "echo *": "ask",
       // git
       "git *": "ask",
       "git help *": "allow",
