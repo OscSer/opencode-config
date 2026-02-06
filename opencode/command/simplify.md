@@ -1,6 +1,5 @@
 ---
 description: Simplifies and refines code for clarity, consistency, and maintainability
-agent: plan
 ---
 
 # Code Simplifier
