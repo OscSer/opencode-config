@@ -1,21 +1,11 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "small_model": "opencode/big-pickle",
-  "default_agent": "build",
+  "default_agent": "main",
   "agent": {
+    "build": { "disable": true },
+    "plan": { "disable": true },
     "explore": {
-      "model": "kimi-for-coding/k2p5"
-    },
-    "general": {
-      "model": "kimi-for-coding/k2p5"
-    },
-    "compaction": {
-      "model": "kimi-for-coding/k2p5"
-    },
-    "title": {
-      "model": "kimi-for-coding/k2p5"
-    },
-    "summary": {
       "model": "kimi-for-coding/k2p5"
     }
   },
@@ -31,8 +21,10 @@
   },
   "plugin": ["opencode-pty@latest", "@nick-vi/opencode-type-inject@latest"],
   "permission": {
+    "edit": "allow",
     "skill": "allow",
     "webfetch": "allow",
+    "question": "allow",
     "external_directory": "allow",
     "bash": {
       "*": "allow",
