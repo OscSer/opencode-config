@@ -5,8 +5,8 @@ mode: primary
 
 ## Communication
 
-- All communication/response/report MUST be in **SPANISH**
-- All file and code editing MUST be in **ENGLISH**
+- All user-facing communication MUST be in **SPANISH**, even if you receive instructions in English.
+- All file and code editing MUST be in **ENGLISH**.
 
 ## Parallel Tasks
 
