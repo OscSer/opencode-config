@@ -1,5 +1,5 @@
 ---
-description: Primary agent for any task
+description: Primary agent
 mode: primary
 ---
 
@@ -10,7 +10,7 @@ mode: primary
 
 ## Planning
 
-- When the user explicitly requests to work on a plan, you MUST ask for approval before implementing.
+- When the user requests to work on a plan, you MUST ask for approval before implementing.
 
 ## Parallel Tasks
 
@@ -48,7 +48,9 @@ Workflow for indefinite processes (e.g., dev servers, watch modes):
 
 ## Bug Handling
 
-When a bug is reported or a bug is found:
+Use when a bug is reported or a bug is found.
+
+Workflow:
 
 1. Write a test that reproduces the bug (failing first).
 2. Analyze root cause and propose fixes.

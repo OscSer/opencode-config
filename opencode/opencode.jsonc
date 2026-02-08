@@ -13,10 +13,6 @@
     "context7": {
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
-    },
-    "memo": {
-      "type": "local",
-      "command": ["npx", "-y", "@upstash/memo"]
     }
   },
   "plugin": ["opencode-pty@latest", "@nick-vi/opencode-type-inject@latest"],
@@ -98,5 +94,5 @@
     "model_cycle_recent": "none"
   },
   "lsp": false,
-  "theme": "system"
+  "theme": "ayu"
 }
