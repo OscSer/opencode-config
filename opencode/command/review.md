@@ -2,7 +2,7 @@
 description: Code review local changes or pull requests
 ---
 
-## User Input
+## Input
 
 ```text
 $ARGUMENTS
@@ -12,16 +12,15 @@ $ARGUMENTS
 
 - Perform a focused, high-signal code review.
 - Prioritize impactful issues and avoid low-value nitpicks, theoretical concerns, or stylistic preferences.
-- Respond to the user in Spanish.
 
 First, determine whether this involves local changes or a PR.
 
-If the user provides a PR number or URL:
+If input includes a PR number or URL:
 
 - Execute `gh pr checkout <number>`
 - Execute `DIFF_FILE=$(mktemp) && gh pr diff <number> > "$DIFF_FILE"`
 
-If the user provides no input, then this involves local changes:
+If no input is provided, this involves local changes:
 
 - Execute `DIFF_FILE=$(mktemp) && git diff HEAD > "$DIFF_FILE"`
 
