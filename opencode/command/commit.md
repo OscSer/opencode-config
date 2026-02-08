@@ -1,9 +1,8 @@
 ---
 description: Generate commit for staged changes
-agent: general
 ---
 
-## User Input
+## Request
 
 ```text
 $ARGUMENTS
@@ -13,7 +12,7 @@ $ARGUMENTS
 
 - Generate a concise, factual commit message from the staged diff and execute the commit.
 - If there are no staged changes, output `No staged changes to commit` and stop.
-- The user input is optional. If it is provided, use it to complement the commit message.
+- Use request input to complement the commit message when provided.
 
 ## Commit Process
 
