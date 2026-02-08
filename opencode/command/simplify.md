@@ -2,7 +2,7 @@
 description: Simplifies and refines code for clarity, consistency, and maintainability
 ---
 
-## User Input
+## Request
 
 ```text
 $ARGUMENTS
@@ -11,21 +11,20 @@ $ARGUMENTS
 ## Your Task
 
 - Start in analysis mode: produce a simplification report first, without modifying files.
-- Only apply code changes after explicit user approval.
+- Only apply code changes after explicit approval.
 - Simplify code for clarity and maintainability without changing behavior.
-- Keep scope tight to user-provided files/input, or local modified code if no input is provided.
+- Keep scope tight to provided files/input, or local modified code if no input is provided.
 - Prefer explicit, readable code over compact or clever code.
-- Respond to the user in Spanish.
 
 ## Scope Selection
 
 First, determine the target scope.
 
-If the user provides files, paths, or snippets:
+If files, paths, or snippets are provided:
 
-- Use only that scope unless the user explicitly asks for broader cleanup.
+- Use only that scope unless broader cleanup is explicitly requested.
 
-If the user provides no input:
+If no input is provided:
 
 - Execute `git diff HEAD` to identify recently modified code and limit changes to those files.
 
@@ -71,7 +70,7 @@ If approval is not given, do not modify files.
 
 ### Pass 1: Inspect
 
-1. Identify candidate files from user input or `git diff HEAD`.
+1. Identify candidate files from provided input or `git diff HEAD`.
 2. Read current code and locate readability/maintainability pain points.
 3. Skip areas where simplification would risk behavior changes.
 
