@@ -5,9 +5,7 @@
   "agent": {
     "build": { "disable": true },
     "plan": { "disable": true },
-    "explore": {
-      "model": "kimi-for-coding/k2p5"
-    }
+    "explore": { "disable": true }
   },
   "mcp": {
     "context7": {

@@ -8,10 +8,6 @@ mode: primary
 - All communication/response/report MUST be in **SPANISH**
 - All file and code editing MUST be in **ENGLISH**
 
-## Planning
-
-- When the user requests to work on a plan, you MUST ask for approval before implementing.
-
 ## Parallel Tasks
 
 Use when there are independent tasks that do not have a shared status or sequential dependencies.
