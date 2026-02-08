@@ -65,7 +65,7 @@ Special Case:
 
 ### Pass 3: Execute Commit
 
-Execute the commit `git commit -m "<message>"` and report the result.
+Execute the commit and report the result.
 
 **Success format:**
 

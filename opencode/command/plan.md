@@ -30,7 +30,7 @@ $ARGUMENTS
    - Provide an ordered, atomic checklist, using verb-first steps.
    - Include at least one validation/testing step.
    - Include edge cases or risk handling when applicable.
-   - If unknowns remain, include an `## Questions` section.
+   - If unknowns remain, include in questions section.
 
 4. Run an approval loop (mandatory).
    - Present the plan and ask for explicit approval to execute it.
@@ -45,32 +45,28 @@ $ARGUMENTS
    - Do not include meta commentary about the process.
    - Do not create plan files.
 
-## Output Template (follow exactly)
+## Output Template
 
 ```markdown
 # Plan
 
-<1-3 sentences: what we're doing, why, and the high-level approach.>
+< what we're doing, why, and the high-level approach. >
 
-## Scope
+## Action Items
 
-<1-3 sentences: in/out items and constraints.>
-
-## Action items
-
-[ ] <Step 1>
-[ ] <Step 2>
-[ ] <Step 3>
-[ ] <Step 4>
-[ ] <Step 5>
+[ ] < Step 1 >
+[ ] < Step 2 >
+[ ] < Step 3 >
+[ ] < Step 4 >
+[ ] < Step 5 >
 
 [Optional: include only if there are unknowns]
 
 ## Questions
 
-1. <Question 1>
-2. <Question 2>
-3. <Question 3>
+1. < Question 1 >
+2. < Question 2 >
+3. < Question 3 >
 ```
 
 ## Checklist Guidance
