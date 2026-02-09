@@ -1,5 +1,5 @@
 ---
-description: Create a concise implementation plan
+description: Create a implementation plan
 ---
 
 ## Request

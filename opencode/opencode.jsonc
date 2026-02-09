@@ -22,28 +22,29 @@
     "external_directory": "allow",
     "bash": {
       "*": "allow",
-      // package managers & runtimes
+      // dependencies
       "* install *": "ask",
       "* update *": "ask",
       "* add *": "ask",
       "* remove *": "ask",
       "* delete *": "ask",
-      "python *": "ask",
-      "python3 *": "ask",
+      // runtime
+      "python*": "ask",
+      "node *": "ask",
       // http
       "wget *": "ask",
-      "curl *": "ask",
-      // prefer native tools for file search/read
+      "curl *": "allow",
+      "curl * POST *": "ask",
+      "curl * PUT *": "ask",
+      "curl * PATCH *": "ask",
+      "curl * DELETE *": "ask",
+      // prefer native tools
       "find *": "deny",
       "grep *": "deny",
       "rg *": "deny",
       "cat *": "deny",
       "head *": "deny",
       "tail *": "deny",
-      // shell text transforms stay gated
-      "sed *": "ask",
-      "awk *": "ask",
-      "echo *": "ask",
       // git
       "git *": "ask",
       "git help *": "allow",
@@ -72,8 +73,7 @@
       "gh issue view *": "allow",
       "gh issue status *": "allow",
       "gh api *": "ask",
-      "gh api --method GET *": "allow",
-      "gh api -X GET *": "allow",
+      "gh api * GET *": "allow",
       // system
       "sudo *": "ask",
       "chmod *": "ask",
