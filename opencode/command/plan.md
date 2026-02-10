@@ -1,5 +1,5 @@
 ---
-description: Create a implementation plan
+description: Create an implementation plan
 ---
 
 ## Request
@@ -10,9 +10,9 @@ $ARGUMENTS
 
 ## Your Task
 
-- Create a single, actionable implementation plan for the request.
+- Create one actionable, living implementation plan for the request.
 - Ask follow-up questions only if truly blocking.
-- Iterate on the plan as many times as needed.
+- Revise that same plan as many times as needed.
 - Require explicit confirmation before executing the plan.
 
 ## Workflow
@@ -52,7 +52,11 @@ $ARGUMENTS
 
 < what we're doing, why, and the high-level approach. >
 
-## Action Items
+## Scope
+
+< in/out items >
+
+## Tasks
 
 [ ] < Step 1 >
 [ ] < Step 2 >
@@ -60,13 +64,13 @@ $ARGUMENTS
 [ ] < Step 4 >
 [ ] < Step 5 >
 
-[Optional: include only if there are unknowns]
-
-## Questions
+## Questions [Optional: include only blocking unknowns]
 
 1. < Question 1 >
 2. < Question 2 >
 3. < Question 3 >
+
+< Ask for explicit approval (yes/no) to execute the plan. >
 ```
 
 ## Checklist Guidance
