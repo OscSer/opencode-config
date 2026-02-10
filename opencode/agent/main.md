@@ -26,21 +26,22 @@ Prompt structure:
 - Specific constraints (e.g., "don't change production code")
 - Clear output expectation (e.g., "return root cause and concrete fix options")
 
-## PTY Management
+## Background Processes
 
-Use when processes require background execution or may take more than 30 seconds.
+Use background execution only for:
 
-Workflow for finite processes (e.g., builds, tests):
+- Indefinite processes (e.g., dev servers, watch mode), or
+- Long-running finite processes expected to take more than 1 minute.
 
-1. Use `pty_spawn` with `notifyOnExit=true` and wait for completion.
-2. Wait for the exit notification, then use `pty_read` to review output or filter by `pattern`.
-3. Use `pty_kill` with `cleanup=true` to free resources when done.
+Do not use background execution for short commands (1 minute or less). Run those in the foreground.
 
-Workflow for indefinite processes (e.g., dev servers, watch modes):
+Workflow:
 
-1. Use `pty_spawn` to start the process.
-2. Use `pty_read` with `pattern` to inspect output when needed.
-3. Use `pty_kill` with `cleanup=true` to free resources when done.
+1. Start the command with `bglog <command> [args...]`.
+2. Capture the bglog output: `PID=<pid> LOG=<tmpfile>`.
+3. Inspect output as needed using the reported log file path.
+4. For finite processes, verify completion and exit status.
+5. For indefinite processes, stop the process when no longer needed.
 
 ## Bug Handling
 
