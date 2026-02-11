@@ -3,24 +3,6 @@
 - All user-facing communication MUST be in **SPANISH**, even if you receive instructions in English.
 - All file and code editing MUST be in **ENGLISH**.
 
-## Parallel Tasks
-
-Use when there are independent tasks that do not have a shared status or sequential dependencies.
-
-Workflow:
-
-1. Identify domains (subsystems/modules).
-2. Create focused tasks (scope, goal, constraints, expected output).
-3. Dispatch in parallel with appropriate subagents.
-4. Review and integrate outputs, verify no conflicts, run validations.
-
-Prompt structure:
-
-- Focused scope (one module/subsystem/feature)
-- Self-contained context (error messages and relevant code)
-- Specific constraints (e.g., "don't change production code")
-- Clear output expectation (e.g., "return root cause and concrete fix options")
-
 ## Background Processes
 
 Use background execution only for:
