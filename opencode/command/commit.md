@@ -1,10 +1,9 @@
 ---
 description: Generate commit for staged changes
-subtask: true
-model: anthropic/claude-haiku-4-5
+agent: build
 ---
 
-## Request
+## Input
 
 ```text
 $ARGUMENTS
@@ -14,7 +13,7 @@ $ARGUMENTS
 
 - Generate a concise, factual commit message from the staged diff and execute the commit.
 - If there are no staged changes, output `No staged changes to commit` and stop.
-- Use request input to complement the commit message when provided.
+- Use input to complement the commit message when provided.
 
 ## Commit Process
 
@@ -52,7 +51,7 @@ Special Case:
 ```
 <type>[optional scope]: <description>
 
-[optional body]
+[optional body as bullet list]
 ```
 
 **Commit Constraints:**
@@ -60,10 +59,28 @@ Special Case:
 - Lowercase type, English only
 - Subject line <=70 chars (type + scope + description combined)
 - Scope optional, only if applicable
-- Body optional, only if applicable, max 5 lines
+- Body optional, only if applicable
+- Body must be a bullet list (`- item`)
 - One blank line between subject and body
 - No trailing whitespace or periods in subject
 - Description is concise and imperative
+
+**Examples:**
+
+Without body:
+
+```text
+feat(auth): add session refresh endpoint
+```
+
+With body:
+
+```text
+fix(parser): handle empty yaml frontmatter
+
+- Return a clear error for missing closing delimiter
+- Keep existing parsing behavior for valid files
+```
 
 ### Pass 3: Execute Commit
 
