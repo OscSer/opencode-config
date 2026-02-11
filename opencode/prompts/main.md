@@ -1,8 +1,3 @@
----
-description: Primary agent
-mode: primary
----
-
 ## Communication
 
 - All user-facing communication MUST be in **SPANISH**, even if you receive instructions in English.
