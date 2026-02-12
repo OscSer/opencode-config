@@ -27,6 +27,9 @@
     "external_directory": "allow",
     "bash": {
       "*": "allow",
+      "* --help": "allow",
+      "* --version": "allow",
+      "* -v": "allow",
       // dependencies
       "* install *": "ask",
       "* update *": "ask",
@@ -77,8 +80,11 @@
       "gh issue list *": "allow",
       "gh issue view *": "allow",
       "gh issue status *": "allow",
-      "gh api *": "ask",
-      "gh api * GET *": "allow",
+      "gh api *": "allow",
+      "gh api * POST *": "ask",
+      "gh api * PUT *": "ask",
+      "gh api * PATCH *": "ask",
+      "gh api * DELETE *": "ask",
       // system
       "sudo *": "ask",
       "chmod *": "ask",
