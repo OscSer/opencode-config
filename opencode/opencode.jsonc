@@ -8,11 +8,12 @@
     "context7": {
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
+    },
+    "rc": {
+      "enabled": false,
+      "type": "remote",
+      "url": "http://mcps.retailcompass.com/mcp"
     }
-    // "rc": {
-    //   "type": "remote",
-    //   "url": "http://mcps.retailcompass.com/mcp"
-    // }
   },
   "permission": {
     "edit": "allow",
