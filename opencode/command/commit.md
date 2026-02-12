@@ -52,7 +52,7 @@ Special Case:
 ```
 <type>[optional scope]: <description>
 
-[optional body as bullet list]
+[optional body]
 ```
 
 **Commit Constraints:**
@@ -70,13 +70,13 @@ Special Case:
 
 Without body:
 
-```text
+```
 feat(auth): add session refresh endpoint
 ```
 
 With body:
 
-```text
+```
 fix(parser): handle empty yaml frontmatter
 
 - Return a clear error for missing closing delimiter
