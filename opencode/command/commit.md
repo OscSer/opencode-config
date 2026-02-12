@@ -85,16 +85,4 @@ fix(parser): handle empty yaml frontmatter
 
 ### Pass 3: Execute Commit
 
-Execute the commit and report the result.
-
-**Success format:**
-
-```text
-✓ Commit created: <hash>
-```
-
-**Failure format:**
-
-```text
-✗ Commit failed: <error description>
-```
+Execute the commit and report the hash and the status `git status --short`
