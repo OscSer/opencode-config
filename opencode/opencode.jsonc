@@ -23,6 +23,7 @@
     "bash": {
       "*": "allow",
       "* --help": "allow",
+      "* -h": "allow",
       "* --version": "allow",
       "* -v": "allow",
       // dependencies
