@@ -17,8 +17,6 @@ Workflow:
 1. Start the command with `bglog <command> [args...]`.
 2. Capture the bglog output: `PID=<pid> LOG=<tmpfile>`.
 3. Inspect output as needed using the reported log file path.
-4. For finite processes, verify completion and exit status.
-5. For indefinite processes, stop the process when no longer needed.
 
 ## Bug Handling
 
@@ -29,4 +27,3 @@ Workflow:
 1. Write a test that reproduces the bug (failing first).
 2. Analyze root cause and propose fixes.
 3. Implement the fix and prove it with a passing test.
-4. Run additional relevant validations if affected.
