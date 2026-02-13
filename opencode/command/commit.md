@@ -3,17 +3,10 @@ description: Generate commit for staged changes
 agent: build
 ---
 
-## Input
-
-```text
-$ARGUMENTS
-```
-
 ## Your Task
 
 - Generate a concise, factual commit message from the staged diff and execute the commit.
 - If there are no staged changes, output `No staged changes to commit` and stop.
-- Use input to complement the commit message when provided.
 
 ## Commit Process
 
@@ -42,11 +35,11 @@ $ARGUMENTS
 | `chore`    | Non-source changes (.gitignore, scripts)   |
 | `perf`     | Performance improvements                   |
 
-Special Case:
+Special Cases:
 
 - Markdown files for LLM instruction are not treated as docs (e.g.,`AGENTS.md`, `skill/*.md`, `command/*.md`) -> classify as `feat`/`fix`/`refactor`
 
-**Commit Format:**
+**Commit Template:**
 
 ```
 <type>[optional scope]: <description>
@@ -57,10 +50,10 @@ Special Case:
 **Commit Constraints:**
 
 - Lowercase type, English only
-- Subject line <=70 chars (type + scope + description combined)
+- Subject line <=50 chars recommended (type + scope + description combined)
 - Scope optional, only if applicable
 - Body optional, only if applicable
-- Body must be a bullet list (`- item`)
+- Body may use bullet points or free-form paragraphs
 - One blank line between subject and body
 - No trailing whitespace or periods in subject
 - Description is concise and imperative
@@ -73,7 +66,7 @@ Without body:
 feat(auth): add session refresh endpoint
 ```
 
-With body:
+With body (bullet points):
 
 ```
 fix(parser): handle empty yaml frontmatter
@@ -82,6 +75,16 @@ fix(parser): handle empty yaml frontmatter
 - Keep existing parsing behavior for valid files
 ```
 
+With body (paragraph):
+
+```
+refactor(api): simplify error handling middleware
+
+Consolidate duplicate error response logic into a single helper
+function. This reduces code duplication across route handlers and
+makes future modifications easier by centralizing error formatting.
+```
+
 ### Pass 3: Execute Commit
 
-Execute the commit and report the hash and the status `git status --short`
+Execute the commit and report the generated commit message.
