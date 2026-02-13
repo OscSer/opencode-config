@@ -44,12 +44,8 @@
       "curl * PATCH *": "ask",
       "curl * DELETE *": "ask",
       // prefer native tools
-      "find *": "deny",
       "grep *": "deny",
-      "rg *": "deny",
       "cat *": "deny",
-      "head *": "deny",
-      "tail *": "deny",
       // git
       "git *": "ask",
       "git help *": "allow",
@@ -59,6 +55,8 @@
       "git show *": "allow",
       "git rev-parse *": "allow",
       "git remote -v": "allow",
+      "git grep *": "allow",
+      "git ls-files *": "allow",
       // gh
       "gh *": "ask",
       "gh help *": "allow",
@@ -100,5 +98,5 @@
     "model_cycle_recent": "none"
   },
   "lsp": false,
-  "theme": "opencode"
+  "theme": "system"
 }
