@@ -15,7 +15,7 @@ agent: build
 1. Run `git diff --cached` to see staged changes
 2. If no diff, stop with `No staged changes to commit` message. DO NOT stage files.
 
-### Pass 2: Analyze Observable Changes
+### Pass 2: Analyze Changes
 
 - Only state facts visible in the diff. Never infer intent, benefits, or causality.
 - If purpose is unclear, describe facts only.
@@ -35,9 +35,15 @@ agent: build
 | `chore`    | Non-source changes (.gitignore, scripts)   |
 | `perf`     | Performance improvements                   |
 
-Special Cases:
+**Rules:**
 
-- Markdown files for LLM instruction are not treated as docs (e.g.,`AGENTS.md`, `skill/*.md`, `command/*.md`) -> classify as `feat`/`fix`/`refactor`
+- Lowercase type, English only
+- Subject line <=50 chars recommended (type + scope + description combined)
+- Scope optional, only if applicable
+- Body optional, only if applicable
+- One blank line between subject and body
+- No trailing whitespace or periods in subject
+- Description is concise and imperative
 
 **Commit Template:**
 
@@ -47,37 +53,20 @@ Special Cases:
 [optional body]
 ```
 
-**Commit Constraints:**
-
-- Lowercase type, English only
-- Subject line <=50 chars recommended (type + scope + description combined)
-- Scope optional, only if applicable
-- Body optional, only if applicable
-- Body may use bullet points or free-form paragraphs
-- One blank line between subject and body
-- No trailing whitespace or periods in subject
-- Description is concise and imperative
-
 **Examples:**
 
-Without body:
-
-```
-feat(auth): add session refresh endpoint
+```text
+feat: add session refresh endpoint
 ```
 
-With body (bullet points):
-
-```
+```text
 fix(parser): handle empty yaml frontmatter
 
 - Return a clear error for missing closing delimiter
 - Keep existing parsing behavior for valid files
 ```
 
-With body (paragraph):
-
-```
+```text
 refactor(api): simplify error handling middleware
 
 Consolidate duplicate error response logic into a single helper
