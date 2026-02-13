@@ -1,7 +1,6 @@
 ---
 description: Generate commit for staged changes
-agent: general
-model: opencode/kimi-k2.5-free
+agent: build
 ---
 
 ## Input
