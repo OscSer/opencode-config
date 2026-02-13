@@ -18,12 +18,6 @@ Workflow:
 2. Capture the bglog output: `PID=<pid> LOG=<tmpfile>`.
 3. Inspect output as needed using the reported log file path.
 
-## Bug Handling
+## Test Driven Development
 
-Use when a bug is reported or a bug is found.
-
-Workflow:
-
-1. Write a test that reproduces the bug (failing first).
-2. Analyze root cause and propose fixes.
-3. Implement the fix and prove it with a passing test.
+Use the `tdd` skill when user wants to build features or fix bugs
