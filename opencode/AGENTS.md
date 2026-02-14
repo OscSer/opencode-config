@@ -14,9 +14,9 @@ Do not use background execution for short commands (1 minute or less). Run those
 
 Workflow:
 
-1. Start the command with `bglog <command> [args...]`.
-2. Capture the bglog output: `PID=<pid> LOG=<tmpfile>`.
-3. Inspect output as needed using the reported log file path.
+1. Start the command with `nohup <command> [args...] > /tmp/<name>.log 2>&1 &`.
+2. Capture the PID: `echo $!`.
+3. Inspect output as needed using the log file path.
 
 ## Test Driven Development
 
