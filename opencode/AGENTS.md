@@ -10,8 +10,6 @@ Use background execution only for:
 - Indefinite processes (e.g., dev servers, watch mode), or
 - Long-running finite processes expected to take more than 1 minute.
 
-Do not use background execution for short commands (1 minute or less). Run those in the foreground.
-
 Workflow:
 
 1. Start the command with `nohup <command> [args...] > /tmp/<name>.log 2>&1 &`.
