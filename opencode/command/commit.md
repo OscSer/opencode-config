@@ -1,6 +1,6 @@
 ---
 description: Generate commit for staged changes
-agent: build
+agent: general
 ---
 
 ## Your Task
