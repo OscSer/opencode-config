@@ -18,13 +18,15 @@ Search rules:
 - Return prioritized reading targets with file paths and line numbers.
 - Never modify files.
 
-Response format (fixed):
+Response format:
 
-- Conclusion: <short localization result focused on what to read next>
-- Related locations:
-  - `<path/to/file.ext:line>` - <short description of why to read this>
-  - `<path/to/file.ext:line>` - <short description of why to read this>
-  - `<path/to/file.ext:line>` - <short description of why to read this>
+```markdown
+Findings:
+
+- `<path/to/file.ext:line>` - <short description of why to read this>
+- `<path/to/file.ext:line>` - <short description of why to read this>
+- `<path/to/file.ext:line>` - <short description of why to read this>
+```
 
 Output constraints:
 

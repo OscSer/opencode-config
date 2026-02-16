@@ -10,10 +10,7 @@ Use `finder` when you determine a task requires extensive codebase discovery (mu
 
 - Do not use `finder` for trivial lookups (one or two obvious files).
 - Use `finder` for read-only discovery to reduce unnecessary file reads.
-- Expect output:
-  - Conclusion: <short localization result for the requested task>
-  - Related locations:
-    - `<path/to/file.ext:line>` - <short description of what should read there>
+- The expected response format is a list of relevant files.
 
 ## Background Processes
 
@@ -25,4 +22,4 @@ Use when you need to run indefinite processes (e.g., dev servers, watch mode) or
 
 ## Test Driven Development
 
-Use the `tdd` skill when user wants to build features or fix bugs
+Use the `tdd` skill when user wants to build features or fix bugs.
