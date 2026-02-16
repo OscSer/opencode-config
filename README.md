@@ -19,7 +19,8 @@ opencode/
 ├── opencode.jsonc  # Global config
 ├── AGENTS.md       # Global instructions
 ├── agent/          # Custom agents
-└── command/        # Custom commands
+├── command/        # Custom commands
+└── skills/         # Custom skills
 src/
 └── installer.ts    # Setup script
 ```
