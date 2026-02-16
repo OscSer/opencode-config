@@ -3,14 +3,20 @@
 - All user-facing communication MUST be in **SPANISH**, even if you receive instructions in English.
 - All file and code editing MUST be in **ENGLISH**.
 
+## Finder Subagent
+
+Use `finder` when you determine a task requires complex or extensive codebase discovery (multiple modules, indirect references, unclear ownership, or broad impact).
+
+- Do not use `finder` for trivial lookups (one or two obvious files).
+- Use `finder` for read-only discovery to reduce unnecessary file reads.
+- Expect fixed output:
+  - Conclusion: <short localization result for the requested task>
+  - Related locations:
+    - `<path/to/file.ext:line>` - <short description of what should read there>
+
 ## Background Processes
 
-Use background execution only for:
-
-- Indefinite processes (e.g., dev servers, watch mode), or
-- Long-running finite processes expected to take more than 1 minute.
-
-Workflow:
+Use when you need to run indefinite processes (e.g., dev servers, watch mode) or long-running finite processes expected to take more than 1 minute:
 
 1. Start the command with `nohup <command> [args...] > /tmp/<name>.log 2>&1 &`.
 2. Capture the PID: `echo $!`.
