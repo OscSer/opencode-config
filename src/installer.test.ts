@@ -46,7 +46,7 @@ describe("ConfigInstaller", () => {
       const opencodeDir = path.join(repoDir, "opencode");
       await fs.mkdir(opencodeDir, { recursive: true });
 
-      await fs.mkdir(path.join(opencodeDir, "command"), { recursive: true });
+      await fs.mkdir(path.join(opencodeDir, "commands"), { recursive: true });
       await fs.mkdir(path.join(opencodeDir, "tool"), { recursive: true });
 
       const targetDir = path.join(tmpDir, "target");
@@ -56,7 +56,7 @@ describe("ConfigInstaller", () => {
 
       expect(success).toBe(true);
       expect(
-        (await fs.lstat(path.join(targetDir, "command"))).isSymbolicLink(),
+        (await fs.lstat(path.join(targetDir, "commands"))).isSymbolicLink(),
       ).toBe(true);
       expect(
         (await fs.lstat(path.join(targetDir, "tool"))).isSymbolicLink(),
@@ -66,7 +66,7 @@ describe("ConfigInstaller", () => {
     it("should log whether linked entries are files or directories", async () => {
       const repoDir = path.join(tmpDir, "repo");
       const opencodeDir = path.join(repoDir, "opencode");
-      await fs.mkdir(path.join(opencodeDir, "command"), { recursive: true });
+      await fs.mkdir(path.join(opencodeDir, "commands"), { recursive: true });
       await fs.writeFile(path.join(opencodeDir, "opencode.jsonc"), "config");
 
       const targetDir = path.join(tmpDir, "target");
@@ -85,16 +85,16 @@ describe("ConfigInstaller", () => {
         console.log = originalLog;
       }
 
-      expect(logs).toContain("Linked dir: command");
+      expect(logs).toContain("Linked dir: commands");
       expect(logs).toContain("Linked file: opencode.jsonc");
     });
 
     it("should make nested content accessible through symlinked directories", async () => {
       const repoDir = path.join(tmpDir, "repo");
       const opencodeDir = path.join(repoDir, "opencode");
-      await fs.mkdir(path.join(opencodeDir, "command"), { recursive: true });
+      await fs.mkdir(path.join(opencodeDir, "commands"), { recursive: true });
       await fs.writeFile(
-        path.join(opencodeDir, "command", "example.md"),
+        path.join(opencodeDir, "commands", "example.md"),
         "content",
       );
 
@@ -104,7 +104,7 @@ describe("ConfigInstaller", () => {
       await installer.install();
 
       const content = await fs.readFile(
-        path.join(targetDir, "command", "example.md"),
+        path.join(targetDir, "commands", "example.md"),
         "utf-8",
       );
       expect(content).toBe("content");

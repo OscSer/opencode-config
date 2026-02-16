@@ -18,8 +18,8 @@ bun run test        # Test suite
 opencode/
 ├── opencode.jsonc  # Global config
 ├── AGENTS.md       # Global instructions
-├── agent/          # Custom agents
-├── command/        # Custom commands
+├── agents/         # Custom agents
+├── commands/       # Custom commands
 └── skills/         # Custom skills
 src/
 └── installer.ts    # Setup script
