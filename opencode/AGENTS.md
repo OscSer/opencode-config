@@ -2,14 +2,15 @@
 
 - All user-facing communication MUST be in **SPANISH**, even if you receive instructions in English.
 - All file and code editing MUST be in **ENGLISH**.
+- When presenting options to the user, always label or enumerate them explicitly (e.g., A, B, C or 1, 2, 3).
 
 ## Finder Subagent
 
-Use `finder` when you determine a task requires complex or extensive codebase discovery (multiple modules, indirect references, unclear ownership, or broad impact).
+Use `finder` when you determine a task requires extensive codebase discovery (multiple modules, indirect references, unclear ownership, or broad impact).
 
 - Do not use `finder` for trivial lookups (one or two obvious files).
 - Use `finder` for read-only discovery to reduce unnecessary file reads.
-- Expect fixed output:
+- Expect output:
   - Conclusion: <short localization result for the requested task>
   - Related locations:
     - `<path/to/file.ext:line>` - <short description of what should read there>
