@@ -29,13 +29,10 @@ Before writing, collect context from:
 
 - Conversation context from this session
 - Current repository state
-- Local git metadata (if available)
-
-Run these commands when git is available:
-
-- `git status --short`
-- `git log --oneline -n 5`
-- `git diff --stat`
+- Local git metadata:
+  - `git status --short`
+  - `git log --oneline -n 5`
+  - `git diff --stat`
 
 ## File Format
 

@@ -13,8 +13,8 @@ agent: build
 ### Pass 1: Check Staged Changes
 
 1. Execute `git status --short` to see the current status
-2. Execute `git diff --cached` to see staged changes
-3. Execute `git log --oneline -n 10` to see recent commits
+2. Execute `git log --oneline -n 10` to see recent commits
+3. Execute `git diff --cached` to see staged changes
 
 ### Pass 2: Analyze Changes
 
@@ -46,14 +46,6 @@ agent: build
 - No trailing whitespace or periods in subject
 - Description is concise and imperative
 
-**Commit Template:**
-
-```
-<type>[optional scope]: <description>
-
-[optional body]
-```
-
 **Examples:**
 
 ```text
@@ -77,4 +69,4 @@ makes future modifications easier by centralizing error formatting.
 
 ### Pass 3: Execute Commit
 
-Execute the commit and report the generated commit message.
+Execute the commit and report the generated message.
