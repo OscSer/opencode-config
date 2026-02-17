@@ -1,6 +1,6 @@
 ---
 description: Code review local changes or pull requests
-agent: plan
+agent: build
 ---
 
 ## Input
@@ -19,6 +19,7 @@ First, determine whether this involves local changes or a PR.
 If input includes a PR number or URL:
 
 - Execute `gh pr checkout <number>`
+- Execute `gh pr view <number> --json title,body`
 - Execute `DIFF_FILE=$(mktemp) && gh pr diff <number> > "$DIFF_FILE"`
 
 If no input is provided, this involves local changes:
@@ -32,131 +33,78 @@ In both cases, you must:
 
 ## Review Process
 
-### Pass 1: Discovery Mode
+### Core Principles
 
-**Objective:** Find and list ALL potential issues. Be inclusive and comprehensive.
+- Focus on real, actionable bugs. Ignore trivial style and preference-only feedback.
+- Use clear, neutral language. Avoid speculation and vague risk statements.
+- Gather sufficient context before flagging any issue.
 
-**CRITICAL RULES for Pass 1:**
+### Step 1: Analyze Changes
 
-- **NO ANALYSIS ALLOWED** - Do not evaluate, judge, or reason about issues yet
-- **NO CONCLUSIONS** - Do not decide if something is good or bad
-- **CAST A WIDE NET** - When in doubt, include it. Better to list and discard later than miss it now
+**Objective:** Build a candidate list of possible issues from the diff.
 
-**What to look for:**
+1. Read the diff file in batches using the `Read` tool.
+2. Identify possible issues in changed code only.
+3. For each candidate, capture:
+   - `file:line`
+   - One-sentence bug hypothesis
+   - Expected failure scenario/impact
 
-- Error handling changes
-- Logic changes
-- New dependencies
-- Resource management (files, connections, memory)
-- Security-related code
-- API changes
-- Data transformations
-- State mutations
-- Boundary conditions
-- Async/await patterns
+Do not report findings yet. This step is hypothesis generation only.
 
-**OUTPUT - Print this exact format:**
+### Step 2: Delegate Verification to Explore Agent
 
-```
-PASS 1 COMPLETE - Potential Issues Found:
-1. [Brief description] in [file:line]
-2. [Brief description] in [file:line]
-3. [Brief description] in [file:line]
-...
-```
+**Objective:** Validate each candidate issue using deeper context.
 
-**STOP: Pass 1 must be complete before proceeding. Do not continue until the numbered list above is printed.**
+- For each candidate from Step 1, run **one Explore agent invocation per issue**.
+- In each invocation, ask Explore to verify or reject the candidate by:
+  - Reading the full source file (not only the diff)
+  - Reading related tests, imports/exports, interfaces, and config as needed
+  - Checking whether the issue is introduced by the changed code
+  - Producing concrete evidence and a realistic failure scenario
 
----
+For each candidate, require a verdict with this structure:
 
-### Pass 2: Evaluation Mode
+- Verdict: `CONFIRMED` or `DISCARDED`
+- Title: short and specific
+- Evidence: concrete proof from code/context
+- Impact: specific scenario and consequence
+- Scope: changed code vs pre-existing code
+- Fix: exact action or minimal snippet
 
-**Prerequisite Check:**
-Before starting Pass 2, verify you have:
+If evidence is weak, speculative, or not clearly tied to changed code, mark it `DISCARDED`.
 
-- [ ] Completed Pass 1 with a numbered list of ALL potential issues
-- [ ] Printed the "PASS 1 COMPLETE" output with the list
+### Step 3: Consolidate and Report Important Findings
 
-If NO to any above, **GO BACK and complete Pass 1 first.**
+Include only `CONFIRMED` issues with concrete evidence.
 
-**Objective:** Evaluate ONLY the items from Pass 1. Do NOT find new issues.
+Report only issues that are important and actionable. Exclude weak or low-value findings unless there is clear evidence of meaningful risk.
 
-Before evaluating ANY issue, you MUST gather context by reading files. For each issue in the Pass 1 list:
+Never report:
 
-1. **Read the source file** at the issue location (not just the diff)
-2. **Read related files:**
-   - Files that import/export the changed code
-   - Test files
-   - Configuration files
-   - API contracts/interfaces
-3. **Search codebase** for usage patterns if needed
-4. **Evaluation:** apply the 4-check framework using the context gathered:
+- Pure style feedback
+- Theoretical concerns without evidence
+- Pre-existing issues not introduced (or worsened) by the current changes
 
-**Impact Analysis**
+## Output Format
 
-- "This would cause [SPECIFIC PROBLEM] when [SCENARIO]"
-- If you can't fill in these blanks concretely → DISCARD
-- Examples: crash, data loss, security breach, resource leak, API contract violation
-
-**Evidence Check**
-
-- "I know this is a problem because [EVIDENCE]"
-- Evidence = observable behavior, error pattern, resource leak pattern, security risk, breaking change
-- NOT evidence = "typically," "best practice," "cleaner," "might," "could," style preferences
-
-**Scope Verification**
-
-- "This issue exists in [CHANGED CODE / PRE-EXISTING CODE]"
-- Only report if introduced in changed code
-- Ignore pre-existing issues unless made worse by changes
-
-**Value Test**
-
-- "Reporting this prevents [CONCRETE NEGATIVE OUTCOME]"
-- If outcome is vague, theoretical, or stylistic → DISCARD
-- Ask: Would this prevent a real problem or just align with preference?
-
-**CRITICAL: Only report if ALL 4 checks pass with concrete, factual answers.**
-
-**OUTPUT - Print this exact format:**
-
-```
-PASS 2 EVALUATION:
-- Issue #1: [REPORT/DISCARD] - [brief reason with evidence from files]
-- Issue #2: [REPORT/DISCARD] - [brief reason with evidence from files]
-...
-```
-
-**Remember: The goal is NOT perfection. The goal is preventing real problems.**
-
-### Pass 3: Final Report
-
-Include ONLY the issues marked as REPORT from Pass 2. Do not include DISCARDED issues.
-
-If no issues, return:
+Always return this single format:
 
 ```markdown
 # Code Review
 
-{1-3 sentences: what functionality was added/modified/removed}
+<1-3 sentences describing what functionality was added/modified/removed>
 
 ## Findings
 
-Looks good to me!
-```
+[If there are no reportable findings: `Looks good to me!`]
+[Otherwise, list only reportable findings as an enumerated list]
 
-If issues, return:
+1. **<path/to/file:line - Short title>**
+   Issue: <description>
+   Fix: <action or snippet>
 
-```markdown
-# Code Review
-
-{1-3 sentences: what functionality was added/modified/removed}
-
-## Findings
-
-**{path:line}**
-{1-2 sentences explaining the problem and its impact}
-{Concrete fix - code snippet or specific action to take}
-
-{repeat for each issue}
+2. **<path/to/file:line - Short title>**
+   Issue: ...
+   Fix: ...
 ```
