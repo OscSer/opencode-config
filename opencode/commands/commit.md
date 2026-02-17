@@ -6,14 +6,15 @@ agent: build
 ## Your Task
 
 - Generate a concise, factual commit message from the staged diff and execute the commit.
-- If there are no staged changes, output `No staged changes to commit` and stop.
+- If there are no staged changes, output `No staged changes to commit` and stop. DO NOT stage any changes.
 
 ## Commit Process
 
 ### Pass 1: Check Staged Changes
 
-1. Run `git diff --cached` to see staged changes
-2. If no diff, stop with `No staged changes to commit` message. DO NOT stage files.
+1. Run `git status --short` to see the current status
+2. Run `git diff --cached` to see staged changes
+3. Run `git log --oneline -n 10` to see recent commits
 
 ### Pass 2: Analyze Changes
 
