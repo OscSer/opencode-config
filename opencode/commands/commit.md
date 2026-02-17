@@ -12,9 +12,9 @@ agent: build
 
 ### Pass 1: Check Staged Changes
 
-1. Run `git status --short` to see the current status
-2. Run `git diff --cached` to see staged changes
-3. Run `git log --oneline -n 10` to see recent commits
+1. Execute `git status --short` to see the current status
+2. Execute `git diff --cached` to see staged changes
+3. Execute `git log --oneline -n 10` to see recent commits
 
 ### Pass 2: Analyze Changes
 

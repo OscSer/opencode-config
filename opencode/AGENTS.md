@@ -6,12 +6,8 @@
 
 ## Background Processes
 
-Use when you need to run indefinite processes (e.g., dev servers, watch mode) or long-running finite processes expected to take more than 1 minute:
+Use when you need to run indefinite processes (e.g., dev servers, watch mode) or long-running processes:
 
 1. Start the command with `nohup <command> [args...] > /tmp/<name>.log 2>&1 &`.
 2. Capture the PID: `echo $!`.
 3. Inspect output as needed using the log file path.
-
-## Test Driven Development
-
-Use the `tdd` skill when user wants to build features or fix bugs.
