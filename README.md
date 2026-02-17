@@ -2,7 +2,7 @@
 
 Centralized configuration for [OpenCode](https://opencode.ai/docs). Automatically syncs `opencode/` assets to `~/.config/opencode/`
 
-## Usage
+## Commands
 
 ```
 bun run setup       # Install configuration
@@ -16,11 +16,11 @@ bun run test        # Test suite
 
 ```
 opencode/
-├── opencode.jsonc  # Global config
-├── AGENTS.md       # Global instructions
-├── agents/         # Custom agents
-├── commands/       # Custom commands
-└── skills/         # Custom skills
+├── opencode.jsonc  # https://opencode.ai/docs/config/
+├── AGENTS.md       # https://opencode.ai/docs/rules/
+├── agents/         # https://opencode.ai/docs/agents/
+├── commands/       # https://opencode.ai/docs/commands/
+└── skills/         # https://opencode.ai/docs/skills/
 src/
 └── installer.ts    # Setup script
 ```
