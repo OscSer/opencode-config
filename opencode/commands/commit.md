@@ -69,4 +69,10 @@ makes future modifications easier by centralizing error formatting.
 
 ### Pass 3: Execute Commit
 
-Execute the commit and report the generated message.
+Execute the commit and report the generated message:
+
+```text
+<type>[scope]: <description>
+
+[body]
+```
