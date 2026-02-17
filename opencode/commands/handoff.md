@@ -45,26 +45,33 @@ Use exactly these top-level sections and keep the marker blocks intact for futur
 
 ## Estado actual
 
-- Objetivo: ...
-- Estado: ...
-- Proximos pasos:
-  - ...
-- Bloqueos/Riesgos:
-  - ...
-  <!-- HANDOFF-SNAPSHOT:END -->
+**Objetivo:**
+
+- <...>
+
+**Proximos pasos:**
+
+- <...>
+
+**Referencias clave:**
+
+- `<ruta/o/recurso>`: <descripción>
+
+<!-- HANDOFF-SNAPSHOT:END -->
 
 ## Bitacora de sesiones
 
 <!-- HANDOFF-LOG:START -->
 
-### YYYY-MM-DD HH:mm (sesion N)
+### YYYY-MM-DD HH:mm
 
-- Referencias clave:
-  - `ruta/o/recurso`
-- Decisiones tomadas:
-  - Decision -> motivo breve
-- Trabajo realizado:
-  - ...
+**Decisiones tomadas:**
+
+- <...>
+
+**Trabajo realizado:**
+
+- <...>
 
 <!-- HANDOFF-LOG:END -->
 ```
@@ -74,11 +81,8 @@ Use exactly these top-level sections and keep the marker blocks intact for futur
 - `Estado actual` must reflect the latest reality after this session.
 - Add exactly one new log entry per execution.
 - New entry goes immediately after `<!-- HANDOFF-LOG:START -->` (newest first).
-- Keep each bullet short (one line whenever possible).
+- Keep each bullet short.
 
 ## Output
 
-After writing the file, print:
-
-1. Relative path to the file
-2. A bullet summary of what was recorded
+After writing the file, print a bullet summary of what was recorded.
