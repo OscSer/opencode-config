@@ -18,7 +18,7 @@ First, determine whether this involves local changes or a PR.
 
 If input includes a PR number or URL:
 
-- Execute `gh pr checkout <number>`
+- Execute `gh pr checkout <number>` (MANDATORY)
 - Execute `gh pr view <number> --json title,body`
 - Execute `DIFF_FILE=$(mktemp) && gh pr diff <number> > "$DIFF_FILE"`
 
@@ -52,12 +52,12 @@ In both cases, you must:
 
 Do not report findings yet. This step is hypothesis generation only.
 
-### Step 2: Delegate Verification to Explore Agent
+### Step 2: Delegate Verification to General Agent
 
 **Objective:** Validate each candidate issue using deeper context.
 
-- For each candidate from Step 1, run **one Explore agent invocation per issue**.
-- In each invocation, ask Explore to verify or reject the candidate by:
+- For each candidate from Step 1, run one `general` agent invocation per issue.
+- In each invocation, ask `general` to verify or reject the candidate by:
   - Reading the full source file (not only the diff)
   - Reading related tests, imports/exports, interfaces, and config as needed
   - Checking whether the issue is introduced by the changed code
@@ -88,7 +88,7 @@ Never report:
 
 ## Output Format
 
-Always return this single format:
+Always return this format:
 
 ```markdown
 # Code Review
