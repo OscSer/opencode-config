@@ -4,6 +4,10 @@
 - All file and code editing MUST be in **ENGLISH**.
 - When presenting options to me, always label or enumerate them explicitly (e.g., A, B, C or 1, 2, 3).
 
+## Codebase Discovery
+
+Use proactively the `explore` agent to explore the codebase and find implementations, patterns, flows, and other useful information.
+
 ## Background Processes
 
 Use this workflow when you need to run processes indefinitely (e.g., dev servers, watch mode) or other long-running processes:
@@ -14,5 +18,5 @@ Use this workflow when you need to run processes indefinitely (e.g., dev servers
 
 ## Memory Management
 
-- If I tell you to remember something, you must call `engram_mem_save` to save it.
-- If compaction happened, or if `FIRST ACTION REQUIRED` appears, call `engram_mem_context` immediately before continuing.
+- After any compaction or context reset, call `engram_mem_context` to recover session state before continuing.
+- Save memories proactively with `engram_mem_save` after significant work.

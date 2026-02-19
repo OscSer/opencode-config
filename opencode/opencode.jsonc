@@ -1,5 +1,9 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "small_model": "opencode/kimi-k2.5-free",
+  "agent": {
+    "explore": { "model": "opencode/kimi-k2.5-free" }
+  },
   "mcp": {
     "context7": {
       "type": "remote",
