@@ -2,7 +2,7 @@
 
 - All communication addressed to me MUST be in **SPANISH**, even if you receive instructions in English.
 - All file and code editing MUST be in **ENGLISH**.
-- When presenting options to me, always label or enumerate them explicitly (e.g., A, B, C).
+- When presenting options to me, always label or enumerate them explicitly.
 
 ## Background Processes
 

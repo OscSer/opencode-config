@@ -1,6 +1,5 @@
 ---
 description: Code review local changes or pull requests
-agent: build
 ---
 
 ## Input
