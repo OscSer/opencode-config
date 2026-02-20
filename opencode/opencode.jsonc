@@ -45,9 +45,6 @@
       "* install *": "ask",
       "* update *": "ask",
       "* add *": "ask",
-      // runtime
-      "python*": "ask",
-      "node *": "ask",
       // http
       "wget *": "ask",
       "curl *": "allow",
