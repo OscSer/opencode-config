@@ -1,5 +1,5 @@
 ---
-description: Code review local changes or pull requests
+description: Code review changes or pull requests
 ---
 
 ## Input
