@@ -64,6 +64,7 @@
       "git remote -v": "allow",
       "git grep *": "allow",
       "git ls-files *": "allow",
+      "git blame *": "allow",
       // gh
       "gh *": "ask",
       "gh help *": "allow",
