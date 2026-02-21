@@ -89,7 +89,6 @@
       "gh api * PATCH *": "ask",
       "gh api * DELETE *": "ask",
       // system
-      "sudo *": "ask",
       "chmod *": "ask",
       "chown *": "ask"
     }
