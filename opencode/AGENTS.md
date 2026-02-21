@@ -1,13 +1,22 @@
-## Communication
+<communication>
+- All communication addressed to the user MUST be in SPANISH, even if you receive instructions in English.
+- All file and code editing MUST be in ENGLISH.
+- When presenting options to the user, always label or enumerate them explicitly.
+</communication>
 
-- All communication addressed to me MUST be in **SPANISH**, even if you receive instructions in English.
-- All file and code editing MUST be in **ENGLISH**.
-- When presenting options to me, always label or enumerate them explicitly.
+<change-strategy>
+- Prefer minimal and incremental changes over broad refactors.
+</change-strategy>
 
-## Background Processes
+<delegation-strategy>
+- Proactively use available subagents when they can improve quality, speed, or confidence.
+- Delegate parallelizable or specialized work to subagents whenever it reduces iteration time.
+- Synthesize and verify delegated results before responding to the user.
+</delegation-strategy>
 
+<background-processes>
 Use this workflow when you need to run processes indefinitely (e.g., dev servers, watch mode) or other long-running processes:
-
-1. Start the command with `nohup <command> [args...] > /tmp/<name>.log 2>&1 &`.
+1. Start the command with `nohup [command] [args...] > /tmp/[file].log 2>&1 &`.
 2. Capture the PID with `echo $!`.
 3. Inspect output as needed using the log file path.
+</background-processes>
