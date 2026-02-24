@@ -74,7 +74,7 @@ Return this exact format:
 
 ## Findings
 
-[If there are no reportable findings: `Looks good to me!`]
+[If there are no reportable findings: `Looks good to me`]
 [Otherwise, list only reportable findings as an enumerated list]
 
 1. **Title**
