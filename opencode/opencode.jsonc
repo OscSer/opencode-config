@@ -93,16 +93,15 @@
     }
   },
   "keybinds": {
+    "app_exit": "ctrl+c",
     "input_clear": "ctrl+d",
     "session_new": "ctrl+n",
-    "session_list": "ctrl+s",
-    "app_exit": "ctrl+c",
+    "model_cycle_favorite": "tab",
     "model_list": "shift+tab",
     "command_list": "f2",
+    "messages_undo": "ctrl+u",
     "messages_next": "ctrl+right",
-    "messages_previous": "ctrl+left",
-    "terminal_suspend": "none",
-    "model_cycle_recent": "none"
+    "messages_previous": "ctrl+left"
   },
   "theme": "system",
   "lsp": false
