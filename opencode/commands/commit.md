@@ -14,7 +14,15 @@ Create a concise, factual commit message from staged changes and run the commit.
    - `git diff --cached`
 2. If `git diff --cached` is empty, print `No staged changes to commit` and stop.
 3. Write the message using only facts visible in the diff.
-4. Execute commit and report the final message.
+4. Execute `git commit` using the generated message.
+5. Output rules:
+   - If commit succeeds, print only:
+     - `Commit successful`
+     - `<final committed message>`
+   - If commit fails, print:
+     - `Commit failed: <git error output>`
+     - `Cause: <brief factual cause inferred from the error output>`
+   - On failure, do not attempt to fix, retry, amend, or run additional corrective commands unless the user explicitly asks.
 
 ## Message rules
 
