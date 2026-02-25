@@ -77,11 +77,11 @@ Return this exact format:
 [If there are no reportable findings: `Looks good to me`]
 [Otherwise, list only reportable findings as an enumerated list]
 
-1. **Title**
+### 1. **Title**
 
-- Where: <path/to/file:line>
-- Evidence:
-- Fix:
+**Where:** <path/to/file:line>
+**Evidence:** <evidence>
+**Fix:** <fix>
 
-2. ...
+### 2. ...
 ```
