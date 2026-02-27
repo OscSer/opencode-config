@@ -93,17 +93,8 @@
       "chown *": "ask"
     }
   },
-  "keybinds": {
-    "app_exit": "ctrl+c",
-    "input_clear": "ctrl+d",
-    "session_new": "ctrl+n",
-    "model_cycle_favorite": "tab",
-    "model_list": "shift+tab",
-    "command_list": "f2",
-    "messages_undo": "ctrl+u",
-    "messages_next": "ctrl+right",
-    "messages_previous": "ctrl+left"
-  },
-  "theme": "system",
-  "lsp": false
+  "lsp": false,
+  "experimental": {
+    "mcp_timeout": 120000
+  }
 }
